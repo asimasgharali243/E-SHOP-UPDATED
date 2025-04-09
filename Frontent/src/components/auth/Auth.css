@@ -1,0 +1,131 @@
+  /*container css*/
+  .authcontainer{
+    position: relative;
+    background-image: url('../../../assets/The-Ecommerce-Business-Model-Explained.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    
+}
+/*form css*/
+.formcss{
+    width:  clamp(370px,420px,600px) !important;
+    position: relative;
+    top: -10%;
+    background:transparent;
+    backdrop-filter: blur(10px)
+    drop-shadow(0 10px 20px rgba(255, 255, 255, 0.5));
+    }
+    /* input box css*/
+.formInputBox{
+    width: 100%;
+    position: relative;
+    border: none;
+    z-index: 1;
+}
+ /*input css*/
+.formInputBox .form-control{
+background:transparent !important;
+border: none;
+border-bottom: 1px inset #ccc;
+border-radius: 0;
+width: 100% !important;
+padding: 5px 42px  5px 15px;
+
+}
+
+/*input focus css*/
+.formInputBox .form-control:focus {
+    outline: none;
+    background:transparent !important;
+    box-shadow: none;
+  }
+/* label css*/
+.formInputBox >.formLabel{
+    position: absolute;
+    top: 38%;
+    left: 20px;
+    transform: translateY(-50%);
+    background:transparent;
+    color:white;    
+    cursor:text;
+    transition: all 0.3s ;
+}
+/* move label css*/
+ .formInputBox .form-control:focus ~ .formLabel ,
+.formInputBox .form-control:not(:focus):not([value=""]) ~ .formLabel
+{
+    top: -5%;
+    left: 10px;
+    padding: 5px;
+    font-size: 13px;
+}
+
+/*icon css*/
+.auth-icon{
+position: absolute;
+top: 7px;
+right: 5px;
+color: black;
+font-size: 18px;
+z-index: 5;
+width: 30px;
+height: 30px;
+}
+
+
+
+.otp_input_container {
+    display: flex;
+    
+    flex-shrink:1;
+    justify-content: space-evenly;
+    align-items: center;
+     /* Adjust gap for spacing */
+    margin-top: 1rem; /* Add some margin for spacing from other elements */
+  }
+  
+  .otp_input_container input {
+    width: clamp(25px, 40px, 50px) !important; /* Width of each input box */
+    height: clamp(30px, 50px, 60px) !important; /* Height of each input box */
+    
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+  }
+  
+  .otp_input_container input:focus {
+    border-color: #165ef0; /* Highlight on focus */
+    box-shadow: 0 0 5px rgba(22, 94, 240, 0.5); /* Subtle shadow on focus */
+  }
+  
+  .otp_input_container input::placeholder {
+    color: #ccc;
+    font-size: 16px;
+  }
+  
+  /* For Chrome, Safari, Edge, and Opera */
+  input[type="number"]::-webkit-inner-spin-button, 
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  /* For Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  
+
+/* Remove the autofill background */
+.form-control:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    background-color: transparent !important;
+    color: inherit !important;
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important; /* Removes browser overlay */
+    box-shadow: 0 0 0 1000px transparent inset !important; /* For broader compatibility */
+    transition: background-color 5000s ease-in-out 0s; /* Prevent autofill from flashing */
+}

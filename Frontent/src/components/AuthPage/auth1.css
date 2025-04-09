@@ -1,0 +1,21 @@
+.card-rating{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+ 
+}
+.card-rating .bi.bi-star-fill,.card-rating .bi.bi-star{
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: gold;
+
+}
+.card-rating .bi.bi-star-fill:hover,.card-rating .bi.bi-star:hover{
+color:gold;
+  
+}
+
+.card-rating i.active{
+  color: yellow
+}

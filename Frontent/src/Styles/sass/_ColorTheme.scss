@@ -1,0 +1,79 @@
+// src/styles/themes.scss
+
+// Color Palette
+$colors: (
+  gunmetal: #2E3545,
+  jasper: #BE593B,
+  b:rgb(13,110,253),
+  anti-flash-white: #EDEEF0,
+  silver-lake-blue: #5F87C7,
+  true-blue: #4F73AF,
+  pale-dogwood: #C8B6B1,
+  redwood: #B06554,
+  raisin-black: #282C38,
+  tiger-eye: #BC6C25,
+  ut-orange: #FB8501,
+//  o:#ff7e00,
+  cornsilk: #FEFADF,
+  platinum: #E5E5E5,
+bg-color:#f5f5f5,
+  blue: #13213C,
+  dark-navy: #0D1B2A,
+);
+
+//color2
+$color2:(
+Text-color:#333e48,
+border-color:#ebebeb,
+white:#ffffff,
+blue-color:#232f3f,   
+orange-color:#ff7e00,    
+headerbg-color:#FFB800,
+orangeCT:#074ab6,
+Schemecolor1:#074AB6,
+Schemecolor2:#FFA500,
+Schemecolor3:#FFD700,
+Schemecolor4:#FFFFFF,
+Schemecolor5:#D3D3D3,
+);
+
+
+
+// Themes
+$themes:(
+  light: (
+    primary: map-get($colors, true-blue),
+    secondary: map-get($colors, jasper),   
+    text: map-get($colors, gunmetal),
+    background: map-get($colors,anti-flash-white),
+    accent: map-get($colors, tiger-eye),
+    border: map-get($colors, platinum),
+    link: map-get($colors, silver-lake-blue),
+  ),
+  dark:(
+    primary: map-get($colors, silver-lake-blue),
+    secondary: map-get($colors, ut-orange),
+    text: map-get($colors, anti-flash-white),
+    background: map-get($colors, raisin-black),
+    accent: map-get($colors, redwood),
+    border: map-get($colors, dark-navy),
+    link: map-get($colors, true-blue),
+  )
+);
+
+// Mixin to Apply Themes
+@mixin theme($theme-name) {
+  $theme: map-get($themes, $theme-name);
+
+  --primary: #{map-get($theme, primary)};
+  --primary-hover: #{darken(map-get($theme, primary), 20%)};
+  --header-link-text:#{lighten(mix(map-get($theme, primary), map-get($theme, secondary), 50%), 20%)};
+  --secondary: #{map-get($theme, secondary)};
+  --secondary-hover: #{darken(map-get($theme, secondary), 10%)};
+  --text: #{map-get($theme, text)};
+  --background: #{map-get($theme, background)};
+  --accent: #{map-get($theme, accent)};
+  --border: #{map-get($theme, border)};
+  --link: #{map-get($theme, link)};
+  --white:white;
+}

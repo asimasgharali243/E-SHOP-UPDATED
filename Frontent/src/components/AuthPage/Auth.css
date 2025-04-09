@@ -1,0 +1,43 @@
+/* styles.css */
+
+/* Auth.css */
+.form-control.is-invalid {
+    border-color: #dc3545;
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3cc ircle cx='6' cy='6' r='.5' fill='%23dc3545'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+.formcss{
+
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  
+  
+border-radius: 20px;
+
+width:  clamp(370px,500px,600px) !important;
+background-color: rgb(241, 240, 237);
+
+}
+.container-fluid{
+    position: relative;
+    background-image: url('../../assets/pic.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-color: rgba(255, 255, 255, 0.5); 
+  backdrop-filter: blur(10px)
+  
+}
+.container-fluid::before {
+    content: ""; /* Necessary for the pseudo-element */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: transparent;    
+    backdrop-filter: blur(3px); 
+    z-index: -1; 
+    }

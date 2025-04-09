@@ -1,0 +1,174 @@
+// Variables (Optional - you can customize these based on your theme)
+$primary-color: black;
+$secondary-color: white;
+$input-focus-color: #165ef0;
+$blur-background: rgba(0, 0, 0, 0.3);
+$box-shadow-color: rgba(255, 255, 255, 0.5);
+
+// Container SCSS
+.authcontainer {
+  position: relative;
+  background-image: url("../../../assets/The-Ecommerce-Business-Model-Explained.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
+  &::after {
+    content: "";
+    background: transparent;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(6px);
+    z-index: 1;
+  }
+
+  // Form SCSS
+  .formcss {
+    width: clamp(370px, 420px, 600px) !important;
+    position: relative;
+    top: -10%;
+    z-index: 2;
+    border-radius: 30px !important;
+    background-color: white;
+    box-shadow: 0 10px 20px $box-shadow-color;
+ 
+.row:nth-child(3) button,button{
+  background-color: var(--primary) !important;
+  color: white !important;
+  
+  &:hover{
+    background-color: var(--primary-hover) !important;
+  }
+}
+.row:nth-child(4) button{
+  background-color: transparent !important;
+  color:var(--primary)!important;
+  border: none;
+  &:hover{
+      background-color: transparent;
+      color:var(--primary-hover);  
+  }
+}
+
+
+    // Input Box SCSS
+    .formInputBox {
+      width: 100%;
+      position: relative;
+      border: none;
+      z-index: 1;
+
+      .form-control {
+        background: transparent;
+        width: 100% !important;
+        padding: 12px 42px 10px 15px;
+
+        &:focus {
+          outline: none;
+          box-shadow: none;
+        }
+      }
+
+      .formLabel {
+        position: absolute;
+        top: 25%;
+        left: 26px;
+        color: rgba(40, 37, 37, 0.7);
+        background-color: transparent;
+        cursor: text;
+        z-index: 4;
+        font-size: clamp(0.8125rem, 0.32rem + 0.645vw, 1.25rem);
+        transition: all 0.5s;
+
+        &.is-invalid {
+          border-color: #dc3545 !important;
+        }
+      }
+
+      .form-control:focus ~ .formLabel,
+      .form-control:not(:focus):not([value=""]) ~ .formLabel {
+        top: -14%;
+        left: 15px;
+        border-left: 2px solid #dee2e6;
+        border-right: 2px solid #dee2e6;
+        padding: 0px 10px;
+        font-weight: 900;
+        background-color: white;
+        color: $primary-color;
+        z-index: 4;
+        font-size: 13px;
+        transition: all 0.5s;
+      }
+
+      .auth-icon{
+        position: absolute;
+        top: 10px;
+        right: 5px;
+        color: black;
+        font-size: 18px;
+        z-index: 5;
+        width: 30px;
+        height: 30px;
+        }
+        
+
+
+
+    }
+
+    // Icon SCSS
+
+    // OTP Input Container SCSS
+    .otp_input_container {
+      display: flex;
+      flex-shrink: 1;
+      justify-content: space-evenly;
+      align-items: center;
+      margin-top: 1rem;
+
+      input {
+        width: clamp(25px, 40px, 50px) !important;
+        height: clamp(30px, 50px, 60px) !important;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+
+        &:focus {
+          border-color: $input-focus-color;
+          box-shadow: 0 0 5px rgba($input-focus-color, 0.5);
+        }
+
+        &::placeholder {
+          color: #ccc;
+          font-size: 16px;
+        }
+      }
+
+      // Remove Spin Buttons for Number Inputs
+      input[type="number"] {
+        &::-webkit-inner-spin-button,
+        &::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
+        & {
+          -moz-appearance: textfield;
+        }
+      }
+    }
+
+    // Remove Autofill Background
+    .form-control:-webkit-autofill,
+    textarea:-webkit-autofill,
+    select:-webkit-autofill {
+      color: inherit !important;
+      -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+      box-shadow: 0 0 0 1000px transparent inset !important;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+  }
+}

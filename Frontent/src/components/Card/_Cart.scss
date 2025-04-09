@@ -1,0 +1,1018 @@
+.card {
+  height: 100% !important;
+  width: 100%;
+  max-width: 206px;
+  min-height: 323px;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0px !important;
+  border: none !important;
+  background-color: var(--white) ;
+  
+flex: 1 1 auto !important;
+  .responsive-img {
+    width: 100%;
+    height: 100%;
+    padding: 0 20px;
+    
+    max-height: 60%;
+    flex: 1 1 auto !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  padding-bottom: 0%;
+  box-shadow: 0px 0px 3px 0px var(--border);
+  border-radius: 0.5px;
+    
+  img.img-fluid {
+      border: 1px solid var(--text);
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      mix-blend-mode:multiply;
+      transition: transform 0.3s linear;
+      background-color: var(--background);
+      border: none;
+      
+      &:hover {
+        transform: scale(1.1);
+        
+      }
+    }
+
+    button {
+      color: white !important;
+      position: absolute;
+      bottom: -50px;
+      left: 0;
+      right: 0;
+      margin: auto;
+      width: 80%; // Adjust width to your preference
+      height: 2.5rem;
+      display: block;
+      font-size: 0.8rem !important;
+      background-color: var(--secondary);
+      border: none;
+      text-align: center;
+      transition: bottom 0.5s ease-in-out, opacity 0.3s ease-in-out; // Smooth animation
+      opacity: 0;
+      width: 100%;
+      height: 2rem;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 0%;
+      background-color: var(--secondary);
+      &:active {
+        background-color: var(--secondary-hover);
+      }
+    }
+
+    i.bi-heart,
+    i.bi-heart-fill,
+    i.bi-eye,
+    i.bi-eye-fill {
+      position: absolute;
+      font-size: 0.9rem;
+      color: var(--text);
+
+      transition: transform 0.5s ease-in-out, opacity 0.3s ease-in-out;
+      opacity: 0;
+      background-color: var(--background);
+      padding: 5px;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      text-align: center;
+      vertical-align: middle;
+      justify-content: center;
+      align-items: center;
+      aspect-ratio: 1/1;
+
+      &:hover {
+        color: var(--primary-hover);
+      }
+      &:active {
+        color: var(--secondary);
+        background-color: transparent;
+      }
+    }
+
+    i.bi-heart,
+    i.bi-heart-fill {
+      top: 3%;
+      right: 3%;
+      transform: translateX(100%);
+    }
+    i.bi-heart-fill.islike {
+      color: red;
+    }
+    i.bi-eye-fill.isview {
+      color: var(--primary);
+    }
+
+    i.bi-eye,
+    i.bi-eye-fill {
+      top: 20%;
+      right: 3%;
+      transform: translateX(100%);
+    }
+  }
+
+  &:hover .responsive-img button {
+    bottom: 0px;
+    opacity: 1;
+  }
+
+  &:hover .responsive-img i.bi-heart,
+  &:hover .responsive-img i.bi-heart-fill,
+  &:hover .responsive-img i.bi-eye,
+  &:hover .responsive-img i.bi-eye-fill {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+
+  &:hover .responsive-img button:active,
+  &:hover .responsive-img i.bi-heart:active,
+  &:hover .responsive-img i.bi-heart-fill:active,
+  &:hover
+    .responsive-img
+    i.bi-eye:active
+    &:hover
+    .responsive-img
+    i.bi-eye-fill:active {
+    color: var(--primary-hover);
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--white) !important;
+    flex: 1 1 auto;
+    border: none !important;
+    box-shadow: none !important;
+    background-color: transparent;
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      cursor: pointer;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: left;
+      vertical-align: middle;
+      justify-self: center;
+color: black;
+      &:hover {
+        color: var(--secondary);
+        transition: all 0.3s linear 0s;
+        -webkit-transition: all 0.3s linear 0s;
+      }
+    }
+
+    .card-price {
+      font-size: 1rem !important;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      justify-self: center;
+      color: black;
+    }
+
+    .card-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      justify-self: center;
+
+      .bi.bi-star-fill,
+      .bi.bi-star {
+        font-size: 1.1rem;
+        cursor: pointer;
+        color: #ffb800;
+
+        &:hover {
+          color: #ffb800;
+        }
+      }
+
+      i.active {
+        color: #ffb800;
+      }
+    }
+  }
+}
+
+
+//large
+@media screen and (max-width: 1199.98px) {
+
+  .card {
+ 
+    height: 100% !important;
+    width: 100%;
+    max-width: 206px;
+    min-height: 323px;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0px !important;
+    border: none !important;
+    background-color: var(--white) ;
+    
+  flex: 1 1 auto !important; 
+  .responsive-img {
+    width: 100%;
+    height: 100%;
+    padding: 0 20px;
+    max-height: 250px;
+    max-height: 60%;
+    flex: 1 1 auto !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border: none !important;
+    
+    img.img-fluid {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      mix-blend-mode: multiply;
+      transition: transform 0.3s linear;
+      background-color: var(--background);
+      border: none !important;
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    button {
+      color: white !important;
+      position: absolute;
+      bottom: -50px;
+      left: 0;
+      right: 0;
+      margin: auto;
+      width: 80%; // Adjust width to your preference
+      height: 2.5rem;
+      display: block;
+      font-size: 0.8rem !important;
+      background-color: var(--secondary);
+      border: none;
+      text-align: center;
+      transition: bottom 0.5s ease-in-out, opacity 0.3s ease-in-out; // Smooth animation
+      opacity: 0;
+      width: 100%;
+      height: 2rem;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 0%;
+      background-color: var(--secondary);
+      &:active {
+        background-color: var(--secondary-hover);
+      }
+    }
+
+    i.bi-heart,
+    i.bi-heart-fill,
+    i.bi-eye,
+    i.bi-eye-fill {
+      position: absolute;
+      font-size: 0.9rem;
+      color: var(--text);
+
+      transition: transform 0.5s ease-in-out, opacity 0.3s ease-in-out;
+      opacity: 0;
+      background-color: var(--background);
+      padding: 5px;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      text-align: center;
+      vertical-align: middle;
+      justify-content: center;
+      align-items: center;
+      aspect-ratio: 1/1;
+
+      &:hover {
+        color: var(--primary-hover);
+      }
+      &:active {
+        color: var(--secondary);
+        background-color: transparent;
+      }
+    }
+
+    i.bi-heart,
+    i.bi-heart-fill {
+      top: 3%;
+      right: 3%;
+      transform: translateX(100%);
+    }
+    i.bi-heart-fill.islike {
+      color: red;
+    }
+    i.bi-eye-fill.isview {
+      color: var(--primary);
+    }
+
+    i.bi-eye,
+    i.bi-eye-fill {
+      top: 20%;
+      right: 3%;
+      transform: translateX(100%);
+    }
+  }
+  
+    &:hover .responsive-img button {
+      bottom: 0px;
+      opacity: 1;
+    }
+  
+    &:hover .responsive-img i.bi-heart,
+    &:hover .responsive-img i.bi-heart-fill,
+    &:hover .responsive-img i.bi-eye,
+    &:hover .responsive-img i.bi-eye-fill {
+      transform: translateX(0%);
+      opacity: 1;
+    }
+  
+    &:hover .responsive-img button:active,
+    &:hover .responsive-img i.bi-heart:active,
+    &:hover .responsive-img i.bi-heart-fill:active,
+    &:hover
+      .responsive-img
+      i.bi-eye:active
+      &:hover
+      .responsive-img
+      i.bi-eye-fill:active {
+      color: var(--primary-hover);
+    }
+  
+     .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--white) !important;
+    flex: 1 1 auto;
+    border: none !important;
+    box-shadow: none !important;
+    background-color: transparent;
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      cursor: pointer;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: left;
+      vertical-align: middle;
+      justify-self: center;
+color: black;
+      &:hover {
+        color: var(--secondary);
+        transition: all 0.3s linear 0s;
+        -webkit-transition: all 0.3s linear 0s;
+      }
+    }
+
+    .card-price {
+      font-size: 1rem !important;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      justify-self: center;
+      color: black;
+    }
+
+    .card-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      justify-self: center;
+
+      .bi.bi-star-fill,
+      .bi.bi-star {
+        font-size: 1.1rem;
+        cursor: pointer;
+        color: #ffb800;
+
+        &:hover {
+          color: #ffb800;
+        }
+      }
+
+      i.active {
+        color: #ffb800;
+      }
+    }
+  }
+  }
+    
+
+}
+//medium
+@media screen and (max-width: 991.98px) {
+  .card {
+    height: 100% !important;
+    width: 100%;
+    max-width: 168px;
+    min-height: 323px;
+    max-height: 100%;
+    
+    .responsive-img {
+      img.img-fluid {
+        &:hover {
+        }
+      }
+  
+      button {
+        &:active {
+        }
+      }
+  
+      i.bi-heart,
+      i.bi-heart-fill,
+      i.bi-eye,
+      i.bi-eye-fill {
+        
+        &:hover {
+        }
+        &:active {
+        }
+      }
+  
+      i.bi-heart,
+      i.bi-heart-fill {
+         }
+      i.bi-heart-fill.islike {
+      }
+      i.bi-eye-fill.isview {
+      }
+  
+      i.bi-eye,
+      i.bi-eye-fill {
+      }
+    }
+  
+    &:hover .responsive-img button {
+    }
+  
+    &:hover .responsive-img i.bi-heart,
+    &:hover .responsive-img i.bi-heart-fill,
+    &:hover .responsive-img i.bi-eye,
+    &:hover .responsive-img i.bi-eye-fill {
+    }
+  
+    &:hover .responsive-img button:active,
+    &:hover .responsive-img i.bi-heart:active,
+    &:hover .responsive-img i.bi-heart-fill:active,
+    &:hover
+      .responsive-img
+      i.bi-eye:active
+      &:hover
+      .responsive-img
+      i.bi-eye-fill:active {
+    }
+  
+    .card-body {
+      .card-title {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: black;
+    
+        &:hover {
+        }
+      }
+  
+      .card-price {
+        font-size: 0.8rem !important;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        justify-self: center;
+        color: black;
+      }
+  
+      .card-rating {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        justify-self: center;
+  
+        .bi.bi-star-fill,
+        .bi.bi-star {
+          font-size: 0.9rem;
+          cursor: pointer;
+  
+          &:hover {
+          }
+        }
+  
+        i.active {
+        }
+      }
+    }
+  }
+  
+}
+
+
+//small
+@media screen and (max-width: 767.98px) {
+  .card {
+    min-height: 300px;
+    max-height: 310px;
+    max-width: 170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0px !important;
+    border: none !important;
+    border-radius: 10px;
+    background-color: var(--background) !important;
+  
+    .responsive-img {
+      width: 100%;
+      height: 100%;
+      max-height: 60%;
+      flex: 1 1 auto !important;
+      display: flex;
+      border-radius: 20px !important;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      border: none !important;
+      background-color: var(--white);
+      img.img-fluid {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        mix-blend-mode: multiply;
+        transition: transform 0.3s linear;
+        background-color: var(--background);
+        border-radius: 20px !important;
+        border: none !important;
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+  
+      button {
+        color: white !important;
+        position: absolute;
+        bottom: -50px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 80%; // Adjust width to your preference
+        height: 2rem;
+        display: block;
+        font-size: 0.8rem !important;
+        background-color: var(--secondary);
+        border: none;
+        text-align: center;
+        transition: bottom 0.5s ease-in-out, opacity 0.3s ease-in-out; // Smooth animation
+        opacity: 0;
+        width: 100%;
+        border-radius: 0%;
+        background-color: var(--secondary);
+        &:active {
+          background-color: var(--secondary-hover);
+        }
+      }
+  
+      i.bi-heart,
+      i.bi-heart-fill,
+      i.bi-eye,
+      i.bi-eye-fill {
+        position: absolute;
+        font-size:1rem;
+        color: var(--text);
+  
+        transition: transform 0.5s ease-in-out, opacity 0.3s ease-in-out;
+        opacity: 0;
+        background-color: var(--background);
+        padding: 5px;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        aspect-ratio: 1/1;
+  
+        &:hover {
+          color: var(--primary-hover);
+        }
+        &:active {
+          color: var(--secondary);
+          background-color: transparent;
+        }
+      }
+ 
+      i.bi-cart,
+      i.bi-cart-fill {
+
+        position: absolute;
+        color: var(--text);
+        background-color: var(--background);
+        padding: 5px;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        vertical-align: middle;
+        aspect-ratio: 1/1;
+        font-size: 1rem;
+        bottom: 3%;
+        right: 3%;
+         &.bi::before, [class^="bi-"]::before, [class*=" bi-"]::before {
+          display: flex;
+        }
+        &:hover {
+          color: var(--primary);
+        }
+        
+      
+      }
+      i.bi-cart-fill {
+color:#cd970d !important;
+
+
+      }
+
+
+      i.bi-heart,
+      i.bi-heart-fill {
+        top: 3%;
+        right: 3%;
+        transform: translateX(0%);
+        opacity: 1;
+      }
+      i.bi-heart-fill.islike {
+        color: red;
+      }
+      i.bi-eye-fill.isview {
+        color: var(--primary);
+      }
+  
+      i.bi-eye,
+      i.bi-eye-fill {
+        top: 20%;
+        right: 3%;
+        transform: translateX(100%);
+      }
+    }
+  
+    &:hover .responsive-img button {
+      bottom: 0px;
+      opacity: 1;
+    }
+  
+    &:hover .responsive-img i.bi-heart,
+    &:hover .responsive-img i.bi-heart-fill,
+    &:hover .responsive-img i.bi-eye,
+    &:hover .responsive-img i.bi-eye-fill {
+      transform: translateX(0%);
+      opacity: 1;
+    }
+  
+    &:hover .responsive-img button:active,
+    &:hover .responsive-img i.bi-heart:active,
+    &:hover .responsive-img i.bi-heart-fill:active,
+    &:hover
+      .responsive-img
+      i.bi-eye:active
+      &:hover
+      .responsive-img
+      i.bi-eye-fill:active {
+      color: var(--primary-hover);
+    }
+  
+    .card-body {
+      display: flex;
+      flex-direction: column;
+  
+      background-color: var(--background) !important;
+      flex: 1 1 auto;
+      border: none !important;
+      box-shadow: none !important;
+      background-color: transparent;
+      .card-title {
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        cursor: pointer;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
+        vertical-align: middle;
+        justify-self: center;
+  color: var(--text);
+        &:hover {
+          color: var(--secondary);
+          transition: all 0.3s linear 0s;
+          -webkit-transition: all 0.3s linear 0s;
+        }
+      }
+  
+      .card-price {
+        font-size: 0.8rem !important;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        justify-self: center;
+        color: var(--text);
+      }
+  
+      .card-rating {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        justify-self: center;
+  
+        .bi.bi-star-fill,
+        .bi.bi-star {
+          font-size: 1rem;
+          cursor: pointer;
+          color: #ffb800;
+  
+          &:hover {
+            color: #ffb800;
+          }
+        }
+  
+        i.active {
+          color: #ffb800;
+        }
+      }
+    }
+  }
+  
+}
+
+
+//extra small 
+@media screen and (max-width: 575.98px) {
+  .card {
+    height: 100% !important;
+    max-width: 155px;
+    max-height: 250px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;;
+    justify-content: space-between;
+    border: none !important;
+    border-radius: 10px;
+    background-color: var(--background) !important;
+  
+    .responsive-img {
+      width: 100%;
+      height: 100%;
+      max-height: 200px;
+      max-height: 60%;
+      flex: 1 1 auto !important;
+      display: flex;
+      border-radius: 20px !important;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      border: none !important;
+      background-color: var(--white);
+      img.img-fluid {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        mix-blend-mode: multiply;
+        transition: transform 0.3s linear;
+        background-color: var(--background);
+        border-radius: 20px !important;
+        border: none !important;
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+  
+      button {
+        color: white !important;
+        position: absolute;
+        bottom: -50px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 80%; // Adjust width to your preference
+        height: 2rem;
+        display: block;
+        font-size: 0.8rem !important;
+        background-color: var(--secondary);
+        border: none;
+        text-align: center;
+        transition: bottom 0.5s ease-in-out, opacity 0.3s ease-in-out; // Smooth animation
+        opacity: 0;
+        width: 100%;
+        border-radius: 0%;
+        background-color: var(--secondary);
+        &:active {
+          background-color: var(--secondary-hover);
+        }
+      }
+  
+      i.bi-heart,
+      i.bi-heart-fill,
+      i.bi-eye,
+      i.bi-eye-fill {
+        position: absolute;
+        font-size: 1rem;
+        color: var(--text);
+  
+        transition: transform 0.5s ease-in-out, opacity 0.3s ease-in-out;
+        opacity: 0;
+        background-color: var(--background);
+        padding: 5px;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        aspect-ratio: 1/1;
+  
+        &:hover {
+          color: var(--primary-hover);
+        }
+        &:active {
+          color: var(--secondary);
+          background-color: transparent;
+        }
+      }
+ 
+      i.bi-cart,
+      i.bi-cart-fill {
+
+        position: absolute;
+        color: var(--text);
+        background-color: var(--background);
+        padding: 5px;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        vertical-align: middle;
+        aspect-ratio: 1/1;
+        font-size: 1rem;
+        bottom: 3%;
+        right: 3%;
+        &:hover {
+          color: var(--primary);
+        }
+        &.bi::before, [class^="bi-"]::before, [class*=" bi-"]::before {
+          display: flex;
+        }
+      
+      }
+      i.bi-cart-fill {
+color:#cd970d !important;
+
+
+      }
+
+
+      i.bi-heart,
+      i.bi-heart-fill {
+        top: 3%;
+        right: 3%;
+        transform: translateX(0%);
+        opacity: 1;
+      }
+      i.bi-heart-fill.islike {
+        color: red;
+      }
+      i.bi-eye-fill.isview {
+        color: var(--primary);
+      }
+  
+      i.bi-eye,
+      i.bi-eye-fill {
+        top: 20%;
+        right: 3%;
+        transform: translateX(100%);
+      }
+    }
+  
+    &:hover .responsive-img button {
+      bottom: 0px;
+      opacity: 1;
+    }
+  
+    &:hover .responsive-img i.bi-heart,
+    &:hover .responsive-img i.bi-heart-fill,
+    &:hover .responsive-img i.bi-eye,
+    &:hover .responsive-img i.bi-eye-fill {
+      transform: translateX(0%);
+      opacity: 1;
+    }
+  
+    &:hover .responsive-img button:active,
+    &:hover .responsive-img i.bi-heart:active,
+    &:hover .responsive-img i.bi-heart-fill:active,
+    &:hover
+      .responsive-img
+      i.bi-eye:active
+      &:hover
+      .responsive-img
+      i.bi-eye-fill:active {
+      color: var(--primary-hover);
+    }
+  
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      background-color: var(--background) !important;
+      gap: 1rem;
+      flex: 1 1 auto;
+      border: none !important;
+      box-shadow: none !important;
+      background-color: transparent;
+      .card-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        cursor: pointer;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
+        vertical-align: middle;
+        justify-self: center;
+        color: var(--text);
+  
+        &:hover {
+          color: var(--secondary);
+          transition: all 0.3s linear 0s;
+          -webkit-transition: all 0.3s linear 0s;
+        }
+      }
+  
+      .card-price {
+        font-size: 0.9rem !important;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        justify-self: center;
+        color: var(--text);
+      }
+  
+      .card-rating {
+        display: flex;
+        align-items: center;
+        gap: 0.2rem;
+        justify-self: center;
+  
+        .bi.bi-star-fill,
+        .bi.bi-star {
+          font-size: 1rem;
+          cursor: pointer;
+          color: #ffb800;
+  
+          &:hover {
+            color: #ffb800;
+          }
+        }
+  
+        i.active {
+          color: #ffb800;
+        }
+      }
+    }
+  }
+}
+

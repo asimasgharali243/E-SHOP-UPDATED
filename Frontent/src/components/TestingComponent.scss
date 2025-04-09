@@ -1,0 +1,163 @@
+// // .slider-wrapper {
+// //     width: 100%;
+// //     overflow: hidden;
+// //     position: relative;
+// //   }
+  
+// //   .slider {
+// //     display: grid;
+// //     grid-auto-flow: column;
+// //     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+// //     gap: 1.5rem;
+// //     transition: transform 0.5s ease-in-out;
+// //     white-space: nowrap;
+// //   }
+  
+// //   .slide {
+// //     background: white;
+// //     border: 1px solid black;
+// //     text-align: center;
+// //     padding: 10px;
+// //     min-width: 180px;
+// //     img {
+// //       width: 100%;
+// //       object-fit: contain;
+// //       mix-blend-mode: multiply;
+// //     }
+// //     h3 {
+// //       color: aqua;
+// //       margin-top: 10px;
+// //     }
+// //   }
+  
+// //   /* Custom Navigation Buttons */
+// //   .carousel-control-prev,
+// //   .carousel-control-next {
+// //     position: absolute;
+// //     top: 50%;
+// //     transform: translateY(-50%);
+// //     background: rgba(0, 0, 0, 0.5);
+// //     border: none;
+// //     color: white;
+// //     font-size: 24px;
+// //     padding: 10px 15px;
+// //     cursor: pointer;
+// //     z-index: 10;
+// //   }
+  
+// //   .carousel-control-prev {
+// //     left: 10px;
+// //   }
+  
+// //   .carousel-control-next {
+// //     right: 10px;
+// //   }
+  
+// //   .carousel-control-prev:hover,
+// //   .carousel-control-next:hover {
+// //     background: rgba(0, 0, 0, 0.8);
+// //   }
+  
+// :root {
+//     --slides-per-view: 4; // Default for large screens
+//   }
+  
+//   @media (max-width: 1400px) {
+//     :root { --slides-per-view: 5; }
+//   }
+//   @media (max-width: 1200px) {
+//     :root { --slides-per-view: 4; }
+//   }
+//   @media (max-width: 992px) {
+//     :root { --slides-per-view: 3; }
+//   }
+//   @media (max-width: 768px) {
+//     :root { --slides-per-view: 2; }
+//   }
+//   @media (max-width: 576px) {
+//     :root { --slides-per-view: 1; }
+//   }
+  
+//   .carousel-container {
+//     position: relative;
+//     width: 100%;
+//     overflow: hidden;
+//   }
+  
+//   .slider-wrapper {
+//     width: 100%;
+//     overflow: hidden;
+//     position: relative;
+//   }
+  
+//   .slider {
+//     display: grid;
+//     grid-auto-flow: column;
+//     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+//     gap: 1.5rem;
+//     transition: transform 0.5s ease-in-out;
+//     white-space: nowrap;
+//   }
+  
+//   .slide {
+//     background: white;
+//     border: 1px solid black;
+//     text-align: center;
+//     padding: 10px;
+//     min-width: 180px;
+  
+//     img {
+//       width: 100%;
+//       object-fit: contain;
+//       mix-blend-mode: multiply;
+//     }
+//     h3 {
+//       color: aqua;
+//       margin-top: 10px;
+//     }
+//   }
+  
+//   /* Custom Navigation Buttons */
+//   .carousel-control-prev,
+//   .carousel-control-next {
+//     position: absolute;
+//     top: 50%;
+//     transform: translateY(-50%);
+//     background: rgba(0, 0, 0, 0.5);
+//     border: none;
+//     color: white;
+//     font-size: 24px;
+//     padding: 10px 15px;
+//     cursor: pointer;
+//     z-index: 10;
+//   }
+  
+//   .carousel-control-prev { left: 10px; }
+//   .carousel-control-next { right: 10px; }
+  
+//   .carousel-control-prev:hover,
+//   .carousel-control-next:hover {
+//     background: rgba(0, 0, 0, 0.8);
+//   }
+  
+//   /* Indicators */
+//   .carousel-indicators {
+//     display: flex;
+//     justify-content: center;
+//     gap: 5px;
+//     margin-top: 10px;
+  
+//     button {
+//       width: 10px;
+//       height: 10px;
+//       border-radius: 50%;
+//       border: none;
+//       background: lightgray;
+//       cursor: pointer;
+//     }
+  
+//     .active {
+//       background: black;
+//     }
+//   }
+  
