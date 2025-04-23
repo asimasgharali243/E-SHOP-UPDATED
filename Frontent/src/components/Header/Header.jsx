@@ -76,7 +76,7 @@ function OffcanvasExample() {
                 <Nav.Link as={Link} to="/wishlist" className="px-2 d-none d-md-flex">
                 <span><i className="bi bi-heart"></i><Badge bg="secondary">0</Badge></span>  <span className="d-none d-lg-flex">Wishlist</span>
                 </Nav.Link>
-                <Nav.Link as={Link} to="/cart" className="px-0 px-md-2">
+                <Nav.Link as={Link} to="/Cart" className="px-0 px-md-2">
                 <span><i className="bi bi-cart"></i><Badge bg="secondary">0</Badge></span><span className="d-none d-lg-flex">Cart</span>
                 </Nav.Link>
               </Nav>

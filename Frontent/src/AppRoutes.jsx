@@ -9,7 +9,9 @@ import Login from "./components/auth/Login";
 import ForgotPassword from "./components/auth/ForgetPassword";
 import VerifyOtp from "./components/auth/VerifyOtp";
 import ResetPassword from "./components/auth/ResetPassword";
-import TestingComponenet from "./components/TestingComponenet";
+import TestingComponenet from "./components/TestingComponenet"; 
+import Cart from "./components/Cart";
+import Checkout from './pages/CheckOut';
 
 const AppRouter = createBrowserRouter([
   {
@@ -48,6 +50,14 @@ const AppRouter = createBrowserRouter([
       {
         path: "testing",
         element:<TestingComponenet/>,
+      },
+      {
+        path: "/cart",
+        element:<Cart/>,
+      },
+      {
+        path:"/checkout",
+        element:<Checkout/>,
       },
     ],
   },
