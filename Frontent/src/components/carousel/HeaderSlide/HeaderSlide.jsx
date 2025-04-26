@@ -138,7 +138,7 @@ const HeaderSlide = () => {
   ];
 
   return (
-    <Container className="header-slider-container mt-0 mt-md-3">
+    <Container className="header-slider-container mt-0 mt-md-4">
       <Row className="justify-content-between">
         <Col className="carousel-container px-0" sm={12} md={12} lg={9}>
           <CustomCarousel indicators={true} interval={null} xs={1} sm={1} md={1} lg={1} xl={1} xxl={1}>

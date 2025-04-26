@@ -1,17 +1,20 @@
+import { lazy } from "react";
 import App from "./App";
 import { createBrowserRouter } from "react-router-dom";
-import Contact from "./components/Contact";
-import Home from "./components/Home";
-import { CataLog } from "./components/CataLog";
-import Error from "./components/Error";
-import Signup from "./components/auth/Signup";
-import Login from "./components/auth/Login";
-import ForgotPassword from "./components/auth/ForgetPassword";
-import VerifyOtp from "./components/auth/VerifyOtp";
-import ResetPassword from "./components/auth/ResetPassword";
-import TestingComponenet from "./components/TestingComponenet"; 
-import Cart from "./components/Cart";
-import Checkout from './pages/CheckOut';
+import WishListPage from "./pages/WishListPage";
+const Contact = lazy(() => import("./pages/Contact"));
+const About = lazy(() => import("./pages/About"));
+const Home = lazy(() => import("./pages/Home"));
+const CataLog = lazy(() => import("./pages/ProductsPage"));
+const Error = lazy(() => import("./pages/ErrorPage"));
+const Signup = lazy(() => import("./components/auth/Signup"));
+const Login = lazy(() => import("./components/auth/Login"));
+const ForgotPassword = lazy(() => import("./components/auth/ForgetPassword"));
+const VerifyOtp = lazy(() => import("./components/auth/VerifyOtp"));
+const ResetPassword = lazy(() => import("./components/auth/ResetPassword"));
+const TestingComponenet = lazy(() => import("./components/TestingComponenet"));
+const Cart = lazy(() => import("./components/Cart"));
+const Checkout = lazy(() => import("./pages/CheckOut"));
 
 const AppRouter = createBrowserRouter([
   {
@@ -30,7 +33,10 @@ const AppRouter = createBrowserRouter([
         path: "login",
         element: <Login />,
       },
-
+      {
+        path: "/About",
+        element: <About />,
+      },
       {
         path: "signup",
         element: <Signup />,
@@ -48,8 +54,8 @@ const AppRouter = createBrowserRouter([
         element: <ResetPassword />,
       },
       {
-        path: "testing",
-        element:<TestingComponenet/>,
+        path: "/Wishlist",
+        element:<WishListPage/>,
       },
       {
         path: "/cart",

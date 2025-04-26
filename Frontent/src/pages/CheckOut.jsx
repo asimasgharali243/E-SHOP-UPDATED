@@ -23,7 +23,7 @@ const CheckoutPage = () => {
     <Container className="my-5 ">
       <Row className="gap-4">
         {/* Billing Details */}
-        <Col md={7} className="border border-1 rounded bg-light p-4 ">
+        <Col md={7} className="border border-1 rounded bg-white p-4 rounded-2 ">
           <h3>Billing Details</h3>
           <Form>
             <Form.Group controlId="firstName" className="mb-3">
@@ -79,7 +79,8 @@ const CheckoutPage = () => {
         </Col>
 
         {/* Order Summary */}
-        <Col md={4} className="border border-1 rounded bg-light p-4 ">
+        <Col md={4} >
+          <div className="border border-1 rounded bg-white p-4 rounded-2 ">
           <h3>Order Summary</h3>
           <div className="mb-4">
             <Row className="mb-2 align-items-center">
@@ -147,10 +148,11 @@ const CheckoutPage = () => {
               />
             </Form.Group>
 
-            <Button variant="danger" onClick={handleOrder}>
+            <Button style={{ backgroundColor: `var(--secondary)`, }} className="border-0 rounded-1 p-2 w-100 " onClick={handleOrder}>
               Place Order
             </Button>
           </Form>
+          </div>
         </Col>
       </Row>
     </Container>

@@ -24,9 +24,14 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Password is required'], // Custom error message for password field
   },
-  resetOtp: { type: String }, // Encrypted OTP
-  resetOtpExpires: { type: Date }, // OTP
-  profilePic: { type: String }, 
+  resetOtp: { type: String }, 
+  resetOtpExpires: { type: Date },
+  profilePic: { type: String },
+  role: {
+    type: String,
+    enum: ['admin', 'seller', 'customer'], // Allowed roles
+    default: 'customer', // Default role is 'customer'
+  },
 });
 
 // Hash password before saving

@@ -20,15 +20,16 @@
 // }
 
 import React, { useState } from "react";
-import DeleteIcon from "@mui/icons-material/Delete";
-import IconButton from "@mui/material/IconButton";
+// import DeleteIcon from "@mui/icons-material/Delete";
+// import IconButton from "@mui/material/IconButton";
+import { Link } from "react-router-dom";
 import { Container, Row, Col, Button, Form, InputGroup } from "react-bootstrap";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
-      name: "LCD Monitor",
+      name: "LCD Monitor ",
       price: 650,
       quantity: 1,
       image:
@@ -64,8 +65,8 @@ const Cart = () => {
   return (
     <Container style={{ marginTop: "30px" }}>
       <h2 className="mb-4">Shopping Cart</h2>
-      <Row>
-        <Col xl={8} className="bg-light p-4">
+      <Row className="justify-content-between ">
+        <Col xl={8} className="bg-white p-4 rounded-2 mb-5">
           <Row className="fw-bold border p-2 ">
             <Col md={4}>Product</Col>
             <Col md={2} className="text-center">
@@ -113,36 +114,37 @@ const Cart = () => {
                 ${item.price * item.quantity}
               </Col>
               <Col md={1} className="text-center">
-                <IconButton
+                {/* <IconButton
                   aria-label="delete"
                   onClick={() => handleDelete(item.id)}
                 >
                   <DeleteIcon />
-                </IconButton>
+                </IconButton> */}
+                <i
+                  className="bi bi-trash"
+                  aria-label="delete"
+                  onClick={() => handleDelete(item.id)}
+                ></i>
               </Col>
             </Row>
           ))}
 
           {/* Action Buttons */}
           <Row className="mt-4">
-            <Col className="d-flex justify-content-between">
-              <Button variant="secondary">Return To Shop</Button>
-              <Button variant="secondary">Update Cart</Button>
+            <Col className="">
+              <Button style={{ backgroundColor: `var(--primary)` } } className="p-2 rounded-1 float-start w-25">
+                Return To Shop
+              </Button>
+              <Button style={{ backgroundColor: `var(--primary)` }}  className="p-2 rounded-1 float-end w-25">
+                Update Cart  
+              </Button>
             </Col>
           </Row>
-          <Col className="mt-5">
-            <Form className="d-flex">
-              <Form.Control type="text" placeholder="Coupon Code" />
-              <Button variant="danger" className="ms-2">
-                Apply Coupon
-              </Button>
-            </Form>
-          </Col>
         </Col>
 
-        {/* Coupon & Total Section */}
-        <Col md={4} xl={4} className="bg-light p-4">
-          <div className="border p-4">
+        {/*  Total Section */}
+        <Col md={3} xl={3} className="">
+          <div className="border p-4 bg-white rounded-2">
             <h5 className="fw-bold">Cart Total</h5>
             <div className="d-flex justify-content-between my-2">
               <span>Subtotal:</span>
@@ -158,9 +160,16 @@ const Cart = () => {
               <span>Total:</span>
               <span>${subtotal}</span>
             </div>
-            <Button variant="danger" className="w-100 mt-3">
+            <div className="d-flex justify-content-center">
+            <Button
+            as={Link}
+              to="/checkout"
+              style={{ backgroundColor: `var(--secondary)`}}
+              className="w-100 mt-3 border-0 p-2 rounded-1"
+            >
               Process to checkout
             </Button>
+            </div>
           </div>
         </Col>
       </Row>

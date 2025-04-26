@@ -24,7 +24,8 @@ export const register = createAsyncThunk('user/register', async (userData, { rej
     // Parse the successful response
     const res = await response.json();
     console.log('Register successful:', res);
-    return { data: res };
+    console.log(res);
+    return { data: res.message };
   } catch (e) {
     // Handle network or parsing errors
     console.error('Register catch error:', e);
@@ -57,7 +58,7 @@ export const login = createAsyncThunk('user/login', async (userData, { rejectWit
     // Parse the successful response
     const res = await response.json();
     console.log('Login successful:', res);
-    return { data: res };
+    return { data: res.message };
   } catch (e) {
     // Handle network or parsing errors
     console.error('Login catch error:', e);

@@ -14,6 +14,8 @@ function OffcanvasExample() {
   const theme = useSelector((state) => state.theme.theme);
   const dark_mode = useSelector((state) => state.theme.dark_mode);
 
+  
+
   useEffect(() => {
     document.body.className = theme; // Apply the theme class to the body
   }, [theme, dark_mode]);
