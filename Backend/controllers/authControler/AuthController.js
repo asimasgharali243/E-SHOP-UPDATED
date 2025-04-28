@@ -54,7 +54,7 @@ export const loginUser = async (req, res) => {
   try {
     // Find the user by email
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: 'Invalid credentials' });
+    if (!user) return res.status(400).json({ message: 'User already exists' });
 
     // Check if the entered password matches the stored hashed password
     const isMatch = await user.matchPassword(password);
