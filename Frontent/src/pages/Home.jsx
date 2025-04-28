@@ -111,39 +111,37 @@ export default function Home() {
   ];
 
   const categories = [
-    { name: "1 Dresses", icon: "bi bi-person-lines-fill" },
-    { name: "2 Handbags", icon: "bi bi-bag-fill" },
-    { name: "3 Jewelry", icon: "bi bi-gem" },
-    { name: "4 Shoes", icon: "bi bi-handbag-fill" },
-    { name: "5 Watches", icon: "bi bi-watch" },
-    { name: "6 T-Shirts", icon: "bi bi-shirt" },
-    { name: "7 Jeans", icon: "bi bi-archive-fill" },
-    { name: "8 Formal Wear", icon: "bi bi-person-standing" },
-    { name: "9 Shoes", icon: "bi bi-handbag-fill" },
-    { name: "10 Watches", icon: "bi bi-watch" },
-    { name: "11 Smartphones", icon: "bi bi-phone" },
-    { name: "12 Laptops", icon: "bi bi-laptop" },
-    { name: "13 Cameras", icon: "bi bi-camera" },
-    { name: "14 Headphones", icon: "bi bi-headphones" },
-    { name: "15 Gaming Consoles", icon: "bi bi-controller" },
-    { name: "16 Furniture", icon: "bi bi-house-fill" },
-    { name: "17 Home Decor", icon: "bi bi-brush-fill" },
-    { name: "18 Lighting", icon: "bi bi-lightbulb-fill" },
-    { name: "19 Kitchenware", icon: "bi bi-cup-straw" },
-    { name: "20 Bedding", icon: "bi bi-cloud-sun" },
-    { name: "21 Toys", icon: "bi bi-balloon-fill" },
-    { name: "22 Baby Clothes", icon: "bi bi-person-bounding-box" },
-    { name: "23 Strollers", icon: "bi bi-cart-fill" },
-    { name: "24 Educational Toys", icon: "bi bi-lightbulb" },
-    { name: "25 Diapers", icon: "bi bi-box2-fill" },
-    { name: "26 Makeup", icon: "bi bi-brush" },
-    { name: "27 Skincare", icon: "bi bi-droplet-fill" },
-    { name: "28 Haircare", icon: "bi bi-scissors" },
-    { name: "29 Perfumes", icon: "bi bi-droplet-half" },
-    { name: "30 Wellness", icon: "bi bi-heart-pulse" },
-    { name: "30 Wellness", icon: "bi bi-heart-fill" },
+    { name: "Dresses", icon: "bi bi-person-lines-fill" },
+    { name: "Handbags", icon: "bi bi-bag-fill" },
+    { name: "Jewelry", icon: "bi bi-gem" },
+    { name: "Shoes", icon: "bi bi-handbag-fill" },
+    { name: "Watches", icon: "bi bi-watch" },
+    { name: "T-Shirts", icon: "bi bi-shirt" },
+    { name: "Jeans", icon: "bi bi-archive-fill" },
+    { name: "Formal Wear", icon: "bi bi-person-standing" },
+    { name: "Shoes", icon: "bi bi-handbag-fill" },
+    { name: "Watches", icon: "bi bi-watch" },
+    { name: "Smartphones", icon: "bi bi-phone" },
+    { name: "Laptops", icon: "bi bi-laptop" },
+    { name: "Cameras", icon: "bi bi-camera" },
+    { name: "Headphones", icon: "bi bi-headphones" },
+    { name: "Gaming Consoles", icon: "bi bi-controller" },
+    { name: "Furniture", icon: "bi bi-house-fill" },
+    { name: "Home Decor", icon: "bi bi-brush-fill" },
+    { name: "Lighting", icon: "bi bi-lightbulb-fill" },
+    { name: "Kitchenware", icon: "bi bi-cup-straw" },
+    { name: "Bedding", icon: "bi bi-cloud-sun" },
+    { name: "Toys", icon: "bi bi-balloon-fill" },
+    { name: "Baby Clothes", icon: "bi bi-person-bounding-box" },
+    { name: "Strollers", icon: "bi bi-cart-fill" },
+    { name: "Educational Toys", icon: "bi bi-lightbulb" },
+    { name: "Diapers", icon: "bi bi-box2-fill" },
+    { name: "Makeup", icon: "bi bi-brush" },
+    { name: "Skincare", icon: "bi bi-droplet-fill" },
+    { name: "Haircare", icon: "bi bi-scissors" },
+    { name: "Perfumes", icon: "bi bi-droplet-half" },
+    { name: "Wellness", icon: "bi bi-heart-pulse" },
   ];
-
   const control = useRef(null);
 
   return (
@@ -173,7 +171,7 @@ export default function Home() {
             <p className="text-muted small">Up to 40% Discount All Products</p>
           </Col>
         </Row> */}
- <Row className="text-center align-items-center bg-white mb-5">
+ <Row className=" text-center align-items-center bg-white mb-5" style={{color: "black"}}>
         <Col md={3} sm={6} xs={12} className="mb-3 p-4 mb-md-0">
           <div className="d-flex align-items-center justify-content-center">
             <i className="bi bi-rocket-takeoff fs-1 me-3"></i>

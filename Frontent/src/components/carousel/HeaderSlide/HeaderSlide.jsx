@@ -166,7 +166,7 @@ const HeaderSlide = () => {
           </Col>
           <Col xs={6} md={6} lg={6} xl={6} xxl={6} className="sm-banner-item px-0">
             <p>Exclusive Deals</p>
-            <img src="/assets/banner_2_1.webp" alt="Deals Banner" />
+            <img src="/assets/products_4_1.jpg" alt="Deals Banner" />
           </Col>
         </Col>
       </Row>

@@ -21,7 +21,7 @@ const CheckoutPage = () => {
 
   return (
     <Container className="my-5 ">
-      <Row className="gap-4">
+      <Row className="gap-4 text-black">
         {/* Billing Details */}
         <Col md={7} className="border border-1 rounded bg-white p-4 rounded-2 ">
           <h3>Billing Details</h3>
@@ -148,7 +148,7 @@ const CheckoutPage = () => {
               />
             </Form.Group>
 
-            <Button style={{ backgroundColor: `var(--secondary)`, }} className="border-0 rounded-1 p-2 w-100 " onClick={handleOrder}>
+            <Button style={{ backgroundColor: `var(--secondary)`,}} className="border-0 rounded-1 p-2 w-100 " onClick={handleOrder}>
               Place Order
             </Button>
           </Form>

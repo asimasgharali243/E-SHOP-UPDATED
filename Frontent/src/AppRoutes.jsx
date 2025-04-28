@@ -5,7 +5,7 @@ import WishListPage from "./pages/WishListPage";
 const Contact = lazy(() => import("./pages/Contact"));
 const About = lazy(() => import("./pages/About"));
 const Home = lazy(() => import("./pages/Home"));
-const CataLog = lazy(() => import("./pages/ProductsPage"));
+const CataLog = lazy(() => import("./pages/Catalog"));
 const Error = lazy(() => import("./pages/ErrorPage"));
 const Signup = lazy(() => import("./components/auth/Signup"));
 const Login = lazy(() => import("./components/auth/Login"));

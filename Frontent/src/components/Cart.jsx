@@ -65,7 +65,7 @@ const Cart = () => {
   return (
     <Container style={{ marginTop: "30px" }}>
       <h2 className="mb-4">Shopping Cart</h2>
-      <Row className="justify-content-between ">
+      <Row className="justify-content-between  text-black">
         <Col xl={8} className="bg-white p-4 rounded-2 mb-5">
           <Row className="fw-bold border p-2 ">
             <Col md={4}>Product</Col>
