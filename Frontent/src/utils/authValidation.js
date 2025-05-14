@@ -1,4 +1,5 @@
-export const validateForm = (formData, fieldsToValidate) => {
+self.onmessage = function (e) {
+  const { formData, fieldsToValidate } = e.data;
   const errors = {};
   const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -33,24 +34,21 @@ export const validateForm = (formData, fieldsToValidate) => {
           errors.password = "Password must be at least 6 characters";
         }
         break;
-        case "conformPassword":
+
+      case "conformPassword":
         if (!value) {
-          errors.conformPassword = "conformPassword is required";
-        } else if (value.length < 6) {
-          errors.conformPassword = "Password must be at least 6 characters";
+          errors.conformPassword = "Confirm password is required";
         }
-        break;
-        case `comparePassword`:
-        if (!errors.conformPassword &&formData.password !== formData.conformPassword) {
-          errors.conformPassword = "Passwords must be  match";
-        }
-
+        else if (formData.password !== formData.conformPassword) {
+          errors.conformPassword = "Passwords do not match";
+        }  
         break;
 
+      
       default:
         break;
     }
   });
 
-  return errors;
+  self.postMessage(errors);
 };

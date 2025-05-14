@@ -1,17 +1,16 @@
-import React, { useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useCallback, useEffect, useRef } from "react";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import { register } from "../../redux/api/authapi/authapi";
-import { Form, Button, Alert, Container, Row, Col } from "react-bootstrap";
-import { validateForm } from "../../utils/authValidation";
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { FormGroup } from "../SubComponent/FormGroup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import AuthValidationWorker from "../../utils/authValidation.js?worker";
 
 const SignUp = () => {
-  
   const dispatch = useDispatch();
-  
-  const { loading, error, islogin } = useSelector((state) => state.authUser);
-  const [formErrors, setFormErrors] = useState({});
+  const navigate = useNavigate();
+  const { status, user } = useSelector((state) => state.authUser, shallowEqual);
+console.log(user);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -19,48 +18,23 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+
+  const [formErrors, setFormErrors] = useState({});
   const [show, setShow] = useState(false);
+  const workerRef = useRef(null);
+useEffect(() => {
+  if (user) {
+    navigate("/logout");
+  }
+},[navigate,user]);
+  useEffect(() => {
+    workerRef.current = new AuthValidationWorker();
 
-  const handleChange = (field) => (e) => {
-    setFormData({ ...formData, [field]: e.target.value });
-
-    // Remove the error for this field
-    setFormErrors((prevErrors) => {
-      const { [field]: _, ...rest } = prevErrors;
-      return rest;
-    });
-  };
-  const showPassword = useCallback(
-    (e) => {
-      setShow(!show);
-    },
-    [show]
-  );
-
-  const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      const fieldTovalidate = [
-        "firstName",
-        "lastName",
-        "userName",
-        "email",
-        "password",
-      ];
-      
-      const errors = validateForm(formData, fieldTovalidate);
-      setFormErrors(errors);
+    // Setup message handler
+    workerRef.current.onmessage = (event) => {
+      const errors = event.data;
       if (Object.keys(errors).length === 0) {
-        
-        dispatch(
-          register({
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            userName: formData.userName,
-            email: formData.email,
-            password: formData.password,
-          })
-        );
+        dispatch(register(formData));
         setFormData({
           firstName: "",
           lastName: "",
@@ -68,24 +42,53 @@ const SignUp = () => {
           email: "",
           password: "",
         });
-        
-        console.log(loading, error, islogin);
+      } else {
+        setFormErrors(errors);
       }
+    };
+
+    // Clean up on unmount
+    return () => {
+      workerRef.current.terminate();
+    };
+  }, [dispatch, formData]);
+
+  const handleChange = useCallback((field) => (e) => {
+    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+    setFormErrors((prevErrors) => {
+      const { [field]: _, ...rest } = prevErrors;
+      return rest;
+    });
+  }, []);
+
+  const showPassword = useCallback(() => setShow((prev) => !prev), []);
+
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      const fieldsToValidate = [
+        "firstName",
+        "lastName",
+        "userName",
+        "email",
+        "password",
+      ];
+
+      workerRef.current?.postMessage({ formData, fieldsToValidate });
     },
-    [formErrors]
+    [formData]
   );
 
   return (
     <Container
       fluid
-      className="d-flex justify-content-center align-items-center bg-light authcontainer "
+      className="d-flex justify-content-center align-items-center bg-light authcontainer"
       style={{ height: "100vh", width: "100vw" }}
     >
       <Form onSubmit={handleSubmit} className="p-4 border rounded formcss">
         <h2 className="text-center pb-3">Sign Up</h2>
-      
         <Row>
-          <Col className="d-flex flex-row gap-3 ">
+          <Col className="d-flex flex-row gap-3">
             <FormGroup
               label="FirstName"
               id="firstName"
@@ -96,9 +99,8 @@ const SignUp = () => {
               formError={formErrors.firstName}
               icon="bi bi-person"
               classFormGroup="mb-3"
-              autoFocus={true}
+              autoFocus
             />
-
             <FormGroup
               label="LastName"
               id="lastName"
@@ -118,31 +120,29 @@ const SignUp = () => {
               label="UserName"
               id="userName"
               type="text"
-              ame="userName"
+              name="userName"
               value={formData.userName}
               onChange={handleChange("userName")}
               formError={formErrors.userName}
-              classFormGroup="mb-3"
               icon="bi bi-person-fill"
+              classFormGroup="mb-3"
             />
-
             <FormGroup
               label="Email"
               id="email"
               type="email"
-              ame="email"
+              name="email"
               value={formData.email}
               onChange={handleChange("email")}
               formError={formErrors.email}
               icon="bi bi-envelope-at-fill"
               classFormGroup="mb-3"
             />
-
             <FormGroup
-              label="password"
+              label="Password"
               id="password"
               type={show ? "text" : "password"}
-              ame="password"
+              name="password"
               value={formData.password}
               onChange={handleChange("password")}
               formError={formErrors.password}
@@ -150,17 +150,15 @@ const SignUp = () => {
               showPassword={showPassword}
               classFormGroup="mb-3"
             />
-
             <Button
               variant=""
               type="submit"
               id="submit"
               className="w-100 bg-black text-white"
-              disabled={loading}
+              disabled={status === "loading"}
             >
-              {loading ? "Signing up..." : "Sign Up"}
+              {status === "loading" ? "Signing up..." : "Sign Up"}
             </Button>
-
             <div className="text-end mt-3">
               Already have an account? <Link to="/login">Log In</Link>
             </div>

@@ -1,0 +1,18 @@
+.carousel-container {
+  width: 100%;
+  max-width: 100%;
+  margin: auto;
+  box-sizing: border-box;
+  overflow-x: hidden !important;
+}
+
+.header-carousel-item {
+  width: 100% !important;
+  display: block;
+}
+
+.carousel-item {
+  width: 100% !important;
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+}/*# sourceMappingURL=GeneralCustomCarousel.css.map */

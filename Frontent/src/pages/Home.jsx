@@ -5,7 +5,7 @@ import Card from "../components/Card/Card";
 import CustomCarousel from "../components/carousel/CustomCarousel";
 import CustomCarousel2 from "../components/carousel/customCarousel2";
 import CardItemSlide from "../components/carousel/CardItemSlide/CardItemSlide";
-import HeaderSlide from "../components/carousel/HeaderSlide/HeaderSlide";
+import HeaderSlide from "../components/carousel/HeaderCarousel";
 import CategorySlider from "../components/carousel/categorySlider/CategorySlider";
 
 export default function Home() {
@@ -146,126 +146,7 @@ export default function Home() {
 
   return (
     <Container style={{ overflow: "hidden" }}>
-      {/* Header Slide */}
-      {<HeaderSlide />}
-      {/* <Row className="text-center  bg-white">
-          <Col as={Row} md={3} sm={6} className="mb-3 mb-md-0 justify-content-center align-items-center">
-            <Col sm={2}><i className="bi bi-rocket-takeoff fs-1 d-flex justify-content-end mb-2"></i></Col>
-            <Col sm={6}><h6 className="mt-2 justify-content-start">Free Shipping</h6>
-            <p className="text-muted small">Free Shipping On All Orders</p>
-            </Col>
-          </Col>
-          <Col md={3} sm={6} className="mb-3 mb-md-0">
-            <i className="bi bi-arrow-repeat fs-2 mb-2"></i>
-            <h6 className="mt-2">Money Guarantee</h6>
-            <p className="text-muted small">30 Day Money Back Guarantee</p>
-          </Col>
-          <Col md={3} sm={6} className="mb-3 mb-md-0">
-            <i className="bi bi-people fs-2 mb-2"></i>
-            <h6 className="mt-2">Online Support 24/7</h6>
-            <p className="text-muted small">Technical Support 24/7</p>
-          </Col>
-          <Col md={3} sm={6}>
-            <i className="bi bi-receipt fs-2 mb-2"></i>
-            <h6 className="mt-2">Member Discount</h6>
-            <p className="text-muted small">Up to 40% Discount All Products</p>
-          </Col>
-        </Row> */}
- <Row className=" text-center align-items-center bg-white mb-5" style={{color: "black"}}>
-        <Col md={3} sm={6} xs={12} className="mb-3 p-4 mb-md-0">
-          <div className="d-flex align-items-center justify-content-center">
-            <i className="bi bi-rocket-takeoff fs-1 me-3"></i>
-            <div className="text-start">
-              <h6 className="mb-1">Free Shipping</h6>
-              <p className="text-muted small mb-0">Free Shipping On All Orders</p>
-            </div>
-          </div>
-        </Col>
-
-        <Col md={3} sm={6} xs={12} className="mb-3 mb-md-0">
-          <div className="d-flex align-items-center justify-content-center">
-            <i className="bi bi-arrow-repeat fs-1 me-3"></i>
-            <div className="text-start">
-              <h6 className="mb-1">Money Guarantee</h6>
-              <p className="text-muted small mb-0">30 Day Money Back Guarantee</p>
-            </div>
-          </div>
-        </Col>
-
-        <Col md={3} sm={6} xs={12} className="mb-3 mb-md-0">
-          <div className="d-flex align-items-center justify-content-center">
-            <i className="bi bi-people fs-1 me-3"></i>
-            <div className="text-start">
-              <h6 className="mb-1">Online Support 24/8</h6>
-              <p className="text-muted small mb-0">Technical Support 24/8</p>
-            </div>
-          </div>
-        </Col>
-
-        <Col md={3} sm={6} xs={12}>
-          <div className="d-flex align-items-center justify-content-center">
-            <i className="bi bi-receipt fs-1 me-3"></i>
-            <div className="text-start">
-              <h6 className="mb-1">Member Discount</h6>
-              <p className="text-muted small mb-0">Up to 60% Discount All Products</p>
-            </div>
-          </div>
-        </Col>
-      </Row>
-
-
-      {/* Browse by Category */}
-      <CardItemSlide
-        title={"Browse by Category"}
-        initialItemsPerSlide={{ xs: 3, sm: 5, md: 6, lg: 7, xl: 8, xxl: 10 }}
-      >
-        {categories.map((category, index) => (
-          <Col key={index} className="categories-container">
-            <i className={`${category.icon} category-icon`}></i>
-            <p className="category-name">{category.name}</p>
-          </Col>
-        ))}
-      </CardItemSlide>
-
-      {/* Flash Sale */}
-      <CardItemSlide
-        title={"Flash Sale"}
-        initialItemsPerSlide={{ xs: 2, sm: 3, md: 4, lg: 4, xl: 6, xxl: 6 }}
-      >
-        {productData.map((product) => (
-          <Col key={product.id}>
-            <Card
-              image={product.image}
-              name={product.name}
-              price={product.price}
-              description={product.description}
-            />
-          </Col>
-        ))}
-      </CardItemSlide>
-
-      {/* Best Selling Products */}
-      <CardItemSlide
-        title={"Best Selling Products"}
-        initialItemsPerSlide={{ xs: 2, sm: 3, md: 6, lg: 6, xl: 6, xxl: 6 }}
-        
-      >
-        {productData.map((product) => (
-          <Col key={product.id}>
-            <Card
-              image={product.image}
-              name={product.name}
-              price={product.price}
-              description={product.description}
-            />
-          </Col>
-        ))}
-      </CardItemSlide>
-
-      {/* New Arrivals */}
-
-      
-      <CustomCarousel2 />
+      <h1>heloo hhow we you yuo are Furniture</h1>
     </Container>
   );
 }

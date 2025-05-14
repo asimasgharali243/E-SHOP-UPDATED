@@ -1,51 +1,85 @@
-import React, { useEffect, useState,useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { FormGroup } from "../SubComponent/FormGroup";
-import { validateForm } from "../../utils/authValidation";
-
-import { useDispatch, useSelector } from "react-redux";
+import AuthValidationWorker from "../../utils/authValidation.js?worker";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { forgetPassword } from "../../redux/api/authapi/ForgetPassword";
-import { OtpSendState } from "../../redux/features/auth/ForgetPasswordSlice";
 
 const ForgetPassword = () => {
   const [formData, setFormData] = useState({ email: "" });
-  const dispatch = useDispatch();
-  const { isOtpSend, loading, error } = useSelector((state) => state.ForgetPassword);
   const [formErrors, setFormErrors] = useState({});
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { timer, loading } = useSelector(
+    (state) => state.ForgetPassword,
+    shallowEqual
+  );
+  
+
+  const emailRef = useRef(""); // store latest email for navigation
+
+  // Navigate to OTP verification when timer is set
+  useEffect(() => {
+    const expiryTime = new Date(timer).getTime();
+    console.log("Expiry Time:", expiryTime);
+    if (expiryTime > Date.now() && emailRef.current) {
+      console.log(emailRef.current);
+      navigate("/verify/otp", { state: { email: emailRef.current } });
+    }
+  }, [timer, navigate]);
   const handleChange = (field) => (e) => {
-    setFormData({ [field]: e.target.value });
-    if (formErrors) setFormErrors({});
+    const value = e.target.value;
+    setFormData((prev) => ({ ...prev, [field]: value }));
+
+    if (formErrors[field]) {
+      setFormErrors((prev) => ({ ...prev, [field]: "" }));
+    }
   };
 
-  const handleSubmit = useCallback((e) => {
-    e.preventDefault();
-    const fieldToValidate = ["email"];
-    const errors = validateForm(formData, fieldToValidate);
-    setFormErrors(errors);
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      const worker = new AuthValidationWorker();
 
-    if (Object.keys(errors).length === 0) {
-      dispatch(forgetPassword({ email: formData.email }));
-    }
-  }, [dispatch, formData]);
+      worker.postMessage({
+        formData,
+        fieldsToValidate: ["email"],
+      });
 
-  useEffect(() => {
-    if (isOtpSend) {
+      worker.onmessage = (event) => {
+        const errors = event.data;
+        setFormErrors(errors);
 
-      navigate("/verify/otp", { state: { email: formData.email } });
-    }
-  },[isOtpSend]);
+        if (Object.keys(errors).length === 0) {
+          emailRef.current = formData.email;
+          dispatch(forgetPassword({ email: formData.email }));
+          navigate("/verify/otp", { state: { email: emailRef.current } });
+        }
+
+        worker.terminate();
+      };
+
+      worker.onerror = (error) => {
+        console.error("Worker validation error:", error);
+        worker.terminate();
+      };
+    },
+    [dispatch, formData]
+  );
 
   return (
     <Container
       fluid
-      className="d-flex justify-content-center align-items-center  authcontainer"
+      className="d-flex justify-content-center align-items-center authcontainer"
       style={{ height: "100vh", width: "100vw" }}
     >
-      <Form onSubmit={handleSubmit} className="p-4 border rounded formcss">
-        <h3 className="mb-3">We Will Sending OTP to Your Email</h3>
+      <Form
+        onSubmit={handleSubmit}
+        className="p-4 border rounded formcss shadow bg-white"
+      >
+        <h4 className="pb-3">We Will Send an OTP to Your Email</h4>
         <Row>
           <Col>
             <FormGroup
@@ -57,7 +91,7 @@ const ForgetPassword = () => {
               formError={formErrors.email}
               icon="bi bi-envelope-at-fill"
               classFormGroup="mb-3"
-              autoFocus={true}
+              autoFocus
             />
             <Button
               variant="primary"

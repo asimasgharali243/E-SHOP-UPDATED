@@ -1,0 +1,89 @@
+.mega-nav {
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.main-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.menu-item {
+  position: relative;
+  cursor: pointer;
+}
+
+.menu-link {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  padding: 1rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  list-style: none;
+  margin: 0;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease-in-out;
+  min-width: 180px;
+  z-index: 100;
+}
+
+.submenu li {
+  padding: 0.5rem 0;
+}
+
+.submenu-link {
+  text-decoration: none;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.menu-item.active .submenu,
+.menu-item:hover .submenu {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .main-menu {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+  .submenu {
+    position: relative;
+    transform: none;
+    box-shadow: none;
+    display: none;
+    opacity: 1;
+    padding-left: 1.5rem;
+  }
+  .menu-item.active .submenu {
+    display: block;
+  }
+  .menu-link {
+    width: 100%;
+    text-align: left;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #eee;
+  }
+}/*# sourceMappingURL=MegaDropdownMenu.css.map */

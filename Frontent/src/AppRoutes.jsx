@@ -15,7 +15,7 @@ const ResetPassword = lazy(() => import("./components/auth/ResetPassword"));
 const TestingComponenet = lazy(() => import("./components/TestingComponenet"));
 const Cart = lazy(() => import("./components/Cart"));
 const Checkout = lazy(() => import("./pages/CheckOut"));
-
+const Logout = lazy(() => import("./components/auth/Logout"));
 const AppRouter = createBrowserRouter([
   {
     path: "/",
@@ -52,6 +52,10 @@ const AppRouter = createBrowserRouter([
       {
         path: "reset/password",
         element: <ResetPassword />,
+      },
+      {
+        path: "logout",
+        element: <Logout />,
       },
       {
         path: "/Wishlist",

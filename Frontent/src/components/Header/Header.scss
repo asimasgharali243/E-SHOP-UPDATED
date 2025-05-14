@@ -1,10 +1,9 @@
 .checkDarkMode {
-  
   display: inline-block;
-& .form-check.form-switch .form-check-input,& .form-check.form-switch .form-check-label{
-  cursor: pointer ;
-  
-}
+  & .form-check.form-switch .form-check-input,
+  & .form-check.form-switch .form-check-label {
+    cursor: pointer;
+  }
 }
 
 .header {
@@ -105,10 +104,9 @@
             height: 20px;
             display: flex;
             justify-content: center;
-            
+
             align-items: center;
             background-color: var(--secondary) !important;
-            
           }
         }
       }
@@ -116,7 +114,7 @@
   }
 }
 
-.header-menu .HeaderRow2 .offcanvas-body {
+.header-menu .offcanvas-body {
   display: flex;
   justify-content: space-between;
   align-items: center;

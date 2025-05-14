@@ -1,40 +1,40 @@
-import apis from '../../../utils/apis'
-import { createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { forgetPassword } from '../../api/authapi/ForgetPassword';
-import ShowToast from '../../../components/SubComponent/Showtoast'; 
+import ShowToast from '../../../components/SubComponent/Showtoast';
+
 const ForgetPasswordSlice = createSlice({
   name: 'ForgetPassword',
-  initialState: {timer:0,isOtpSend:false, loading: false, error: null },
+  initialState: {
+    timer: 0,
+    loading: false,
+  },
   reducers: {
-    
-      OtpSendState: (state,action) => {
-        return { ...state, isOtpSend: action.payload };
-      },
-      resetTime: (state) => {
-        state.timer=0;
-      }
-      
-  
+    resetTime: (state) => {
+      state.timer = 0;
+      state.loading = false;
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(forgetPassword.pending, (state) => { state.loading = true; })
+    .addCase(forgetPassword.pending, (state, action) => {
+      state.loading = true;
+    })
       .addCase(forgetPassword.fulfilled, (state, action) => {
+        state.timer = action.payload.data.timer || 0;
         state.loading = false;
-        state.error = null;
-        state.isOtpSend=true;
-        state.timer=action.payload.data.timer;
-        ShowToast('success', "Otp send successfully", 'top-right');
+        
+        ShowToast('success', action.payload.data.message || 'OTP sent successfully', 'top-right');
+        
       })
       .addCase(forgetPassword.rejected, (state, action) => {
+        state.timer = action.payload.timer || 0;
+        
         state.loading = false;
-        state.isOtpSend=true;
-        state.error = action.payload.message;
-        state.timer=action.payload.timer;
-        ShowToast('error', `${action.payload.message || 'Network error'}`, 'top-right');
-      })
-      
+        console.log(action.payload.message);
+        ShowToast('error', action.payload.message || 'Failed to send OTP', 'top-right');
+      });
   },
 });
-export const { OtpSendState,resetTime } = ForgetPasswordSlice.actions;
+
+export const { resetTime } = ForgetPasswordSlice.actions;
 export default ForgetPasswordSlice.reducer;

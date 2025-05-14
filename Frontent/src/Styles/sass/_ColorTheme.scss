@@ -4,7 +4,7 @@
 $colors: (
   gunmetal: #2E3545,
   jasper: #BE593B,
-  b:rgb(13,110,253),
+  bg1-color:#f8f9fa,
   anti-flash-white: #EDEEF0,
   silver-lake-blue: #5F87C7,
   true-blue: #4F73AF,
@@ -45,7 +45,8 @@ $themes:(
     primary: map-get($colors, true-blue),
     secondary: map-get($colors, jasper),   
     text: map-get($colors, gunmetal),
-    background: map-get($colors,anti-flash-white),
+    text1:map-get($colors, gunmetal),
+    background: map-get($colors,bg1-color),
     accent: map-get($colors, tiger-eye),
     border: map-get($colors, platinum),
     link: map-get($colors, silver-lake-blue),
@@ -54,6 +55,7 @@ $themes:(
     primary: map-get($colors, silver-lake-blue),
     secondary: map-get($colors, ut-orange),
     text: map-get($colors, anti-flash-white),
+    text1:map-get($colors, gunmetal),
     background: map-get($colors, raisin-black),
     accent: map-get($colors, redwood),
     border: map-get($colors, dark-navy),
@@ -71,6 +73,7 @@ $themes:(
   --secondary: #{map-get($theme, secondary)};
   --secondary-hover: #{darken(map-get($theme, secondary), 10%)};
   --text: #{map-get($theme, text)};
+  --text1:#{map-get($theme, text1)};
   --background: #{map-get($theme, background)};
   --accent: #{map-get($theme, accent)};
   --border: #{map-get($theme, border)};

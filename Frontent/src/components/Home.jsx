@@ -151,6 +151,7 @@ export default function Home() {
   return (
     <Container style={{ overflow: "hidden" }}>
       {/* Header Slide */}
+
       {<HeaderSlide />}
 
       {/* Browse by Category */}

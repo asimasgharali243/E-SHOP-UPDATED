@@ -1,9 +1,9 @@
 import nodemailer from "nodemailer";
 export const Mailer = nodemailer.createTransport({
-    service: "Gmail", // Use your email service
+    service: "Gmail", 
     auth: {
-      user: "hashimali123456.asim@gmail.com", // Replace with your email
-      pass: "lvjm vsrx aoej vwdz",  // Replace with your email password
+      user: "hashimali123456.asim@gmail.com", 
+      pass: "lvjm vsrx aoej vwdz",  
       secure: true,
       
     },

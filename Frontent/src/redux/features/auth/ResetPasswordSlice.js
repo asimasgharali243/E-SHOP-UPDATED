@@ -1,32 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { resetPasswordApi } from "../../api/authapi/resetPasswordApi";
-import  ShowToast from "../../../components/SubComponent/Showtoast";
+import ShowToast from "../../../components/SubComponent/Showtoast";
+
 const ResetPasswordSlice = createSlice({
-  name: "ResetPassword",
-  initialState: { loading: false, success: false, error: null },
+  name: "resetPassword",
+  initialState: {
+    status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
+  },
   reducers: {
     clearResetState: (state) => {
-      state.success = false;
-      state.error = null;
+      state.status = "idle";
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(resetPasswordApi.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = null;
+        state.status = "loading";
+        
       })
-      .addCase(resetPasswordApi.fulfilled, (state,action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = null;
-        ShowToast("success", `${action.payload.data.message || "Password reset successfully"}`, "top-right");
+      .addCase(resetPasswordApi.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        ShowToast(
+          "success",
+          action.payload?.data?.message || "Password reset successfully",
+          "top-right"
+        );
       })
       .addCase(resetPasswordApi.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-        ShowToast("error", `${action.payload || "Network error"}`, "top-right");
+        state.status = "failed";
+        ShowToast("error", action.payload.message || "Network error", "top-right");
       });
   },
 });

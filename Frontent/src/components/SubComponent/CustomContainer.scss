@@ -1,0 +1,40 @@
+// override.scss
+
+.container {
+  width: 100%;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  margin-left: auto;
+  margin-right: auto;
+.row{
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+.col{
+  width: 100%;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+}
+  @media (min-width: 576px) {
+    max-width: 612px !important;
+  }
+
+  @media (min-width: 768px) {
+    max-width: 836px !important;
+  }
+
+  @media (min-width: 992px) {
+    max-width: 1044px !important;
+  }
+
+  @media (min-width: 1200px) {
+    max-width: 1245px !important;
+  }
+
+  @media (min-width: 1400px) {
+    max-width: 1380px !important;
+  }
+
+}

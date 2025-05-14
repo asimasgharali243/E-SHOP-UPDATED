@@ -26,7 +26,7 @@ export const  forgetPassword = createAsyncThunk('Forget/Password', async (userDa
   } catch (e) {
     // Handle network or parsing errors
     console.error('Forget password catch error:', e);
-    return rejectWithValue(e || 'Network error');
+    return rejectWithValue(e);
   }
 });
 

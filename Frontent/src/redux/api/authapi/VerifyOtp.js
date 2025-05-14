@@ -15,7 +15,7 @@ export const  VerifyOtpApi = createAsyncThunk('Otp/Verify', async (userData, { r
       // Handle HTTP errors
       const error = await response.json();
       console.error(' Otp Verify error:', error);
-      return rejectWithValue(error.message);
+      return rejectWithValue(error);
     }
 
     // Parse the successful response
@@ -25,7 +25,7 @@ export const  VerifyOtpApi = createAsyncThunk('Otp/Verify', async (userData, { r
   } catch (e) {
     // Handle network or parsing errors
     console.error('Otp verify catch error:', e);
-    return rejectWithValue(e.message || 'Network error');
+    return rejectWithValue(e);
   }
 });
 

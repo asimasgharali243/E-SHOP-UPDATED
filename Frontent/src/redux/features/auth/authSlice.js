@@ -1,42 +1,96 @@
-import apis from '../../../utils/apis'
-import { createSlice} from '@reduxjs/toolkit';
-import { register, login } from '../../api/authapi/authapi';
-import ShowToast from '../../../components/SubComponent/Showtoast'; 
+import { createSlice } from '@reduxjs/toolkit';
+import { register, login ,logout } from '../../api/authapi/authapi';
+import ShowToast from '../../../components/SubComponent/Showtoast';
+
+// ---------- Local Storage Helpers ----------
+const AuthUser = 'authUser';
+
+const getStoredUser = () => {
+  try {
+    const user = localStorage.getItem(AuthUser);
+    return user ? JSON.parse(user) : null;
+  } catch {
+    return null;
+  }
+};
+
+const storeUser = (userData) => {
+  try {
+    localStorage.setItem(AuthUser, JSON.stringify(userData));
+  } catch {}
+};
+
+const clearStoredUser = () => {
+  try {
+    localStorage.removeItem(AuthUser);
+  } catch {}
+};
+
+// ---------- Redux Slice ----------
 const authSlice = createSlice({
   name: 'authUser',
-  initialState: { user: null, loading: false, error: null ,islogin:false},
-  reducers: {},
+  initialState: {
+    user: getStoredUser(),
+    status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+  },
+  reducers: {
+    
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(register.pending, (state) => { state.loading = true; })
+
+      // ------ REGISTER ------
+      .addCase(register.pending, (state) => {
+        state.status = 'loading';
+      })
       .addCase(register.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload.data;
-        state.islogin=true;
-        state.error = null;
-        ShowToast('success', 'Registration successfully', 'top-right');
+        const userData = action.payload.data;
+        state.user = userData;
+        state.status = 'succeeded';
+        storeUser(userData);
+        ShowToast('success', userData.message || 'Registered successfully', 'top-right');
       })
       .addCase(register.rejected, (state, action) => {
-        state.loading = false;
-        state.islogin=false;
-        state.error = action.payload;
-        ShowToast('error', `${action.payload}`, 'top-right');
+        state.status = 'failed';
+        ShowToast('error', action.payload.message || 'Registration failed', 'top-right');
       })
-      .addCase(login.pending, (state) => { state.loading = true; })
+
+      // ------ LOGIN ------
+      .addCase(login.pending, (state) => {
+        state.status = 'loading';
+      })
       .addCase(login.fulfilled, (state, action) => {
-        state.loading = false;
-        state.islogin=true;
-        state.error = null;
-        state.user = action.payload.data;
-        ShowToast('success', 'Login successfully', 'top-right');
+        console.log("testing"+action.payload)
+        const userData = action.payload.data.user;
+        state.user = userData;
+        state.status = 'succeeded';
+        storeUser(userData);
+        ShowToast('success', action.payload.data.message || 'Login successful', 'top-right');
       })
       .addCase(login.rejected, (state, action) => {
-        state.loading = false;
-        state.islogin=false;
-        state.error = action.payload;
-        ShowToast('error', `${action.payload}`, 'top-right');
+        state.status = 'failed';
+        ShowToast('error', action.payload.message || 'Login failed', 'top-right');
+      })
+
+      /* ------ LOGOUT ------ */
+      .addCase(logout.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.user = null;
+        state.status = 'idle';
+        clearStoredUser();
+        ShowToast('success', 'Logout successful', 'top-right');
+      })
+      .addCase(logout.rejected, (state, action) => {
+        state.status = 'failed';
+        ShowToast('error', action.payload.message || 'Logout failed', 'top-right');
       });
+      
+      
   },
 });
+
+// ---------- Exports ----------
 
 export default authSlice.reducer;

@@ -5,6 +5,7 @@ const apis = () => {
     baseUrl:`${local}`,
     registerUser: `${local}user/signup`,
     loginUser: `${local}user/login`,
+    logoutUser: `${local}user/logout`,
     forgetPassword: `${local}user/forgetpassword`,
     otpVerify: `${local}user/otp/verify`,
     resetPassword: `${local}user/resetpassword`,

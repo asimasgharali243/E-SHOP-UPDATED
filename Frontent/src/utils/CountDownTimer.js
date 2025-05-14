@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react";
-import {useSelector } from "react-redux";
 
 
-
-export const useCountdownTimer = () => {
-  const { timer } = useSelector((state) => state.ForgetPassword); // Get timer from Redux state
+export const useCountdownTimer = (timer) => {
 
   const [countDown, setCountDown] = useState(0);
 
   useEffect(() => {
     // Reset the countdown when the timer value changes
-    if (!timer) return;
+    if (!timer) return 0;
 
     const targetTime = new Date(timer).getTime(); // Convert timer to a valid time
     setCountDown(Math.max(targetTime - Date.now(), 0));
@@ -27,7 +24,6 @@ export const useCountdownTimer = () => {
 
     return () => clearInterval(interval); // Cleanup interval on unmount or timer change
   }, [timer]); // Depend on timer changes from Redux
-
   return formatTime(countDown);
 };
 
@@ -37,7 +33,7 @@ const formatTime = (countDown) => {
   const hours = Math.floor((countDown % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const minutes = Math.floor((countDown % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((countDown % (1000 * 60)) / 1000);
-  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  //  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
   return {days,hours,minutes,seconds}
 };

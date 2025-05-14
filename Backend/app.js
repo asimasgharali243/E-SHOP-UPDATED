@@ -3,10 +3,11 @@ import cookieParser from 'cookie-parser';
 import authRoutes from './routes/AuthRoute.js';
 import ProductRouter from './routes/ProductsRoutes.js'
 import cors from 'cors';
+import compression from 'compression';
 
 export const app = express();
 
-
+app.use(compression());
 app.use(cors({ 
     origin: 'http://localhost:3000', 
     credentials: true,              // Allow cookies to be sent
