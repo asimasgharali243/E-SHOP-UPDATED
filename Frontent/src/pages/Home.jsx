@@ -146,7 +146,7 @@ export default function Home() {
 
   return (
     <Container style={{ overflow: "hidden" }}>
-      <h1>heloo hhow we you yuo are Furniture</h1>
+      <h1>heloo hhow we yhgsdalhdldfjcvh</h1>
     </Container>
   );
 }
