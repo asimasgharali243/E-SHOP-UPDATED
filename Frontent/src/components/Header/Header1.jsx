@@ -11,7 +11,7 @@ import {
   Badge,
   Offcanvas,
 } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
+import { Link,useNavigate, useLocation } from "react-router-dom";
 import { toggleTheme } from "../../redux/features/theme-mode/ThemeSlice";
 import CustomContainer from "../SubComponent/CustomContainer";
 import DropdownMenu from "./DropdownMenu";
@@ -19,27 +19,16 @@ import "./Header1.scss";
 import TopBar from "./TopBar";
 import SearchBar from "./SearchBar";
 import ToggleIcon from "../SubComponent/ToggleIcon";
-
+import useIsmobile from "../CustomHook/useIsmobile";
 export default function Header1() {
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const handleShow = () => setShowOffcanvas(true);
   const handleClose = () => setShowOffcanvas(false);
   const location = useLocation();
   const theme = useSelector((state) => state.theme.theme);
- const [isMobile, setIsMobile] = useState(false);
+ const isMobile= useIsmobile();
 const offcanvasRef = useRef(null);
-
- useEffect(() => {
-  const handleResize = () => {
-    const mobile = window.innerWidth < 768;
-    setIsMobile(mobile);
-    if (!mobile) setShowOffcanvas(false); // close Offcanvas when switching to desktop
-  };
-
-  handleResize();
-  window.addEventListener("resize", handleResize);
-  return () => window.removeEventListener("resize", handleResize);
-}, []);
+const navigate = useNavigate();
 
 // useEffect(() => {
 //   if (offcanvasRef.current) {
@@ -51,6 +40,46 @@ const offcanvasRef = useRef(null);
 //   }
 // }, [isMobile, theme]);
 
+
+ 
+  const categories = [
+    {
+      name: "Women's Fashion",
+      key: "women",
+      subcategories: Array.from({ length: 30 }, (_, i) => ({
+        name: `Women's Item ${i + 1}`,
+        key: `women_item_${i + 1}`,
+        image: `https://picsum.photos/seed/women${i + 1}/150/150`,
+      })),
+    },
+    {
+      name: "Women's Fashion1",
+      key: "women1",
+      subcategories: Array.from({ length: 30 }, (_, i) => ({
+        name: `Women's Item ${i + 1}`,
+        key: `women_item_${i + 1}`,
+        image: `https://picsum.photos/seed/women${i + 1}/150/150`,
+      })),
+    },
+    {
+      name: "Men's Fashion",
+      key: "men",
+      subcategories: Array.from({ length: 30 }, (_, i) => ({
+        name: `Men's Item ${i + 1}`,
+        key: `men_item_${i + 1}`,
+        image: `https://picsum.photos/seed/men${i + 1}/150/150`,
+      })),
+    },
+    {
+      name: "Electronics",
+      key: "electronics",
+      subcategories: Array.from({ length: 27 }, (_, i) => ({
+        name: `Electronics Item ${i + 1}`,
+        key: `electronics_item_${i + 1}`,
+        image: `https://picsum.photos/seed/electronics${i + 1}/150/150`,
+      })),
+    },
+  ];
 
 
   return (
@@ -162,7 +191,13 @@ const offcanvasRef = useRef(null);
               </Offcanvas.Header>
               <Offcanvas.Body className="">
                 <Nav className={``}>
-                  <DropdownMenu />
+                  <DropdownMenu 
+                  navigate={navigate} 
+                  categories={categories} 
+                  theme={theme}
+                  isMobile={isMobile}
+                  setShowOffcanvas={setShowOffcanvas}
+                  />
                   <Nav.Link
                     as={Link}
                     onClick={handleClose}

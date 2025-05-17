@@ -1,0 +1,21 @@
+.product-card {
+  transition: transform 0.3s ease-in-out;
+  border-radius: 1rem;
+}
+.product-card .product-image {
+  height: 220px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.product-card:hover {
+  transform: translateY(-5px);
+}
+.product-card:hover .action-icons {
+  opacity: 1;
+  transform: translateY(0);
+}
+.product-card .action-icons {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.2s ease-in-out;
+}/*# sourceMappingURL=ProductCard.css.map */

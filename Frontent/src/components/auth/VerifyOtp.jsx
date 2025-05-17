@@ -30,10 +30,10 @@ console.log(status);
   const { minutes, seconds, expired } = useWorkerCountdown(initialTargetTime);
 
   useEffect(() => {
-    if (!email) navigate("/forgetpassword");
+    if (!email || !reduxTimer ) navigate("/forgetpassword");
     else inputRefs.current[0]?.focus();
   }, [email, navigate]);
-
+console.log(reduxTimer);
   useEffect(() => {
     if (status === "succeeded") {
       navigate("/reset/password", { state: { email,status } });

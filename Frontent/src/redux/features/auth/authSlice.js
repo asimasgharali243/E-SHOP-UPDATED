@@ -45,7 +45,7 @@ const authSlice = createSlice({
       })
       .addCase(register.fulfilled, (state, action) => {
         const userData = action.payload.data;
-        state.user = userData;
+        state.user = userData.user;
         state.status = 'succeeded';
         storeUser(userData);
         ShowToast('success', userData.message || 'Registered successfully', 'top-right');

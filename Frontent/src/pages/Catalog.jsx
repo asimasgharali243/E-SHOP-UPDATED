@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Button, Offcanvas, Dropdown } from 'react-bootstrap';
 import FilterSidebar from '../components/FilterComponent/FilterSidebar';
-import ProductCard from '../components/Card/Card';
+import ProductCard from '../components/Card/ProductCard';
 
 const CatalogPage = () => {
   const [showFilter, setShowFilter] = useState(false);
@@ -81,6 +81,7 @@ const CatalogPage = () => {
       image: "/assets/products_1_1_1920x.jpg",
       name: "Product 9",
       price: 29.99,
+      badge: "New",
       description: "Description for Product 2",
     },
     {
@@ -88,6 +89,7 @@ const CatalogPage = () => {
       image: "https://via.placeholder.com/200",
       name: "Product 10 asdsadsa sad sadadsadads dasds",
       price: 39.99,
+      discount: 20,
       description: "Description for Product 3",
     },
     {
@@ -207,7 +209,7 @@ const CatalogPage = () => {
           <Row {...getGridCols()} className="g-3">
             {productData.map((product) => (
               <Col key={product.id}>
-                <ProductCard {...product} />
+                <ProductCard product={product} />
               </Col>
             ))}
           </Row>

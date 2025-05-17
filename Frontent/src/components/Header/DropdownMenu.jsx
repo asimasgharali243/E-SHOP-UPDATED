@@ -1,90 +1,62 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Dropdown, Modal, Row, Col } from 'react-bootstrap';
-import './CustomDropdownMenu.scss';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Dropdown, Modal, Row, Col, Accordion } from "react-bootstrap";
+import "./CustomDropdownMenu.scss";
 
-const CustomDropdownMenu = ({ categorie, theme = 'light' }) => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+const CustomDropdownMenu = ({
+  categories,
+  theme = "light",
+  navigate,
+  isMobile,
+  setShowOffcanvas,
+}) => {
   const [showMain, setShowMain] = useState(false);
   const [openSubIndex, setOpenSubIndex] = useState(null);
   const [showMobileModal, setShowMobileModal] = useState(false);
   const closeTimeout = useRef(null);
-  
-  const categories = [
-    {
-      name: "Women's Fashion",
-      key: "women",
-      subcategories: Array.from({ length: 30 }, (_, i) => ({
-        name: `Women's Item ${i + 1}`,
-        key: `women_item_${i + 1}`,
-        image: `https://picsum.photos/seed/women${i + 1}/150/150`,
-      })),
-    },
-    {
-      name: "Women's Fashion1",
-      key: "women1",
-      subcategories: Array.from({ length: 30 }, (_, i) => ({
-        name: `Women's Item ${i + 1}`,
-        key: `women_item_${i + 1}`,
-        image: `https://picsum.photos/seed/women${i + 1}/150/150`,
-      })),
-    },
-    {
-      name: "Men's Fashion",
-      key: "men",
-      subcategories: Array.from({ length: 30 }, (_, i) => ({
-        name: `Men's Item ${i + 1}`,
-        key: `men_item_${i + 1}`,
-        image: `https://picsum.photos/seed/men${i + 1}/150/150`,
-      })),
-    },
-    {
-      name: "Electronics",
-      key: "electronics",
-      subcategories: Array.from({ length: 27 }, (_, i) => ({
-        name: `Electronics Item ${i + 1}`,
-        key: `electronics_item_${i + 1}`,
-        image: `https://picsum.photos/seed/electronics${i + 1}/150/150`,
-      })),
-    },
-  ];
-
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener('resize', handleResize);
     return () => {
-      window.removeEventListener('resize', handleResize);
       if (closeTimeout.current) {
         clearTimeout(closeTimeout.current);
       }
     };
   }, []);
 
-  const handleClick = useCallback((e) => {
-    const role = e.target.closest('[data-role]')?.dataset?.role;
-    const index = e.target.closest('[data-index]')?.dataset?.index;
+  const handleClick = useCallback(
+    (e) => {
+      const role = e.target.closest("[data-role]")?.dataset?.role;
+      const index = e.target.closest("[data-index]")?.dataset?.index;
+      const subKey = e.target.closest("[data-subkey]")?.dataset?.subkey;
 
-    if (!role) return;
+      if (!role) return;
 
-    if (role === 'toggle-main') {
-      if (isMobile) {
-        setShowMobileModal(true);
-      } else {
-        setShowMain((prev) => !prev);
-        setOpenSubIndex(null);
+      if (role === "toggle-main") {
+        if (isMobile) {
+          setShowMobileModal(true);
+        } else {
+          setShowMain((prev) => !prev);
+          setOpenSubIndex(null);
+        }
       }
-    }
 
-    if (role === 'toggle-sub') {
-      setOpenSubIndex((prev) => (prev === index ? null : index));
-    }
-  }, [isMobile]);
+      if (role === "toggle-sub") {
+        setOpenSubIndex((prev) => (prev === index ? null : index));
+      }
+
+      if (role === "subcategory" && subKey) {
+        navigate(`/catalog/open=${subKey}`);
+        setShowMain(false);
+        setOpenSubIndex(null);
+        setShowMobileModal(false);
+        setShowOffcanvas(false);
+      }
+    },
+    [isMobile, navigate, setShowOffcanvas]
+  );
 
   const handleMouseEnter = (index) => {
     if (!isMobile) {
-      if (closeTimeout.current) {
-        clearTimeout(closeTimeout.current);
-      }
+      if (closeTimeout.current) clearTimeout(closeTimeout.current);
       setShowMain(true);
       setOpenSubIndex(index);
     }
@@ -92,19 +64,12 @@ const CustomDropdownMenu = ({ categorie, theme = 'light' }) => {
 
   const handleMouseLeave = () => {
     if (!isMobile) {
-      if (closeTimeout.current) {
-        clearTimeout(closeTimeout.current);
-      }
+      if (closeTimeout.current) clearTimeout(closeTimeout.current);
       closeTimeout.current = setTimeout(() => {
         setShowMain(false);
         setOpenSubIndex(null);
-      }, 3000); // 3 seconds delay
+      }, 100);
     }
-  };
-
-  const handleSelect = (subcategory) => {
-    console.log('Selected:', subcategory);
-    // Implement navigation or other actions here
   };
 
   return (
@@ -115,12 +80,12 @@ const CustomDropdownMenu = ({ categorie, theme = 'light' }) => {
         onMouseLeave={handleMouseLeave}
         aria-label="Main Product Categories"
       >
-        <Dropdown className="custom-dropdown" show={showMain} onToggle={() => {}}>
+        <Dropdown className="custom-dropdown" show={showMain}>
           <Dropdown.Toggle
             data-role="toggle-main"
             variant="primary"
-            aria-haspopup="true"
             className="custom-dropdown-toggle d-flex align-items-center justify-content-center gap-3"
+            aria-haspopup="true"
             aria-expanded={showMain}
             aria-controls="main-menu"
             onMouseEnter={() => handleMouseEnter(null)}
@@ -131,41 +96,55 @@ const CustomDropdownMenu = ({ categorie, theme = 'light' }) => {
 
           <Dropdown.Menu
             id="main-menu"
-            className={`main-menu ${showMain ? 'show' : ''}`}
+            className={`main-menu ${showMain ? "show" : ""}`}
             role="menu"
             onMouseLeave={handleMouseLeave}
             onMouseEnter={() => {
-              if (closeTimeout.current) {
-                clearTimeout(closeTimeout.current);
-              }
+              if (closeTimeout.current) clearTimeout(closeTimeout.current);
             }}
           >
             {categories.map((category, index) => (
               <div
                 key={category.key}
-                className={`dropdown-item ${category.subcategories?.length ? 'has-submenu' : ''}`}
-                data-role={category.subcategories?.length ? 'toggle-sub' : undefined}
+                className={`dropdown-item ${
+                  category.subcategories?.length ? "has-submenu" : ""
+                }`}
+                data-role={
+                  category.subcategories?.length ? "toggle-sub" : undefined
+                }
                 data-index={index}
-                aria-haspopup={category.subcategories?.length ? 'true' : undefined}
+                aria-haspopup={
+                  category.subcategories?.length ? "true" : undefined
+                }
                 aria-expanded={openSubIndex === index}
                 onMouseEnter={() => handleMouseEnter(index)}
               >
                 {category.subcategories?.length ? (
                   <>
                     <div className="d-flex justify-content-between align-items-center">
-                      <span>{category.name}</span>
-                      <i className={`bi bi-caret-${openSubIndex === index ? 'right' : 'down'}-fill`}></i>
+                      <span >{category.name}</span>
+                      <i
+                        className={`bi bi-caret-${
+                          openSubIndex === index ? "right" : "down"
+                        }-fill`}
+                      ></i>
                     </div>
-                    <div className={`submenu ${openSubIndex === index ? 'show' : ''}`} role="menu">
+                    <div
+                      className={`submenu ${
+                        openSubIndex === index ? "show" : ""
+                      }`}
+                      role="menu"
+                    >
                       {category.subcategories.map((sub) => (
                         <div
                           key={sub.key}
-                          onClick={() => handleSelect(sub.name)}
+                          data-role="subcategory"
+                          data-subkey={sub.key}
                           role="button"
                           className="sub-menu-item"
                           style={{
-                            width: '100px',
-                            textAlign: 'center',
+                            width: "100px",
+                            textAlign: "center",
                           }}
                         >
                           <img
@@ -173,15 +152,14 @@ const CustomDropdownMenu = ({ categorie, theme = 'light' }) => {
                             alt={sub.name}
                             width="64"
                             height="64"
-                            onError={(e) => {
-                              e.currentTarget.onerror = null;
-                              e.currentTarget.src = '/placeholder.jpg';
-                            }}
                             className="rounded-circle"
-                            style={{ objectFit: 'cover', marginBottom: '12px' }}
                             loading="lazy"
+                            style={{ objectFit: "cover", marginBottom: "12px" }}
                           />
-                          <p className="m-0" style={{ fontSize: 'clamp(12px, 1.2vw, 13px)' }}>
+                          <p
+                            className="m-0 text-muted"
+                            style={{ fontSize: "clamp(12px, 1.2vw, 13px)" }}
+                          >
                             {sub.name}
                           </p>
                         </div>
@@ -189,7 +167,10 @@ const CustomDropdownMenu = ({ categorie, theme = 'light' }) => {
                     </div>
                   </>
                 ) : (
-                  <a href={`/category/${category.key}`} className="dropdown-link">
+                  <a
+                    href={`/category/${category.key}`}
+                    className="dropdown-link"
+                  >
                     {category.name}
                   </a>
                 )}
@@ -197,60 +178,70 @@ const CustomDropdownMenu = ({ categorie, theme = 'light' }) => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-      </nav>
 
-      {isMobile && (
-        <Modal
-          data-bs-theme={theme}
-          show={showMobileModal}
-          onHide={() => setShowMobileModal(false)}
-          centered
-          size="lg"
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Select Category</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {categories.map((category) => (
-              <div key={category.key} className="mb-4">
-                <h6 className="fw-bold">{category.name}</h6>
-                <Row>
-                  {category.subcategories.slice(0, 20).map((sub) => (
-                    <Col key={sub.key} xs={4} className="text-center mb-3">
-                      <div
-                        role="button"
-                        onClick={() => {
-                          handleSelect(sub.name);
-                          setShowMobileModal(false);
-                        }}
-                      >
-                        <img
-                          src={sub.image}
-                          alt={sub.name}
-                          width="64"
-                          height="64"
-                          className="rounded-circle"
-                          style={{ objectFit: 'cover', marginBottom: '8px' }}
-                          loading="lazy"
-                        />
-                        <p className="m-0" style={{ fontSize: '12px' }}>
-                          {sub.name}
-                        </p>
-                      </div>
-                    </Col>
-                  ))}
-                </Row>
-              </div>
-            ))}
-          </Modal.Body>
-        </Modal>
-      )}
+        {isMobile && (
+          <Modal
+            data-bs-theme={theme}
+            show={showMobileModal}
+            onHide={() => setShowMobileModal(false)}
+            centered
+            size="lg"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Select Category</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Accordion alwaysOpen>
+                {categories.map((category, idx) => (
+                  <Accordion.Item eventKey={String(idx)} key={category.key}>
+                    <Accordion.Header>{category.name}</Accordion.Header>
+                    <Accordion.Body>
+                      <Row>
+                        {category.subcategories?.slice(0, 20).map((sub) => (
+                          <Col key={sub.key} xs={4} className="text-center mb-3">
+                            <div
+                              data-role="subcategory"
+                              data-subkey={sub.key}
+                              role="button"
+                              className="mobile-submenu-item"
+                              onClick={() => {
+                                navigate(`/catalog/open=${sub.key}`);
+                                setShowMobileModal(false);
+                                setShowOffcanvas(false);
+                              }}
+                            >
+                              <img
+                                src={sub.image}
+                                alt={sub.name}
+                                width="64"
+                                height="64"
+                                className="rounded-circle"
+                                style={{
+                                  objectFit: "cover",
+                                  marginBottom: "8px",
+                                }}
+                                loading="lazy"
+                              />
+                              <p className="m-0" style={{ fontSize: "12px" }}>
+                                {sub.name}
+                              </p>
+                            </div>
+                          </Col>
+                        ))}
+                      </Row>
+                    </Accordion.Body>
+                  </Accordion.Item>
+                ))}
+              </Accordion>
+            </Modal.Body>
+          </Modal>
+        )}
+      </nav>
     </>
   );
 };
 
 export default React.memo(CustomDropdownMenu);
-
 
 
 // import React, { useState, useRef, useEffect } from "react";
@@ -259,7 +250,7 @@ export default React.memo(CustomDropdownMenu);
 
 // export default function DropdownMenu() {
 //   const theme = useSelector((state) => state.theme.theme);
-  
+
 //   const [activeSubDropdown, setActiveSubDropdown] = useState(null);
 //   const [selectedCategory, setSelectedCategory] = useState("Categories");
 //   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -271,7 +262,6 @@ export default React.memo(CustomDropdownMenu);
 //   const [isMobile, setIsMobile] = useState(false);
 // const [showMobileModal, setShowMobileModal] = useState(false);
 // const [mobileSubcategories, setMobileSubcategories] = useState([]);
-
 
 //   const handleSelect = (category) => {
 //     clearAllDropdownTimers();
@@ -289,15 +279,15 @@ export default React.memo(CustomDropdownMenu);
 // };
 
 // const handleMouseLeave = (dropdownName) => {
-  // if (dropdownTimers.current[dropdownName])
-  //   clearTimeout(dropdownTimers.current[dropdownName]);
+// if (dropdownTimers.current[dropdownName])
+//   clearTimeout(dropdownTimers.current[dropdownName]);
 
-  // dropdownTimers.current[dropdownName] = setTimeout(() => {
-  //   if (activeDropdown === dropdownName) {
-  //     setActiveDropdown(null);
-  //     setMenuHeight(0); // move height reset here
-  //   }
-  // }, 1000); // shorter delay (300ms feels natural)
+// dropdownTimers.current[dropdownName] = setTimeout(() => {
+//   if (activeDropdown === dropdownName) {
+//     setActiveDropdown(null);
+//     setMenuHeight(0); // move height reset here
+//   }
+// }, 1000); // shorter delay (300ms feels natural)
 // };
 
 //   const handleClick = (dropdownName) => {
@@ -312,45 +302,44 @@ export default React.memo(CustomDropdownMenu);
 //   });
 // };
 
-
-  // const dropdownMenuLG = [
-  //   {
-  //     name: "Women's Fashion",
-  //     key: "women",
-  //     subcategories: Array.from({ length: 30 }, (_, i) => ({
-  //       name: `Women's Item ${i + 1}`,
-  //       key: `women_item_${i + 1}`,
-  //       image: `https://picsum.photos/seed/women${i + 1}/150/150`,
-  //     })),
-  //   },
-  //   {
-  //     name: "Women's Fashion1",
-  //     key: "women1",
-  //     subcategories: Array.from({ length: 30 }, (_, i) => ({
-  //       name: `Women's Item ${i + 1}`,
-  //       key: `women_item_${i + 1}`,
-  //       image: `https://picsum.photos/seed/women${i + 1}/150/150`,
-  //     })),
-  //   },
-  //   {
-  //     name: "Men's Fashion",
-  //     key: "men",
-  //     subcategories: Array.from({ length: 30 }, (_, i) => ({
-  //       name: `Men's Item ${i + 1}`,
-  //       key: `men_item_${i + 1}`,
-  //       image: `https://picsum.photos/seed/men${i + 1}/150/150`,
-  //     })),
-  //   },
-  //   {
-  //     name: "Electronics",
-  //     key: "electronics",
-  //     subcategories: Array.from({ length: 27 }, (_, i) => ({
-  //       name: `Electronics Item ${i + 1}`,
-  //       key: `electronics_item_${i + 1}`,
-  //       image: `https://picsum.photos/seed/electronics${i + 1}/150/150`,
-  //     })),
-  //   },
-  // ];
+// const dropdownMenuLG = [
+//   {
+//     name: "Women's Fashion",
+//     key: "women",
+//     subcategories: Array.from({ length: 30 }, (_, i) => ({
+//       name: `Women's Item ${i + 1}`,
+//       key: `women_item_${i + 1}`,
+//       image: `https://picsum.photos/seed/women${i + 1}/150/150`,
+//     })),
+//   },
+//   {
+//     name: "Women's Fashion1",
+//     key: "women1",
+//     subcategories: Array.from({ length: 30 }, (_, i) => ({
+//       name: `Women's Item ${i + 1}`,
+//       key: `women_item_${i + 1}`,
+//       image: `https://picsum.photos/seed/women${i + 1}/150/150`,
+//     })),
+//   },
+//   {
+//     name: "Men's Fashion",
+//     key: "men",
+//     subcategories: Array.from({ length: 30 }, (_, i) => ({
+//       name: `Men's Item ${i + 1}`,
+//       key: `men_item_${i + 1}`,
+//       image: `https://picsum.photos/seed/men${i + 1}/150/150`,
+//     })),
+//   },
+//   {
+//     name: "Electronics",
+//     key: "electronics",
+//     subcategories: Array.from({ length: 27 }, (_, i) => ({
+//       name: `Electronics Item ${i + 1}`,
+//       key: `electronics_item_${i + 1}`,
+//       image: `https://picsum.photos/seed/electronics${i + 1}/150/150`,
+//     })),
+//   },
+// ];
 
 //   useEffect(() => {
 //   if (activeDropdown === "showDropdown" && menuRef.current) {
@@ -373,7 +362,7 @@ export default React.memo(CustomDropdownMenu);
 
 //   return (
 // <>
-    
+
 //     <Dropdown
 //       className="category-dropdown "
 //       // onMouseLeave={() => setActiveSubDropdown(null)}
@@ -390,14 +379,14 @@ export default React.memo(CustomDropdownMenu);
 //     }
 //   }}
 // >
-  // <span className="">Shop By Categories</span>
-  // <i className="bi bi-list " style={{ fontSize: "1.2rem" }}></i>
+// <span className="">Shop By Categories</span>
+// <i className="bi bi-list " style={{ fontSize: "1.2rem" }}></i>
 // </Dropdown.Toggle>
 
 //       {!isMobile && <Dropdown.Menu
 //         ref={menuRef}
 //         className={`main-dropdown-menu${activeDropdown === "showDropdown" ? " show" : ""}`}
-        
+
 //         style={{
 //             maxHeight: `${menuHeight + 20}px`,
 //           transition: "max-height 1s ease",
@@ -407,14 +396,14 @@ export default React.memo(CustomDropdownMenu);
 //       >
 //         {dropdownMenuLG.map((category) => (
 //           <Dropdown
-         
+
 //             key={category.key}
 //             drop="end"
 //             show={activeSubDropdown === category.key}
 //             onMouseEnter={() => {setActiveSubDropdown(category.key);}}
 //             as="div"
 //             className="w-100 sub-dropdown "
-            
+
 //           >
 //             <Dropdown.Toggle
 //               as="button"
@@ -447,37 +436,37 @@ export default React.memo(CustomDropdownMenu);
 //                 // }}
 //               >
 //                 {category.subcategories.map((sub) => (
-  //                 <div
-  //                   key={sub.key}
-  //                   onClick={() => handleSelect(sub.name)}
-  //                   role="button"
-  //                   className="sub-dropdown-item "
-  //                   onSelect={() => handleSelect(sub.name)}
-  //                   style={{
-  //                     width: "100px",
-  //                     textAlign: "center",
-  //                   }}
-  //                 >
-  //                   <img
-  //                     src={sub.image}
-  //                     alt={sub.name}
-  //                     width="64"
-  //                     height="64"
-  //                     onError={(e) => {
-  //   e.currentTarget.onerror = null; 
-  //   e.currentTarget.src = "/placeholder.jpg";
-  // }}
-  //                     className="rounded-circle "
-  //                     style={{ objectFit: "cover", marginBottom: "12px" }}
-  //                     loading="lazy"
-  //                   />
-  //                   <p
-  //                     className=" m-0"
-  //                     style={{ fontSize: `clamp(12px, 1.2vw, 13px)` }}
-  //                   >
-  //                     {sub.name}
-  //                   </p>
-  //                 </div>
+//                 <div
+//                   key={sub.key}
+//                   onClick={() => handleSelect(sub.name)}
+//                   role="button"
+//                   className="sub-dropdown-item "
+//                   onSelect={() => handleSelect(sub.name)}
+//                   style={{
+//                     width: "100px",
+//                     textAlign: "center",
+//                   }}
+//                 >
+//                   <img
+//                     src={sub.image}
+//                     alt={sub.name}
+//                     width="64"
+//                     height="64"
+//                     onError={(e) => {
+//   e.currentTarget.onerror = null;
+//   e.currentTarget.src = "/placeholder.jpg";
+// }}
+//                     className="rounded-circle "
+//                     style={{ objectFit: "cover", marginBottom: "12px" }}
+//                     loading="lazy"
+//                   />
+//                   <p
+//                     className=" m-0"
+//                     style={{ fontSize: `clamp(12px, 1.2vw, 13px)` }}
+//                   >
+//                     {sub.name}
+//                   </p>
+//                 </div>
 //                 ))}
 //               </div>
 //             </Dropdown.Menu>

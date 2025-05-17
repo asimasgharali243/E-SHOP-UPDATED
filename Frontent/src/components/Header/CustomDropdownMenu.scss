@@ -44,7 +44,7 @@
   border-radius: 0 !important;
   padding: 0 !important;
   border: 1px solid var(--secondary) !important;
-  background-color: var(--white);
+  background-color: var(--white) !important;
   overflow: hidden;
   transition: all 1s ease-in;
   animation: deActiveDropDownAnimation 1s ease-in 0ms normal 1 forwards;
@@ -81,7 +81,7 @@ animation: activeDropDownAnimation 0.2s ease-in 0ms normal 1 forwards;
   }
 
   span {
-    font-size: clamp(12px, 1.2vw, 15px) !important;
+    font-size: clamp(12px, 1.2vw, 14px) !important;
     font-weight: 450 !important;
     color: var(--text1);
   }
@@ -126,9 +126,11 @@ animation: activeDropDownAnimation 0.2s ease-in 0ms normal 1 forwards;
       padding: 12px;
 
       &:hover {
-        background-color: var(--background);
-        color: var(--text) !important;
+        background-color: #f8f9fa;
         font-weight: 400;
+        p{
+          color: var(--text1) !important;
+        }
       }
 
       img {

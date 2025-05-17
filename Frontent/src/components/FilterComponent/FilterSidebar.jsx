@@ -18,7 +18,7 @@ const FilterSidebar = () => {
     <div className='ps-5 pe-4'>
       <Row  className='text-black' ><Col  className='bg-white pt-3 pb-4' style={{marginLeft:'12px'}}><span className='ms-2' style={{fontSize:'20px',fontWeight:550}}>Filters</span></Col><Col className='text-end  bg-white pt-3 pb-4'  style={{marginRight:'12px'}}><span className='' style={{fontSize:'20px',fontWeight:550}}>Advanced</span></Col></Row>
       
-      <Accordion activeKey={activeKeys} flush alwaysOpen>
+      <Accordion as={Col} activeKey={activeKeys} flush alwaysOpen>
         {/* Brand Filter */}
         <Accordion.Item eventKey="0">
           <Accordion.Header onClick={() => handleToggle("0")}>Brand</Accordion.Header>
