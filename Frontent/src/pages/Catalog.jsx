@@ -1,24 +1,13 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Button, Offcanvas, Dropdown } from 'react-bootstrap';
-import FilterSidebar from '../components/FilterComponent/FilterSidebar';
-import ProductCard from '../components/Card/ProductCard';
+import FilterSidebar from '../components/CataLogComponent/FilterSidebar';
+import CustomContainer from '../components/SubComponent/CustomContainer';
+import CustomGrid from '../components/CataLogComponent/CustomGrid';
 
 const CatalogPage = () => {
-  const [showFilter, setShowFilter] = useState(false);
-  const [sortOption, setSortOption] = useState('Popular');
-  const [gridType, setGridType] = useState('grid3'); // grid2, grid3, list
+       const [showFilter, setShowFilter] = useState(false);
 
-  const handleSortChange = (option) => {
-    setSortOption(option);
-  };
-
-  const handleShowFilter = () => setShowFilter(true);
-  const handleCloseFilter = () => setShowFilter(false);
-
-  const handleGridChange = (type) => {
-    setGridType(type);
-  };
-
+const handleToggleFilter = () => setShowFilter(prev => !prev);
   const productData = [
     {
       id: 1,
@@ -122,102 +111,35 @@ const CatalogPage = () => {
     },
   ];
 
-  const getGridCols = () => {
-    switch (gridType) {
-      case 'grid2':
-        return { xs: 2, md: 4, lg: 4 };
-      case 'grid3':
-        return { xs: 2, md: 6, lg: 6 };
-      case 'list':
-        return { xs: 1, md: 1, lg: 1 };
-      default:
-        return { xs: 2, md: 3, lg: 3 };
-    }
-  };
-
+  
   return (
-    <Container fluid className="mt-4">
-      <Row>
-        <Col sm={12} className="mx-5 my-3"><h5 className="">{productData.length} Results for Search</h5></Col>
+    <CustomContainer className="">
+     <div sm={12} className=" my-3"
+     style={{padding:'0px 12px'}}
+     ><h5 className=""
+        style={{fontSize:`clamp(14px, 1.2vw,18px)`}}
+        >{productData.length} Results for Search</h5></div>
+      <div className='d-flex justify-content-between align-items-start'
+      
+      >
+        
         {/* Sidebar */}
-        <Col lg={3} className="d-none d-lg-block">
+        <div  className="d-none d-lg-block  "
+        style={{minWidth:'270px',maxWidth:'270px',padding:'0px 12px'}}
+        >
           <FilterSidebar />
-        </Col>
+        </div>
 
         {/* Main Content */}
-        <Col xs={12} lg={9}>
-          <Row className="justify-content-between align-items-center mb-3 flex-wrap gap-2 mb-5">
-            
-
-            <Col className="d-flex align-items-center gap-2">
-              {/* Filter Button (Mobile) */}
-              <Button
-                variant="outline-primary"
-                size="sm"
-                className="d-lg-none"
-                onClick={handleShowFilter}
-              >
-                Filter
-              </Button>
-
-              {/* Grid Layout Switcher */}
-              <Col className="d-flex align-items-center gap-2">
-                <Button
-                  variant={gridType === 'grid2' ? 'primary' : 'light'}
-                  size="sm"
-                  onClick={() => handleGridChange('grid2')}
-                >
-                  <i className="bi bi-grid" style={{ fontSize: '18px' }}></i>
-                </Button>
-
-                <Button
-                  variant={gridType === 'grid3' ? 'primary' : 'light'}
-                  size="sm"
-                  onClick={() => handleGridChange('grid3')}
-                >
-                  <i className="bi bi-grid-3x3-gap" style={{ fontSize: '18px' }}></i>
-                </Button>
-
-                <Button
-                  variant={gridType === 'list' ? 'primary' : 'light'}
-                  size="sm"
-                  onClick={() => handleGridChange('list')}
-                >
-                  <i className="bi bi-list" style={{ fontSize: '18px' }}></i>
-                </Button>
-              </Col>
-
-              {/* Sort Dropdown */}
-              <Col className='d-flex justify-content-end me-5'>
-              <Dropdown>
-                <Dropdown.Toggle as={Button} variant="light" size="sm" id="sort-dropdown" className='d-flex justify-content-center align-items-center'>
-                  <i className='bi bi-filter' style={{ fontSize: '24px' }}></i><span className="ms-2 text-center">Sort by: {sortOption}</span>
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => handleSortChange('Popular')}>Popular</Dropdown.Item>
-                  <Dropdown.Item onClick={() => handleSortChange('Newest')}>Newest</Dropdown.Item>
-                  <Dropdown.Item onClick={() => handleSortChange('Price: Low to High')}>Price: Low to High</Dropdown.Item>
-                  <Dropdown.Item onClick={() => handleSortChange('Price: High to Low')}>Price: High to Low</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-              </Col>
-            </Col>
-          </Row>
-
-          {/* Product Grid */}
-          <Row {...getGridCols()} className="g-3">
-            {productData.map((product) => (
-              <Col key={product.id}>
-                <ProductCard product={product} />
-              </Col>
-            ))}
-          </Row>
-        </Col>
-      </Row>
+        <div className='w-100'
+        style={{padding:'0px 12px'}}
+        >
+   <CustomGrid productData={productData} handleToggleFilter={handleToggleFilter}  />
+        </div>
+      </div>
 
       {/* Mobile Offcanvas Filter */}
-      <Offcanvas show={showFilter} onHide={handleCloseFilter} placement="start">
+      <Offcanvas show={showFilter} onHide={handleToggleFilter} placement="start">
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Filter</Offcanvas.Title>
         </Offcanvas.Header>
@@ -225,7 +147,7 @@ const CatalogPage = () => {
           <FilterSidebar />
         </Offcanvas.Body>
       </Offcanvas>
-    </Container>
+    </CustomContainer>
   );
 };
 

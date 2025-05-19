@@ -1,0 +1,83 @@
+.catalog-grid {
+  display: grid;
+  gap: 12px;
+  justify-content: center;
+  align-content: start;
+}
+@media (min-width: 1200px) {
+  .catalog-grid--wide {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .catalog-grid--wide {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .catalog-grid--wide {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (min-width: 576px) and (max-width: 767px) {
+  .catalog-grid--wide {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 575px) {
+  .catalog-grid--wide {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1200px) {
+  .catalog-grid--compact {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .catalog-grid--compact {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .catalog-grid--compact {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 576px) and (max-width: 767px) {
+  .catalog-grid--compact {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 575px) {
+  .catalog-grid--compact {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+.catalog-grid .item {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+}
+@media (max-width: 991px) {
+  .catalog-grid--wide .item, .catalog-grid--compact .item {
+    justify-content: center;
+  }
+}
+
+/*filter scss*/
+.filter-sidebar .accordion-button {
+  font-size: clamp(14px, 1.2vw, 16px);
+  font-weight: 400;
+}
+.filter-sidebar .accordion-body {
+  font-size: clamp(12px, 1.2vw, 14px) !important;
+  font-weight: 400 !important;
+}
+.filter-sidebar .accordion-body *,
+.filter-sidebar .accordion-body input,
+.filter-sidebar .accordion-body label,
+.filter-sidebar .accordion-body button {
+  font-size: inherit !important;
+  font-weight: inherit !important;
+}/*# sourceMappingURL=Grid.css.map */

@@ -1,31 +1,5 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useCallback } from "react";
-import {  Link,Links } from "react-router-dom";
+import {  Link,Links, Navigate } from "react-router-dom";
 import { Row, Col, Button, Form, Image, Alert, Table } from "react-bootstrap";
 import CustomContainer from "../components/SubComponent/CustomContainer";
 import useIsmobile from "../components/CustomHook/useIsmobile";
@@ -69,6 +43,9 @@ const Cart = () => {
         })
         .filter((item) => (type === "delete" && item.id === id ? false : true))
     );
+    if(type ==="open" && id){
+    Navigate(`/product/${id}`);
+    }
   }, []);
 
   const handleClearCart = () => setCartItems([]);
@@ -88,7 +65,9 @@ const Cart = () => {
           <Row className="gx-4 gy-4" onChange={handleCartClick} onClick={handleCartClick}>
             {/* Cart Items Section */}
             <Col xs={12} lg={8}>
-              <section className="bg-white p-4 rounded shadow-sm">
+              <section className="bg-white p-4 rounded shadow-sm"
+               style={{color:`var(--text1)`}}
+              >
                 <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                   <h2 className="h5 mb-0">Cart Items</h2>
                   <Button variant="outline-danger" size="sm" onClick={handleClearCart}>Clear Cart</Button>
@@ -98,7 +77,10 @@ const Cart = () => {
                   {isMobile ? (
                     <div className="mobile-cart d-flex flex-column gap-3">
                       {cartItems.map((item) => (
-                        <article key={item.id} className="mobile-cart-item d-flex p-3 rounded shadow-sm bg-light position-relative">
+                        <article key={item.id} 
+                        data-id={item.id}
+                        datatype="open"
+                        className="mobile-cart-item d-flex p-3 rounded shadow-sm bg-light position-relative">
                           <Image
                             src={item.image}
                             alt={item.name}
@@ -137,7 +119,11 @@ const Cart = () => {
                             data-type="delete"
                             aria-label="Remove item"
                           >
-                            <i className="bi bi-trash"></i>
+                            <i
+                             data-id={item.id}
+                            data-type="delete"
+                           
+                            className="bi bi-trash"></i>
                           </Button>
                         </article>
                       ))}
@@ -149,6 +135,7 @@ const Cart = () => {
                           <tr>
                             <th colSpan={6}>
                               <div className="d-flex justify-content-between gap-2 "
+                              
                               style={{ fontSize: `16px `} }
                               >
                                 <span>Image</span>
@@ -170,9 +157,15 @@ const Cart = () => {
                                 <div className="cart-item-wrapper d-flex justify-content-between align-items-center p-3 border rounded mb-3"
                                 style={{ fontSize: `14px `}
                                }
+datatype="open"
+data-id={item.id}
+
                                 >
                                   <div className="d-flex align-items-center gap-3">
-                                    <Image src={item.image} alt={item.name} width={80} height={80} loading="lazy" />
+                                    <Image
+                                    
+                                    style={{ objectFit: "cover", borderRadius: "6px" }}
+                                    src={item.image} alt={item.name} width={80} height={80} loading="lazy" />
                                     <div>{item.name}</div>
                                   </div>
                                   <div>${item.price.toFixed(2)}</div>
@@ -188,8 +181,14 @@ const Cart = () => {
                                     ))}
                                   </Form.Select>
                                   <div>${(item.price * item.quantity).toFixed(2)}</div>
-                                  <Button variant="outline-danger " style={{border: "none",fontSize: `16px `}} size="sm" data-id={item.id} data-type="delete">
- <i className="bi bi-trash"></i>                              
+                                  <Button variant="outline-danger " style={{border: "none",fontSize: `16px `}} size="sm" data-id={item.id} data-type="delete"
+                                  aria-label="Remove item button"
+                                  >
+ <i className="bi bi-trash" 
+ aria-label="Remove item icon"
+                             data-id={item.id}
+                            data-type="delete"
+                           ></i>                              
                                   </Button>
                                 </div>
                               </td>
@@ -215,7 +214,9 @@ const Cart = () => {
 
             {/* Summary Section */}
             <Col xs={12} lg={4}>
-              <aside className="bg-white p-4 rounded shadow-sm">
+              <aside className="bg-white p-4 rounded shadow-sm"
+              style={{color:`var(--text1)`}}
+              >
                 <h2 className="h5 mb-3"
                 style={{fontSize: `20px `, fontWeight: `bold`} }
                 >Cart Summary</h2>
@@ -236,7 +237,7 @@ const Cart = () => {
                   <span>Total:</span>
                   <span>${subtotal.toFixed(2)}</span>
                 </div>
-                <Button as={Link} to="/checkout"  className="w-100" style={{fontSize: `16px `, fontWeight: `bold`, backgroundColor: `var(--secondary)`,border: `none`,borderRadius: `0px`} }  >
+                <Button as={Link} to="/checkout"  className="w-100 rounded" style={{fontSize: `16px `, fontWeight: `bold`, backgroundColor: `var(--secondary)`,border: `none`,borderRadius: `0px`} }  >
                   Proceed to Checkout
                 </Button>
               </aside>

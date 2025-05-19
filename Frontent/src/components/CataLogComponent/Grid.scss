@@ -1,0 +1,83 @@
+.catalog-grid {
+  display: grid;
+  gap: 12px;
+  justify-content: center;
+  align-content: start;
+
+  &--wide {
+    
+    @media (min-width: 1200px) {
+      grid-template-columns: repeat(5, 1fr);
+    }
+    @media (min-width: 992px) and (max-width: 1199px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    @media (min-width: 768px) and (max-width: 991px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    @media (min-width: 576px) and (max-width: 767px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media (max-width: 575px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &--compact {
+    @media (min-width: 1200px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    @media (min-width: 992px) and (max-width: 1199px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media (min-width: 768px) and (max-width: 991px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media (min-width: 576px) and (max-width: 767px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (max-width: 575px) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+  // Default item layout
+  .item {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+  }
+
+  // Override justify-content to center on smaller screens
+  @media (max-width: 991px) {
+    &--wide .item,
+    &--compact .item {
+      justify-content: center;
+    }
+  }
+}
+
+
+
+
+/*filter scss*/
+.filter-sidebar {
+  .accordion-button {
+    font-size: clamp(14px, 1.2vw, 16px);
+    font-weight: 400;
+  }
+
+  .accordion-body {
+    font-size: clamp(12px, 1.2vw, 14px) !important;
+    font-weight: 400 !important;
+
+    // Ensure all inner elements inherit the styles
+    *,
+    input,
+    label,
+    button {
+      font-size: inherit !important;
+      font-weight: inherit !important;
+    }
+  }
+}

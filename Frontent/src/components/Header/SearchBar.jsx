@@ -9,8 +9,13 @@ export default function SearchBar() {
         className="me-2"
         aria-label="Search"
       />
-      <Button className="Search-icon">
-        <i className="bi bi-search"></i>
+      <Button className="Search-icon"
+        aria-label="Search button"
+      
+      >
+        <i className="bi bi-search"
+        aria-label="Search icon"
+        ></i>
       </Button>
     </Form>
   );

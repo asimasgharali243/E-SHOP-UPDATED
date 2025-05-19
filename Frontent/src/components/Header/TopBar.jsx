@@ -44,7 +44,7 @@ export default function TopBar() {
           <Form
             as={Col}
             className="d-flex align-items-center justify-content-end "
-            role="switch"
+            role="switch button"
             aria-label="Dark mode toggle"
           >
             <Form.Check

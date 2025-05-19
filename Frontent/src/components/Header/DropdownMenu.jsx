@@ -153,6 +153,10 @@ const CustomDropdownMenu = ({
                             width="64"
                             height="64"
                             className="rounded-circle"
+                            onError={(e) => {
+                              e.target.src="/placeholder.jpg";
+                              e.target.onerror = null;
+                            }}
                             loading="lazy"
                             style={{ objectFit: "cover", marginBottom: "12px" }}
                           />
@@ -198,7 +202,9 @@ const CustomDropdownMenu = ({
                     <Accordion.Body>
                       <Row>
                         {category.subcategories?.slice(0, 20).map((sub) => (
-                          <Col key={sub.key} xs={4} className="text-center mb-3">
+                          <Col key={sub.key} xs={4} className="text-center mb-3"
+                          style={{color:`${theme==='light'?`var(--text1)`:`var(--white)`}`}}
+                          >
                             <div
                               data-role="subcategory"
                               data-subkey={sub.key}
@@ -216,6 +222,11 @@ const CustomDropdownMenu = ({
                                 width="64"
                                 height="64"
                                 className="rounded-circle"
+                                onError={(e)=>{
+e.target.src="/placeholder.jpg";
+e.target.onerror=null;
+
+                                }}
                                 style={{
                                   objectFit: "cover",
                                   marginBottom: "8px",

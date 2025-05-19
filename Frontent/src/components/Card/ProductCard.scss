@@ -1,15 +1,20 @@
 // ProductCard.scss
 .product-card {
   transition: transform 0.3s ease-in-out;
-  border-radius: 1rem;
-
+  max-height:300px ;
+  // max-width: clamp(190px,5vw,200px);
+width: clamp(180px, calc(1.5rem + 2vw), 200px);
+;
   .product-image {
-    height: 220px;
+    
+    max-height: 180px;
+    min-height: 180px;
     object-fit: cover;
+  
   }
 
   &:hover {
-    transform: translateY(-5px);
+    transform: scale(1.05);
 
     .action-icons {
       opacity: 1;
@@ -21,5 +26,15 @@
     opacity: 0;
     transform: translateY(-10px);
     transition: all 0.2s ease-in-out;
+  }
+
+  .card-description{
+     display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      cursor: pointer;
+      color: var(--text1);
+      overflow: hidden;
+      text-overflow: ellipsis;
   }
 }
