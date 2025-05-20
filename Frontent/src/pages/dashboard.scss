@@ -1,0 +1,43 @@
+.sidebar {
+  max-width: 300px;
+  font-size: 15px;
+  background-color: #ffffff;
+}
+
+.sidebar-item {
+  color: #333;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.sidebar-item:hover,
+.sidebar-item.active {
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+.sidebar-sublink {
+  font-size: 14px;
+  padding-left: 10px;
+  color: #444;
+  transition: color 0.2s;
+}
+
+.sidebar-sublink:hover {
+  color: #007bff;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.sidebar-submenu-wrapper {
+  max-height: 20px;
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out;
+}
+
+.sidebar-submenu-wrapper.open {
+  max-height: 500px; // Adjust depending on content
+}

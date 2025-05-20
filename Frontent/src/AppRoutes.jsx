@@ -16,6 +16,7 @@ const TestingComponenet = lazy(() => import("./components/TestingComponenet"));
 const Cart = lazy(() => import("./components/Cart"));
 const Checkout = lazy(() => import("./pages/CheckOut"));
 const Logout = lazy(() => import("./components/auth/Logout"));
+const Dashboard = lazy(() => import("./pages/Dasboard"));
 const AppRouter = createBrowserRouter([
   {
     path: "/",
@@ -59,15 +60,19 @@ const AppRouter = createBrowserRouter([
       },
       {
         path: "/Wishlist",
-        element:<WishListPage/>,
+        element: <WishListPage />,
       },
       {
         path: "/cart",
-        element:<Cart/>,
+        element: <Cart />,
       },
       {
-        path:"/checkout",
-        element:<Checkout/>,
+        path: "/checkout",
+        element: <Checkout />,
+      },
+      {
+        path: "/dashboard",
+        element: <Dashboard />,
       },
     ],
   },
