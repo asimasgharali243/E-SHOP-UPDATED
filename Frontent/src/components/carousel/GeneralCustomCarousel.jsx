@@ -5,66 +5,44 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import './GeneralCustomCarousel.scss';
 import { useMemo } from 'react';
-
-export default function GeneralCustomCarousel() {
-
- const responsive = useMemo(() => ({
-    xxl: {
-      breakpoint: { max: 3000, min: 1400 },
-      items:  5,
-      slidesToSlide:1,
-    },
-    xl: {
-      breakpoint: { max: 1399.98, min: 1200 },
-      items:   4,
-      slidesToSlide:1,
-    },
-    lg: {
-      breakpoint: { max: 1199.98, min: 992 },
-      items: 3,
-      slidesToSlide:1,
-    },
-    md: {
-      breakpoint: { max: 991.98, min: 768 },
-      items:  2,
-      slidesToSlide:1,
-    },
-    sm: {
-      breakpoint: { max: 767.98, min: 576 },
-      items: 1,
-      slidesToSlide:1,
-    },
-    xs: {
-      breakpoint: { max: 575.98, min: 0 },
-      items:  1,
-      slidesToSlide:1,
-    }
+import ProductCard from '../Card/ProductCard';
+export default function GeneralCustomCarousel({ children }) {
+  const responsive = useMemo(() => ({
+    xxl: { breakpoint: { max: 3000, min: 1400 }, items: 6 },
+    xl: { breakpoint: { max: 1399.98, min: 1200 }, items: 6 },
+    lg: { breakpoint: { max: 1199.98, min: 992 }, items: 5 },
+    md: { breakpoint: { max: 991.98, min: 768 }, items: 3 },
+    sm: { breakpoint: { max: 767.98, min: 576 }, items: 2 },
+    xs: { breakpoint: { max: 575.98, min: 0 }, items: 2 },
   }), []);
+
+  return (
+    <Carousel responsive={responsive}
     
-    return (
     
-    <Carousel  responsive={responsive}>
-      <div>Item 1</div>
-      <div>Item 2</div>
-      <div>Item 3</div>
-      <div>Item 4</div>
-      <div>Item 1</div>
-      <div>Item 2</div>
-      <div>Item 3</div>
-      <div>Item 4</div><div>Item 1</div>
-      <div>Item 2</div>
-      <div>Item 3</div>
-      <div>Item 4</div><div>Item 1</div>
-      <div>Item 2</div>
-      <div>Item 3</div>
-      <div>Item 4</div>
+    swipeable={
+      true
+    }
+  draggable={true}
+  // showDots={true}
+  ssr={true} // means to render carousel on server-side.
+  infinite={true}
+  autoPlay={true }
+  autoPlaySpeed={3000}
+  keyBoardControl={true}
+  customTransition="all .5"
+  transitionDuration={500}
+  containerClass="carousel-container"
+  removeArrowOnDeviceType={["tablet", "mobile"]}
+  // deviceType={this.props.deviceType}
+  dotListClass="custom-dot-list-style"
+  itemClass="carousel=item"
+    
+    >
+      {children}
     </Carousel>
-  )
+  );
 }
-
-
-
-
 
 
 

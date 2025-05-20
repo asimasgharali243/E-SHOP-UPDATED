@@ -1,16 +1,37 @@
-// ProductCard.scss
 .product-card {
+  height: 100%; // make it always take full height
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: clamp(160px, calc(1.5rem + 2vw), 200px); // adjust as needed, e.g., 200px;
   transition: transform 0.3s ease-in-out;
-  max-height:300px ;
-  // max-width: clamp(190px,5vw,200px);
-width: clamp(180px, calc(1.5rem + 2vw), 200px);
-;
+
+  width: clamp(180px, calc(1.5rem + 2vw), 200px);
+  background-color: var(--white); // ensure it's visible
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+            0 1px 3px rgba(0, 0, 0, 0.06) !important;
+
+
   .product-image {
-    
     max-height: 180px;
     min-height: 180px;
     object-fit: cover;
-  
+  }
+
+  .action-icons {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.2s ease-in-out;
+  }
+
+  .card-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    cursor: pointer;
+    color: var(--text1);
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &:hover {
@@ -20,21 +41,5 @@ width: clamp(180px, calc(1.5rem + 2vw), 200px);
       opacity: 1;
       transform: translateY(0);
     }
-  }
-
-  .action-icons {
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: all 0.2s ease-in-out;
-  }
-
-  .card-description{
-     display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      cursor: pointer;
-      color: var(--text1);
-      overflow: hidden;
-      text-overflow: ellipsis;
   }
 }

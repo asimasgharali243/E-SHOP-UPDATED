@@ -7,6 +7,9 @@ import CustomCarousel2 from "../components/carousel/customCarousel2";
 import CardItemSlide from "../components/carousel/CardItemSlide/CardItemSlide";
 import HeaderSlide from "../components/carousel/HeaderCarousel";
 import CategorySlider from "../components/carousel/categorySlider/CategorySlider";
+import CustomContainer from "../components/SubComponent/CustomContainer";
+import GeneralCustomCarousel from "../components/carousel/GeneralCustomCarousel";
+import ProductCard from "../components/Card/ProductCard";
 
 export default function Home() {
   const productData = [
@@ -145,9 +148,9 @@ export default function Home() {
   const control = useRef(null);
 
   return (
-    <Container style={{ overflow: "hidden" }}>
-      <h1>heloo hhow we yhgsdalhdldfjcvh</h1>
-    </Container>
+    <CustomContainer style={{ overflow: "hidden" }}>
+      <Col><CategorySlider/></Col>
+    </CustomContainer>
   );
 }
 
