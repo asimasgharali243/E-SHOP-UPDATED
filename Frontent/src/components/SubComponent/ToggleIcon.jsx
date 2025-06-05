@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./ToggleIcon.scss";
 
-const ToggleIcon = ({ handleoffCanvass,handleClose,isOpen }) => {
+const ToggleIcon = ({ handleoffCanvass,handleClose,isOpen ,style}) => {
   
 
   const toggleIcon = () => {
@@ -18,10 +18,11 @@ const ToggleIcon = ({ handleoffCanvass,handleClose,isOpen }) => {
       onClick={toggleIcon}
       aria-label="Menu Toggle"
       role="button"
+      
     >
-      <span></span>
-      <span></span>
-      <span></span>
+      <span style={style}></span>
+      <span style={style}></span>
+      <span style={style}></span>
     </div>
   );
 };

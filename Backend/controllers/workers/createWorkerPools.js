@@ -30,4 +30,7 @@ const __dirname = path.dirname(__filename);
   });
 }
  const AuthWorkerPool = createWorkerPool({ workerFile: './Authworker/authWorker.js', maxThreads: 2 });
-export default AuthWorkerPool
+  
+export { AuthWorkerPool}
+
+ export default AuthWorkerPool

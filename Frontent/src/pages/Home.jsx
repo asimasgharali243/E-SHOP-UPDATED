@@ -10,7 +10,7 @@ import CategorySlider from "../components/carousel/categorySlider/CategorySlider
 import CustomContainer from "../components/SubComponent/CustomContainer";
 import GeneralCustomCarousel from "../components/carousel/GeneralCustomCarousel";
 import ProductCard from "../components/Card/ProductCard";
-
+import {useGetSingleProductQuery} from "../redux/api/productsApi/ProductApi";
 export default function Home() {
   const productData = [
     {
@@ -145,12 +145,45 @@ export default function Home() {
     { name: "Perfumes", icon: "bi bi-droplet-half" },
     { name: "Wellness", icon: "bi bi-heart-pulse" },
   ];
-  const control = useRef(null);
-
+  const { data, isLoading, isError, error } = useGetSingleProductQuery("6839f2ca9cd37748440605ac");
+const control = useRef(null);
+const product = data?.product;
+console.log(data);
   return (
-    <CustomContainer style={{ overflow: "hidden" }}>
-      <Col><CategorySlider/></Col>
+     <CustomContainer style={{ overflow: "hidden" }}>
+      <Col>
+        <CategorySlider />
+      </Col>
+      <Col>
+        <h2>{product?.name}</h2>
+        <p><strong>Short Description:</strong> {product?.shortDescription}</p>
+        <p><strong>Description:</strong> {product?.description}</p>
+        <p><strong>Price:</strong> ${product?.price}</p>
+        <p><strong>Discount:</strong> {product?.discount}%</p>
+        <p><strong>Stock:</strong> {product?.stock}</p>
+        <p><strong>Category:</strong> {product?.category}</p>
+        <p><strong>Subcategory:</strong> {product?.subcategory}</p>
+        <p><strong>Ratings:</strong> {product?.ratings}</p>
+        <p><strong>Reviews:</strong> {product?.numOfReviews}</p>
+
+        {/* Display feature images if available */}
+        {product?.featureImages?.length > 0 && (
+          <div style={{ display: "flex", gap: "10px", marginTop: "1rem" }}>
+            {product.featureImages.map((img, idx) => (
+              <img
+                key={idx}
+                src={`${img.url}`}
+                alt={`feature-${idx}`}
+                style={{ width: "100px", height: "100px", objectFit: "cover" }}
+              />
+            ))}
+          </div>
+          
+        )}
+      </Col>
     </CustomContainer>
+
+
   );
 }
 

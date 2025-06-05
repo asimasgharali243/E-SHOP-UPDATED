@@ -1,73 +1,88 @@
-import { generateToken, verifyToken } from "../utils/JWT.js";
+import asyncHandler from "../middlewares/AsyncHandler.js";
+import { AppError } from "./errorHandler.js";
 import AuthWorkerPool from "../controllers/workers/createWorkerPools.js";
-export const AuthUser = async (req, res, next) => {
-  const accessToken = req.cookies.accessToken;
-  const refreshToken = req.cookies.refreshToken;
 
-  // No Access or Refresh Token 
-  if (!accessToken && !refreshToken) {
-    return res
-      .status(401)
-      .json({ message: "Access denied. No tokens provided." });
+export const AuthUser = asyncHandler(async (req, res, next) => {
+  const { myAccessToken, myRefreshToken } = req.cookies;
+  
+  // Check if tokens exist
+  if (!myAccessToken && !myRefreshToken) {
+    throw new AppError('Access denied. No tokens provided', 401);
   }
 
-  try {
-
-    //  If Access Token Exists 
-    if (accessToken) {
-      const decodedAccess =await AuthWorkerPool.run("verifyToken", {
-        token: accessToken,
-        JWT_Secrete: process.env.JWT_SECRET_Customer,
+  // Verify access token first
+  if (myAccessToken) {
+    try {
+      const decodedAccess = await AuthWorkerPool.run({
+        type: "verifyToken",
+        data: {
+          token: myAccessToken,
+          JWT_Secret: process.env.JWT_SECRET_CUSTOMER,
+        }
       });
 
-      if (!decodedAccess) {
-        return res
-          .status(403)
-          .json({ message: "Invalid or expired access token." });
+      if (decodedAccess.success) {
+        req.userId = decodedAccess.data.userId;
+        return next();
+      }
+    } catch (err) {
+      // Only proceed to refresh token if access token is expired
+      if (err.message.includes("TokenExpiredError")) {
+        console.log("Access token expired");
+      } else {
+        // For any other error with access token
+        throw new AppError('Invalid access token', 403);
+      }
+    }
+  }
+
+  // If access token is missing or expired, try refresh token
+  if (myRefreshToken) {
+    try {
+      const decodedRefresh = await AuthWorkerPool.run({
+        type: "verifyToken", 
+        data: {
+          token: myRefreshToken,
+          JWT_Secret: process.env.JWT_REFRESH_SECRET_CUSTOMER,
+        }
+      });
+
+      if (!decodedRefresh.success) {
+        throw new AppError('Invalid refresh token', 403);
       }
 
-      req.user = decodedAccess;
+      // Generate new access token
+      const newAccessTokenResult = await AuthWorkerPool.run({
+        type: "generateToken",
+        data: {
+          userId: decodedRefresh.data.userId,
+          secret: process.env.JWT_SECRET_CUSTOMER,
+          expiresIn: process.env.JWT_ACCESS_EXPIRATION,
+        }
+      });
+
+      if (!newAccessTokenResult.success) {
+        throw new AppError('Token generation failed', 500);
+      }
+
+      // Set the new access token in cookies
+      res.cookie("myAccessToken", newAccessTokenResult.token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+        maxAge: parseInt(process.env.ACCESS_TOKEN_COOKIE_EXPIRE),
+      });
+
+      req.userId = decodedRefresh.data.userId;
       return next();
+    } catch (err) {
+      if (err.message.includes("TokenExpiredError")) {
+        throw new AppError('Session expired. Please login again', 403);
+      }
+      throw new AppError('Invalid refresh token', 403);
     }
-
-    // === Else: Try Refresh Token ===
-    const decodedRefresh =await AuthWorkerPool.run("verifyToken", {
-      token: refreshToken,
-      JWT_Secrete: process.env.expires_customer_Refresh_token,
-    });
-
-    if (!decodedRefresh.success) {
-      return res
-        .status(403)
-        .json({
-          message: "Invalid or expired refresh token." || decodedRefresh.error,
-        });
-    }
-    const newAccessToken =await AuthWorkerPool.run('generateToken', {
-      userId: decodedRefresh.userId,
-      JWT_Secrete_accessToken: process.env.JWT_SECRET_Customer,
-      ExpiresIn_accessToken: process.env.expires_customer_token,
-    });
-
-    
-    if (!newAccessToken.success) {
-      return res
-        .status(500)
-        .json({ message: "Token generation failed." || newAccessToken.error });
-    }
-
-    res.cookie("accessToken", newAccessToken, {
-      httpOnly: true,
-      maxAge: parseInt(process.env.expires_customer_token),
-      secure: process.env.NODE_ENV === "production",
-    });
-    
-    req.user = decodedRefresh;
-    return next();
-  } catch (error) {
-    console.error("Auth error:", error);
-    return res
-      .status(500)
-      .json({ message: "Authentication failed." || error.message });
   }
-};
+
+  // If we get here, authentication failed
+  throw new AppError('Authentication failed', 403);
+});

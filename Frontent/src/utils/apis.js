@@ -12,11 +12,14 @@ const apis = () => {
     getAllProduct:`products`,
     getSingleProduct:`products`,
     createProduct:`products/create`,
-    updateProduct: `products`,
-    deleteProduct: `products`,
+    updateProduct: `products/update`,
+    deleteProduct: `products/delete`,
     getAllOrders: `${local}orders`,
     getAllUsers: `${local}users`,
     getSingleUser: `${local}users`,
+    getSignature: `${local}get-signature`,
+    RemoveBackground: `${local}remove-background`,
+    RollbackProductDetails: `${local}products/rollback`,
   };
 
   return list;

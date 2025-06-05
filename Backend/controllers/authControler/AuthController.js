@@ -1,138 +1,126 @@
-import User from '../../models/UserModel.js'
-import  AuthWorkerPool  from '../workers/createWorkerPools.js';
+import User from '../../models/UserModel.js';
+import AuthWorkerPool from '../workers/createWorkerPools.js';
+import { AppError } from '../../middlewares/errorHandler.js';
+import asyncHandler from '../../middlewares/AsyncHandler.js';
+import sendResponse from '../../utils/sendResponse.js';
 
-export const registerUser = async (req, res) => {
+export const registerUser = asyncHandler(async (req, res) => {
   const { firstName, lastName, userName, email, password } = req.body;
 
+  // Validation
   if (!firstName || !lastName || !userName || !email || !password) {
-    return res.status(400).json({ message: 'All fields are required' });
+    throw new AppError('All fields are required', 400);
   }
 
-  try {
-    const existingUser = await User.findOne({ $or: [{ email }, { userName }] });
-    if (existingUser) {
-      return res.status(409).json({
-        message:
-          existingUser.email === email
-            ? 'Email already in use'
-            : 'Username already taken',
-      });
-    }
-
-    // Run hashing and token generation in the worker thread
-    const { success, hashedPassword, accessToken, refreshToken } =
-      await AuthWorkerPool.run({
-        type: 'hashAndToken',
-        data: {
-          password,
-          userId: email, // Temporarily using email until user._id is available
-          JWT_Secrete_accessToken: process.env.JWT_SECRET_Customer,
-          JWT_Secrete_refreshToken: process.env.refresh_token_JWT_Customer,
-          ExpiresIn_accessToken: process.env.expires_customer_token,
-          ExpiresIn_refreshToken: process.env.expires_customer_Refresh_token,
-        }
-      });
-
-    if (!success) {
-      return res.status(500).json({ message: error || 'Hashing/token error' });
-    }
-
-    // Create new user with hashed password
-    const user = new User({ firstName, lastName, userName, email, password: hashedPassword });
-    await user.save();
-
-    res.cookie('token', accessToken, {
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'None',
-      httpOnly: true,
-      maxAge: parseInt(process.env.expires_customer_Access_cookies),
-    });
-
-    res.cookie('refreshToken', refreshToken, {
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Strict',
-      httpOnly: true,
-      maxAge: parseInt(process.env.expires_customer_Refresh_cookies),
-    });
-
-    res.status(201).json({
-      message: 'Registration successful',
-      user: {
-    userId: user._id.toString(),
-        },
-    });
-  } catch (error) {
-    console.error('Register Error:', error);
-    return res.status(500).json({ message: 'Server error during registration' });
+  // Check if user exists
+  const existingUser = await User.findOne({ $or: [{ email }, { userName }] });
+  if (existingUser) {
+    throw new AppError(
+      existingUser.email === email ? 'Email already in use' : 'Username already taken',
+      409
+    );
   }
-};
 
+  // Hash password and generate tokens
+  const { success, hashedPassword, accessToken, refreshToken, error } =
+    await AuthWorkerPool.run({
+      type: 'hashAndToken',
+      data: {
+        password,
+        userId: email,
+        JWT_Secret_accessToken: process.env.JWT_SECRET_CUSTOMER,
+        JWT_Secret_refreshToken: process.env.JWT_REFRESH_SECRET_CUSTOMER,
+        ExpiresIn_accessToken: process.env.JWT_ACCESS_EXPIRATION,
+        ExpiresIn_refreshToken: process.env.JWT_REFRESH_EXPIRATION,
+      },
+    });
 
+  if (!success) {
+    throw new AppError(error || 'Registration failed', 500);
+  }
 
-export const loginUser = async (req, res) => {
+  // Create user
+  const user = new User({ 
+    firstName, 
+    lastName, 
+    userName, 
+    email, 
+    password: hashedPassword 
+  });
+  await user.save();
+
+  // Set cookies
+  res.cookie('myAccessToken', accessToken, {
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    httpOnly: true,
+    maxAge: parseInt(process.env.ACCESS_TOKEN_COOKIE_EXPIRE),
+  });
+
+  res.cookie('myRefreshToken', refreshToken, {
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Strict',
+    httpOnly: true,
+    maxAge: parseInt(process.env.REFRESH_TOKEN_COOKIE_EXPIRE),
+  });
+
+  return sendResponse(res, 201, 'Registration successful', {
+    user: { userId: user._id.toString() }
+  });
+});
+
+export const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password are required' });
+    throw new AppError('Email and password are required', 400);
   }
 
-  try {
-    const user = await User.findOne({ email });
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new AppError('Invalid credentials', 401);
+  }
 
-    if (!user) {
-      return res.status(401).json({ message: 'User not found' });
-    }
-
-    const { success, accessToken, refreshToken } =
-      await AuthWorkerPool.run({
-        type: 'compareAndToken',
-        data: {
-          password,
-          hashedPassword: user.password,
-          userId: user._id.toString(),
-          JWT_Secrete_accessToken: process.env.JWT_SECRET_Customer,
-          JWT_Secrete_refreshToken: process.env.refresh_token_JWT_Customer,
-          ExpiresIn_accessToken: process.env.expires_customer_token,
-          ExpiresIn_refreshToken: process.env.expires_customer_Refresh_token,
-        },
-      });
-
-    if (!success) {
-      return res.status(401).json({ message: error || 'Invalid email or password' });
-    }
-
-    res.cookie('accessToken', accessToken, {
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'None',
-      httpOnly: true,
-      maxAge: parseInt(process.env.expires_customer_Access_cookies),
-    });
-
-    res.cookie('refreshToken', refreshToken, {
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Strict',
-      httpOnly: true,
-      maxAge: parseInt(process.env.expires_customer_Refresh_cookies),
-    });
-
-    res.status(200).json({
-      message: 'Login successful',
-      user: {
+  const { success, accessToken, refreshToken, error } =
+    await AuthWorkerPool.run({
+      type: 'compareAndToken',
+      data: {
+        password,
+        hashedPassword: user.password,
         userId: user._id.toString(),
+        JWT_Secret_accessToken: process.env.JWT_SECRET_CUSTOMER,
+        JWT_Secret_refreshToken: process.env.JWT_REFRESH_SECRET_CUSTOMER,
+        ExpiresIn_accessToken: process.env.JWT_ACCESS_EXPIRATION,
+        ExpiresIn_refreshToken: process.env.JWT_REFRESH_EXPIRATION,
       },
     });
-  } catch (error) {
-    console.error('Login Error:', error);
-    return res.status(500).json({ message: 'Server error during login' });
+
+  if (!success) {
+    throw new AppError(error || 'Invalid credentials', 401);
   }
-};
-export const logoutUser = async (req, res) => {
-  try {
-    res.clearCookie('accessToken');
-    res.clearCookie('refreshToken');
-    res.status(200).json({ message: 'Logout successful' });
-  } catch (error) {
-    console.error('Logout Error:', error);
-    return res.status(500).json({ message: 'Server error during logout' });
-  }
-};
+
+  // Set cookies
+  res.cookie('myAccessToken', accessToken, {
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    httpOnly: true,
+    maxAge: parseInt(process.env.ACCESS_TOKEN_COOKIE_EXPIRE),
+  });
+
+  res.cookie('myRefreshToken', refreshToken, {
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    httpOnly: true,
+    maxAge: parseInt(process.env.REFRESH_TOKEN_COOKIE_EXPIRE),
+  });
+
+  return sendResponse(res, 200, 'Login successful', {
+    user: { userId: user._id.toString() }
+  });
+});
+
+export const logoutUser = asyncHandler(async (req, res) => {
+  res.clearCookie('myAccessToken');
+  res.clearCookie('myRefreshToken');
+  return sendResponse(res, 200, 'Logout successful');
+});

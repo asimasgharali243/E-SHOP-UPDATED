@@ -1,45 +1,32 @@
-import { Outlet } from "react-router-dom";
+import { useLocation, Outlet } from "react-router-dom";
 import Header from "./components/Header/Header1";
+import Footer from "./components/footer/Footer";
 import "../src/Styles/sass/App.css";
-import CustomContainer from "./components/SubComponent/CustomContainer";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import "react-bootstrap";
-import '/src/Styles/fonts.css';
 import "react-toastify/dist/ReactToastify.css";
-import { useLocation } from "react-router-dom";
-import Footer from "./components/footer/Footer";
-function App() {
+import '/src/Styles/fonts.css';
+
+function AppLayout() {
   const location = useLocation();
 
-  // Define the paths where you don't want to show the header
   const hideHeaderPaths = [
-    "/logout",
-    "/logout/",
-    "/login",
-    "/login/",
-    "/signup",
-    "/SignUp/",
-    "/signup/",
-    "/forgetpassword/",
-    "/forgetpassword",
-    "/verify/otp",
-    "/verify/otp/",
-    "/reset/password/",
-    "/reset/password",
+    "/login", "/signup", "/logout", "/forgetpassword",
+    "/verify/otp", "/reset/password"
   ];
-  const shouldHideHeader = hideHeaderPaths.includes(location.pathname);
+
+  // Check if path is in the hide list OR starts with '/dashboard'
+  const shouldHideHeader = hideHeaderPaths.includes(location.pathname) || location.pathname.startsWith("/dashboard");
+  const shouldHideFooter = shouldHideHeader; // Same logic for footer
 
   return (
     <>
       {!shouldHideHeader && <Header />}
       <Outlet />
-      {/* <Outlet />
-      {!shouldHideHeader && <Footer />} */}
+      {!shouldHideFooter && <Footer />}
     </>
   );
 }
 
-export default App;
+export default AppLayout;

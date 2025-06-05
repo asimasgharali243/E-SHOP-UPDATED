@@ -1,8 +1,7 @@
 import { app } from './app.js';
 import dotenv from 'dotenv';
 import connectDB from './Config/ConnectDB.js';
-import cloudinary from "cloudinary";
-
+import imagekit from 'imagekit';
 // Handling Uncaught Exception
 process.on("uncaughtException", (err) => {
     console.log(`Error: ${err.message}`);
@@ -14,13 +13,12 @@ process.on("uncaughtException", (err) => {
 dotenv.config();
 
 connectDB();
-cloudinary.config({
-    cloud_name: "dfzhwu2c5",
-    api_key: "399145913243965",
-    api_secret: "5UuKnTWZfxe75Uzc7rCGiorYlEM",
-  });
 
-      
+export const imagekitInstance = new imagekit({
+    publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+    privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+    urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
+  });
 
 
 const server=app.listen(5000, () => {

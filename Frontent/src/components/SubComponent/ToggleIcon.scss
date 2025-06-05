@@ -7,10 +7,11 @@
   justify-content: space-between;
   cursor: pointer;
   z-index: 999;
+  
   span {
     display: block;
     height: 3px;
-    background-color: white;
+    
     border-radius: 2px;
     transition: all 0.3s ease;
   }

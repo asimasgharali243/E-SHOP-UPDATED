@@ -1,0 +1,97 @@
+.dashboard-layout {
+  height: 100vh;
+  overflow: hidden;
+}
+.dashboard-layout .sidebar {
+  width: 250px;
+  background-color: #1e1e2f;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  color: white;
+  padding: 1rem;
+  z-index: 1000;
+}
+.dashboard-layout .content {
+  margin-left: 250px;
+  overflow-y: auto;
+  height: 100vh;
+  background-color: #f8f9fa;
+}
+
+/* sidebar */
+/* src/components/Dashboard/DashboardLayout.scss */
+.dashboard-layout {
+  display: flex;
+}
+.dashboard-layout .custom-sidebar {
+  width: 50px;
+  height: 100vh;
+  background-color: #ffffff;
+  border-right: 1px solid #dee2e6;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 1.5rem 1rem;
+  overflow-y: auto;
+  z-index: 1040;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.03);
+}
+.dashboard-layout .custom-sidebar h5 {
+  font-weight: 600;
+  color: #333;
+}
+.dashboard-layout .custom-sidebar .sidebar-link,
+.dashboard-layout .custom-sidebar .sidebar-sublink {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  color: #495057;
+  text-decoration: none;
+  font-size: 0.95rem;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+}
+.dashboard-layout .custom-sidebar .sidebar-link:hover,
+.dashboard-layout .custom-sidebar .sidebar-sublink:hover {
+  background-color: #f1f3f5;
+  color: #0d6efd;
+}
+.dashboard-layout .custom-sidebar .sidebar-link.active,
+.dashboard-layout .custom-sidebar .sidebar-sublink.active {
+  background-color: #e9f5ff;
+  color: #0d6efd;
+  font-weight: 500;
+}
+.dashboard-layout .custom-sidebar .sidebar-sublink {
+  padding-left: 1.5rem;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+.dashboard-layout .custom-sidebar .sidebar-sublink:hover {
+  color: #0d6efd;
+  background: transparent;
+}
+.dashboard-layout .custom-sidebar .accordion-button {
+  background-color: transparent;
+  font-size: 0.95rem;
+  color: #495057;
+}
+.dashboard-layout .custom-sidebar .accordion-button:not(.collapsed) {
+  background-color: #f8f9fa;
+  color: #0d6efd;
+}
+.dashboard-layout .custom-sidebar .accordion-body {
+  padding: 0.75rem 1rem 1rem 1rem;
+}
+@media (max-width: 768px) {
+  .dashboard-layout .custom-sidebar {
+    display: none;
+  }
+}
+
+.custom-sidebar.open {
+  width: 250px !important;
+  transition: all 0.3s ease-in-out;
+}/*# sourceMappingURL=DashBoard.css.map */

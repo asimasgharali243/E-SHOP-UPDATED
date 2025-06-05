@@ -1,41 +1,60 @@
-import cloudinary from "cloudinary";
-import product from "../../models/ProductsModel.js"
-import  uploadImage  from "../../utils/uploadImage.js";
-export const createProduct = async (req, res) => {
-    let images = [];
+import Product from '../../models/ProductsModel.js';
+import asyncHandler from '../../middlewares/AsyncHandler.js';
+import { AppError } from '../../middlewares/errorHandler.js';
+import sendResponse from '../../utils/sendResponse.js';
+
+export const createProduct = asyncHandler(async (req, res, next) => {
+  const data = req.body;
+  const userId = req.userId;
+console.log(userId)
+  // Validate input
+  if (!data || !userId) {
+    throw new AppError('Invalid input or unauthorized', 400);
+  }
+console.log(data)
+  // Validate required fields
+  const requiredFields = ['name', 'price', 'category','subcategory','stock','slug','description','shortDescription'];
+  const missingFields = requiredFields.filter(field => !data[field] );
   
-    try {
-        console.log("hi")
-      if (typeof req.body.images === "string") {
-        images.push(req.body.images);
-      } else {
-        images = req.body.images;
+  if (missingFields.length > 0) {
+    throw new AppError(`Missing required fields: ${missingFields.join(', ')}`, 400);
+  }
+
+  // Create product
+  const product = new Product({
+    ...data,
+    userId: userId,
+  });
+
+  // Save with error handling
+  try {
+    await product.save();
+    
+    // Remove sensitive data before sending response
+    const productResponse = product.toObject();
+    delete productResponse.__v;
+    
+    sendResponse(res, 201, {
+      status: 'success',
+      data: {
+        product: productResponse
       }
-  
-      const imagesLinks = [];
-      for (let i = 0; i < images.length; i++) {
-        const result = await uploadImage(images[i]);
-  
-        imagesLinks.push({
-          public_id: result.public_id,
-          url: result.secure_url,
-        });
-      }
-  
-      req.body.images = imagesLinks;
-      req.body.user = req.user.id;
-  
-      const product = await product.create(req.body);
-  
-      res.status(201).json({
-        success: true,
-        product,
-      });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "Error creating product: " + error.message,
-      });
+    });
+  } catch (err) {
+    // Handle duplicate key errors (like duplicate slug)
+    if (err.code === 11000) {
+      const field = Object.keys(err.keyValue)[0];
+      throw new AppError(`${field} already exists`, 400);
     }
-  };
-  
+    
+    // Handle validation errors
+    if (err.name === 'ValidationError') {
+      const errors = Object.values(err.errors).map(el => el.message);
+      throw new AppError(`Invalid input data: ${errors.join('. ')}`, 400);
+    }
+    
+    throw err; // Let the error handler middleware deal with it
+  }
+});
+
+export default createProduct;

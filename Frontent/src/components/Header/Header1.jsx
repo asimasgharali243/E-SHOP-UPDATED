@@ -147,7 +147,9 @@ const navigate = useNavigate();
               sm={{ span: 3, order: 3 }}
               md={{ span: 12, order: 4 }}
             >
-              <ToggleIcon handleoffCanvass={handleShow } handleClose={handleClose} isOpen={showOffcanvas} />
+              <ToggleIcon 
+              style={{backgroundColor:`var(--white)`}}
+              handleoffCanvass={handleShow } handleClose={handleClose} isOpen={showOffcanvas} />
             </Col>
           </Row>
         </CustomContainer>
