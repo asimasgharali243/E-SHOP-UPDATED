@@ -152,7 +152,7 @@ console.log(data);
   return (
      <CustomContainer style={{ overflow: "hidden" }}>
       <Col>
-        <CategorySlider />
+        <CategorySlider title={"Flash Sales"}/>
       </Col>
       <Col>
         <h2>{product?.name}</h2>

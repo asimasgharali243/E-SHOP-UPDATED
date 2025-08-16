@@ -6,32 +6,35 @@ export default defineConfig({
   plugins: [
     react(),
     viteCompression({
-      algorithm: 'brotliCompress', // or 'gzip'
-      ext: '.br',                  // or '.gz'
-      threshold: 10240,            // Only compress files > 10KB
+      algorithm: 'gzip',
+      ext: '.gz',
+      threshold: 10240,
     }),
-     // Optional: Brotli
     viteCompression({
-      algorithm: 'gzip', // or 'brotliCompress'
-      ext: '.gz',        // or '.br'
-      threshold: 10240,  // Compress assets > 10kb
-    })
+      algorithm: 'brotliCompress',
+      ext: '.br',
+      threshold: 10240,
+    }),
   ],
-  server: {
-    port: 3000, // Change the port if needed
-    host: '0.0.0.0', // Allow access from all IP addresses
-    strictPort: true, // Exit if the port is already in use
+  optimizeDeps: {
+    include: ['onnxruntime-web'],
+    exclude: ['@imgly/background-removal'],
+    
   },
-  
-  logLevel: 'info', // Set the log level to info
+  server: {
+    port: 3000,
+    host: '0.0.0.0',
+    strictPort: true,
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+    },
+  },
+  logLevel: 'info',
   build: {
     minify: 'esbuild',
     rollupOptions: {
       treeshake: true,
     },
   }
-
 });
-
-
-  

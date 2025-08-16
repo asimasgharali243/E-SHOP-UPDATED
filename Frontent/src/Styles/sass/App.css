@@ -152,10 +152,10 @@ html {
 
 :root {
   --primary: #4F73AF;
-  --primary-hover: #2f4569;
-  --header-link-text:#b39094;
+  --primary-hover: rgb(47.2755905512, 68.8188976378, 104.7244094488);
+  --header-link-text:rgb(178.8461538462, 144.1538461538, 147.9615384615);
   --secondary: #B7410E;
-  --secondary-hover: #88300a;
+  --secondary-hover: rgb(135.6243654822, 48.1725888325, 10.3756345178);
   --text: #2E3545;
   --text1:#2E3545;
   --background: #f8f9fa;
@@ -167,10 +167,10 @@ html {
 
 body.dark {
   --primary: #5F87C7;
-  --primary-hover: #32558e;
-  --header-link-text:#d2bbaf;
+  --primary-hover: rgb(49.7777777778, 85.3333333333, 142.2222222222);
+  --header-link-text:rgb(209.7648351648, 187.1472527473, 174.7351648352);
   --secondary: rgb(251, 129, 20);
-  --secondary-hover: #d86804;
+  --secondary-hover: rgb(216.3179916318, 104.0167364017, 3.6820083682);
   --text: #EDEEF0;
   --text1:#2E3545;
   --background: #282C38;

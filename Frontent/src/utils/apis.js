@@ -19,7 +19,7 @@ const apis = () => {
     getSingleUser: `${local}users`,
     getSignature: `${local}get-signature`,
     RemoveBackground: `${local}remove-background`,
-    RollbackProductDetails: `${local}products/rollback`,
+    RollbackProductDetails: `${local}products/roll/back`,
   };
 
   return list;

@@ -144,10 +144,19 @@ const productSchema = new mongoose.Schema({
     default: 0,
   },
   userId: {
-    type: mongoose.Schema.Types.ObjectId || String,
-    ref: "User",
-    required: true,
+  type: mongoose.Schema.Types.Mixed, // Can be any type
+  required: true,
+  validate: {
+    validator: function (value) {
+      return (
+        mongoose.isValidObjectId(value) ||
+        typeof value === "string"
+      );
+    },
+    message: "userId must be an ObjectId or a string",
   },
+}
+,
 
   negotiationEnabled: {
     

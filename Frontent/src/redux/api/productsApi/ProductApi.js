@@ -56,13 +56,7 @@ const ProductApi = createApi({
     GetSignature: builder.query({
       query: (count) =>   `${apis().getSignature}?count=${count}`,
     }),
- RemoveBackground: builder.mutation({
-  query: (formData) => ({
-    url: apis().RemoveBackground,
-    method: 'POST',
-    body: formData,
-  }),
-}),
+
 
     rollbackProduct: builder.mutation({
 
@@ -88,7 +82,7 @@ export const {
 
 } = ProductApi;
 
-// Optional: Export endpoints for use in middleware/tests
+//  Export endpoints for use in middleware/tests
 export const {
   endpoints: {
     createProduct,

@@ -1,8 +1,8 @@
-import React from 'react';
-import GeneralCustomCarousel from '../GeneralCustomCarousel';
-import ProductCard from '../../Card/ProductCard';
+import React from "react";
+import GeneralCustomCarousel from "../GeneralCustomCarousel";
+import ProductCard from "../../Card/ProductCard";
 
-export default function CategorySlider() {
+export default function CategorySlider({ title }) {
   const productData = [
     {
       id: 1,
@@ -46,7 +46,7 @@ export default function CategorySlider() {
       price: 39.99,
       description: "Description for Product 3",
     },
-     {
+    {
       id: 1,
       image: "/assets/products_4_1.jpg",
       name: "product 1",
@@ -87,8 +87,8 @@ export default function CategorySlider() {
       name: "Product 3",
       price: 39.99,
       description: "Description for Product 3",
-    }
-    
+    },
+
     // ...more products
   ];
 
@@ -96,17 +96,26 @@ export default function CategorySlider() {
     <>
       <div className="d-flex align-items-center justify-content-start mb-4 position-relative mt-3 ">
         <h2
-        style={{fontSize:`clamp(20px, 3vw, 30px)`, fontWeight: 600,color:`var(--text)`}}  
-        className="mb-0">Categories</h2>
-        <div className="d-none d-md-flex align-items-center justify-content-center gap-2 cursor-pointer me-5 position-absolute  "
-        style={{right:"15%",top:"50%",transform:"translateY(-50%)"}}
-        
+          style={{
+            fontSize: `clamp(20px, 3vw, 30px)`,
+            fontWeight: 600,
+            color: `var(--text)`,
+          }}
+          className="mb-0"
         >
-          <i className="bi bi-arrow-left  border fs-4 rounded-circle d-flex align-items-center justify-content-center"
-          style={{width:"50px",height:"50px"}}
+          {title}
+        </h2>
+        <div
+          className="d-none d-md-flex align-items-center justify-content-center gap-2 cursor-pointer me-5 position-absolute  "
+          style={{ right: "15%", top: "50%", transform: "translateY(-50%)" }}
+        >
+          <i
+            className="bi bi-arrow-left  border fs-4 rounded-circle d-flex align-items-center justify-content-center"
+            style={{ width: "50px", height: "50px" }}
           ></i>
-          <i className="bi bi-arrow-right  border fs-4 rounded-circle d-flex align-items-center justify-content-center"
-          style={{width:"50px",height:"50px"}}
+          <i
+            className="bi bi-arrow-right  border fs-4 rounded-circle d-flex align-items-center justify-content-center"
+            style={{ width: "50px", height: "50px" }}
           ></i>
         </div>
       </div>

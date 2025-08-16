@@ -245,9 +245,9 @@ const navigate = useNavigate();
                   <Nav.Link
                     as={Link}
                     onClick={handleClose}
-                    to="/contact"
+                    to="/dashboard"
                     className={` ${
-                      location.pathname === "/contact" ? "active" : ""
+                      location.pathname === "/dashboard" ? "active" : ""
                     }`}
                   >
                     DashBoard

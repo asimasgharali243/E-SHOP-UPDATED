@@ -6,14 +6,14 @@ import sendResponse from '../../utils/sendResponse.js';
 export const createProduct = asyncHandler(async (req, res, next) => {
   const data = req.body;
   const userId = req.userId;
-console.log(userId)
+// console.log(userId)
   // Validate input
   if (!data || !userId) {
     throw new AppError('Invalid input or unauthorized', 400);
   }
-console.log(data)
+// console.log(data)
   // Validate required fields
-  const requiredFields = ['name', 'price', 'category','subcategory','stock','slug','description','shortDescription'];
+  const requiredFields = ['name', 'price', 'category','subcategory','stock','slug','description'];
   const missingFields = requiredFields.filter(field => !data[field] );
   
   if (missingFields.length > 0) {

@@ -14,6 +14,6 @@ ProductRouter.route('/products').get(getAllProducts);
 ProductRouter.route('/products/:id').get(getSingleProduct).delete(deleteProduct).put(updateProduct)
 ProductRouter.route('/products/create').post(AuthUser,createProduct)
 ProductRouter.route('/get-signature').get(signUpload)
-ProductRouter.route('/products/rollback').delete(rollbackProductDetails)
+ProductRouter.route('/products/roll/back').delete(rollbackProductDetails)
 ProductRouter.route('/remove-background').post(AuthUser,removeBackground)
 export default ProductRouter;
