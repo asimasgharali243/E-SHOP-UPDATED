@@ -1,6 +1,7 @@
 import { imagekitInstance } from "../../index.js";
 export const signUpload =  async (req, res) => {
-  const count=req.query.count || 1;
+  const count=req.query.count 
+  console.log(count);
   const tokens=[];
   try {
     console.log("hell");

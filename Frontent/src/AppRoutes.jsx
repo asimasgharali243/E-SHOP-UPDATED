@@ -14,7 +14,7 @@ const Login = lazy(() => import("./components/auth/Login"));
 const ForgotPassword = lazy(() => import("./components/auth/ForgetPassword"));
 const VerifyOtp = lazy(() => import("./components/auth/VerifyOtp"));
 const ResetPassword = lazy(() => import("./components/auth/ResetPassword"));
-const TestingComponent = lazy(() => import("./components/TestingComponenet")); 
+const SingleProductPage = lazy(() => import("./pages/SingleProductPage/SingleProductPage"));
 const Cart = lazy(() => import("./components/Cart"));
 const Checkout = lazy(() => import("./pages/CheckOut"));
 const Logout = lazy(() => import("./components/auth/Logout"));
@@ -49,6 +49,8 @@ const AppRouter = createBrowserRouter([
       { path: "verify/otp", element: <VerifyOtp /> },
       { path: "reset/password", element: <ResetPassword /> },
       { path: "logout", element: <Logout /> },
+      { path: "product/:id", element: <SingleProductPage /> },
+
       { path: "wishlist", element: <WishListPage /> },
       { path: "cart", element: <Cart /> },
       { path: "checkout", element: <Checkout /> },

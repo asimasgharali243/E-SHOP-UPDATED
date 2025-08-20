@@ -21,22 +21,14 @@ export const registerUser = asyncHandler(async (req, res) => {
     );
   }
 
-  // Hash password and generate tokens
-  const { success, hashedPassword, accessToken, refreshToken, error } =
-    await AuthWorkerPool.run({
-      type: 'hashAndToken',
-      data: {
-        password,
-        userId: email,
-        JWT_Secret_accessToken: process.env.JWT_SECRET_CUSTOMER,
-        JWT_Secret_refreshToken: process.env.JWT_REFRESH_SECRET_CUSTOMER,
-        ExpiresIn_accessToken: process.env.JWT_ACCESS_EXPIRATION,
-        ExpiresIn_refreshToken: process.env.JWT_REFRESH_EXPIRATION,
-      },
-    });
+  // Hash password
+  const hashedPasswordResult = await AuthWorkerPool.run({
+    type: 'hash',
+    data: { password }
+  });
 
-  if (!success) {
-    throw new AppError(error || 'Registration failed', 500);
+  if (!hashedPasswordResult.success) {
+    throw new AppError(hashedPasswordResult.error || 'Password hashing failed', 500);
   }
 
   // Create user
@@ -45,19 +37,35 @@ export const registerUser = asyncHandler(async (req, res) => {
     lastName, 
     userName, 
     email, 
-    password: hashedPassword 
+    password: hashedPasswordResult.hashedPassword 
   });
   await user.save();
 
+  // Generate tokens
+  const tokenResult = await AuthWorkerPool.run({
+    type: 'generateTokenPair',
+    data: {
+      userId: user._id.toString(),
+      JWT_Secret_accessToken: process.env.JWT_SECRET_CUSTOMER,
+      JWT_Secret_refreshToken: process.env.JWT_REFRESH_SECRET_CUSTOMER,
+      ExpiresIn_accessToken: process.env.JWT_ACCESS_EXPIRATION,
+      ExpiresIn_refreshToken: process.env.JWT_REFRESH_EXPIRATION,
+    },
+  });
+
+  if (!tokenResult.success) {
+    throw new AppError(tokenResult.error || 'Token generation failed', 500);
+  }
+
   // Set cookies
-  res.cookie('myAccessToken', accessToken, {
+  res.cookie('myAccessToken', tokenResult.accessToken, {
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
     httpOnly: true,
     maxAge: parseInt(process.env.ACCESS_TOKEN_COOKIE_EXPIRE),
   });
 
-  res.cookie('myRefreshToken', refreshToken, {
+  res.cookie('myRefreshToken', tokenResult.refreshToken, {
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'Strict',
     httpOnly: true,
@@ -81,33 +89,32 @@ export const loginUser = asyncHandler(async (req, res) => {
     throw new AppError('Invalid credentials', 401);
   }
 
-  const { success, accessToken, refreshToken, error } =
-    await AuthWorkerPool.run({
-      type: 'compareAndToken',
-      data: {
-        password,
-        hashedPassword: user.password,
-        userId: user._id.toString(),
-        JWT_Secret_accessToken: process.env.JWT_SECRET_CUSTOMER,
-        JWT_Secret_refreshToken: process.env.JWT_REFRESH_SECRET_CUSTOMER,
-        ExpiresIn_accessToken: process.env.JWT_ACCESS_EXPIRATION,
-        ExpiresIn_refreshToken: process.env.JWT_REFRESH_EXPIRATION,
-      },
-    });
+  const tokenResult = await AuthWorkerPool.run({
+    type: 'compareAndToken',
+    data: {
+      password,
+      hashedPassword: user.password,
+      userId: user._id.toString(),
+      JWT_Secret_accessToken: process.env.JWT_SECRET_CUSTOMER,
+      JWT_Secret_refreshToken: process.env.JWT_REFRESH_SECRET_CUSTOMER,
+      ExpiresIn_accessToken: process.env.JWT_ACCESS_EXPIRATION,
+      ExpiresIn_refreshToken: process.env.JWT_REFRESH_EXPIRATION,
+    },
+  });
 
-  if (!success) {
-    throw new AppError(error || 'Invalid credentials', 401);
+  if (!tokenResult.success) {
+    throw new AppError(tokenResult.error || 'Invalid credentials', 401);
   }
 
   // Set cookies
-  res.cookie('myAccessToken', accessToken, {
+  res.cookie('myAccessToken', tokenResult.accessToken, {
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     httpOnly: true,
     maxAge: parseInt(process.env.ACCESS_TOKEN_COOKIE_EXPIRE),
   });
 
-  res.cookie('myRefreshToken', refreshToken, {
+  res.cookie('myRefreshToken', tokenResult.refreshToken, {
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     httpOnly: true,

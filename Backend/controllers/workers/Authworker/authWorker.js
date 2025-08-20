@@ -35,16 +35,34 @@ const verifyJwt = (token, secret) => {
   });
 };
 
-export default async function ({ type, data }) {
+export default async function (input) {
   try {
+    // Validate input structure
+    if (!input || typeof input !== 'object' || !input.type) {
+      return { success: false, error: 'Invalid worker input format' };
+    }
+
+    const { type, data } = input;
+
+    // Validate data exists for operations that need it
+    if (type !== 'hash' && (!data || typeof data !== 'object')) {
+      return { success: false, error: 'Missing or invalid data parameter' };
+    }
+
     switch (type) {
       case "hash":
+        if (!data.password) {
+          return { success: false, error: 'Password is required' };
+        }
         return { 
           success: true, 
           hashedPassword: await hashPassword(data.password) 
         };
 
       case "hashAndToken": {
+        if (!data.password || !data.userId) {
+          return { success: false, error: 'Missing required fields' };
+        }
         const [hashedPassword, accessToken, refreshToken] = await Promise.all([
           hashPassword(data.password),
           generateToken(data.userId, data.JWT_Secret_accessToken, data.ExpiresIn_accessToken),
@@ -54,9 +72,12 @@ export default async function ({ type, data }) {
       }
 
       case "compareAndToken": {
+        if (!data.password || !data.hashedPassword || !data.userId) {
+          return { success: false, error: 'Missing required fields' };
+        }
         const isMatch = await compareHash(data.password, data.hashedPassword);
         if (!isMatch) return { success: false, error: "Incorrect credentials" };
-console.log(data)
+        
         const [accessToken, refreshToken] = await Promise.all([
           generateToken(data.userId, data.JWT_Secret_accessToken, data.ExpiresIn_accessToken),
           generateToken(data.userId, data.JWT_Secret_refreshToken, data.ExpiresIn_refreshToken),
@@ -65,27 +86,44 @@ console.log(data)
       }
 
       case "verifyToken": {
-        console.log(data.token, "/n"+data.JWT_Secret);
+        if (!data.token || !data.JWT_Secret) {
+          return { success: false, error: 'Token and secret are required' };
+        }
         const decoded = await verifyJwt(data.token, data.JWT_Secret);
         return { success: true, data: decoded };
       }
+
       case 'generateOtpAndHash': {
-        const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
         const salt = await bcrypt.genSalt(10);
         const hashedOtp = await bcrypt.hash(otp, salt);
         return { success: true, otp, hashedOtp };
       }
       
-case 'generateToken': {
-          const token = await generateToken(data.userId, data.secret, data.expiresIn);
-          return { success: true,token };
+      case 'generateToken': {
+        if (!data.userId || !data.secret || !data.expiresIn) {
+          return { success: false, error: 'Missing required fields' };
+        }
+        const token = await generateToken(data.userId, data.secret, data.expiresIn);
+        return { success: true, token };
       }
-      
+
+      case 'generateTokenPair': {
+        if (!data.userId || !data.JWT_Secret_accessToken || !data.JWT_Secret_refreshToken) {
+          return { success: false, error: 'Missing required fields' };
+        }
+        const [accessToken, refreshToken] = await Promise.all([
+          generateToken(data.userId, data.JWT_Secret_accessToken, data.ExpiresIn_accessToken),
+          generateToken(data.userId, data.JWT_Secret_refreshToken, data.ExpiresIn_refreshToken),
+        ]);
+        return { success: true, accessToken, refreshToken };
+      }
 
       default:
         return { success: false, error: `Unknown operation type: '${type}'` };
     }
   } catch (err) {
+    console.error('Worker Error:', err);
     return { success: false, error: `Worker execution failed: ${err.message}` };
   }
 }

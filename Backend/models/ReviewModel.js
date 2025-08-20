@@ -30,5 +30,8 @@ const reviewSchema = new mongoose.Schema({
   timestamps: true, // Adds createdAt and updatedAt
 });
 
+reviewSchema.index({ productId: 1 }); // Faster product review queries
+reviewSchema.index({ userId: 1, productId: 1 }, { unique: true }); // Prevent duplicate reviews
+
 const Review = mongoose.model("Review", reviewSchema);
 export default Review;

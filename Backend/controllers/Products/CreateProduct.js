@@ -13,8 +13,26 @@ export const createProduct = asyncHandler(async (req, res, next) => {
   }
 // console.log(data)
   // Validate required fields
-  const requiredFields = ['name', 'price', 'category','subcategory','stock','slug','description'];
-  const missingFields = requiredFields.filter(field => !data[field] );
+// Validate required fields
+const requiredFields = [
+  'name',
+  'price',
+  'category',
+  'subcategory',
+  'stock',
+  'slug',
+  'shortDescription',
+  'detailsDescription'
+];
+
+const missingFields = requiredFields.filter(
+  field => !data[field] || data[field].toString().trim() === ""
+);
+
+if (missingFields.length > 0) {
+  throw new AppError(`Missing required fields: ${missingFields.join(', ')}`, 400);
+}
+
   
   if (missingFields.length > 0) {
     throw new AppError(`Missing required fields: ${missingFields.join(', ')}`, 400);

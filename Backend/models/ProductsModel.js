@@ -16,13 +16,13 @@ const productSchema = new mongoose.Schema({
     trim: true,
     maxlength: [100, "Manufacturer name cannot exceed 100 characters"],
   },
-  // shortDescription: {
-  //   type: String,
-  //   required: [true, "Please enter a short description"],
-  //   trim: true,
-  //   maxlength: [300, "Short description cannot exceed 300 characters"],
-  // },
-  description: {
+  shortDescription: {
+    type: String,
+    required: [true, "Please enter a short description"],
+    trim: true,
+    maxlength: [300, "Short description cannot exceed 300 characters"],
+  },
+  detailsDescription: {
     type: String,
     required: [true, "Please enter a full description"],
     trim: true,
@@ -89,18 +89,26 @@ const productSchema = new mongoose.Schema({
     max: [9999, "Stock cannot exceed 4 digits"],
     default: 1,
   },
-  color: [
-    {
-      type: String,
-      trim: true,
+  colors: {
+    type: [String],
+    set: function (value) {
+      if (typeof value === "string") {
+        return value.split(",").map(c => c.trim());
+      }
+      return value;
     },
-  ],
-  size: [
-    {
-      type: String,
-      trim: true,
+    maxlength: [10, "Colors cannot exceed 10 items"],
+  },
+  sizes: {
+    type: [String],
+    set: function (value) {
+      if (typeof value === "string") {
+        return value.split(",").map(s => s.trim());
+      }
+      return value;
     },
-  ],
+    maxlength: [10, "Sizes cannot exceed 10 items"],
+  },
   brand: {
     type: String,
     trim: true,
@@ -139,11 +147,17 @@ const productSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  numOfReviews: {
-    type: Number,
-    default: 0,
+reviews: [
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Review",  // reference to Review collection
   },
-  userId: {
+],
+numOfReviews: {
+  type: Number,
+  default: 0,
+},
+userId: {
   type: mongoose.Schema.Types.Mixed, // Can be any type
   required: true,
   validate: {
@@ -155,8 +169,7 @@ const productSchema = new mongoose.Schema({
     },
     message: "userId must be an ObjectId or a string",
   },
-}
-,
+},
 
   negotiationEnabled: {
     

@@ -4,6 +4,9 @@ import authRoutes from './routes/AuthRoute.js';
 import ProductRouter from './routes/ProductsRoutes.js'
 import cors from 'cors';
 import compression from 'compression';
+
+import NegotiationRouter from './routes/NegotiationRoute.js';
+
 import errorMiddleware from './middlewares/errorHandler.js';
 export const app = express();
 
@@ -15,7 +18,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use(cookieParser());
-app.use('/',authRoutes);
-app.use('/',ProductRouter);
-
+app.use('/api/auth', authRoutes);
+app.use('/api/products', ProductRouter);
+app.use('/api/negotiation', NegotiationRouter);
 app.use(errorMiddleware);
