@@ -10,7 +10,7 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { status, user } = useSelector((state) => state.authUser, shallowEqual);
-console.log(user);
+  console.log(user);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -22,11 +22,11 @@ console.log(user);
   const [formErrors, setFormErrors] = useState({});
   const [show, setShow] = useState(false);
   const workerRef = useRef(null);
-useEffect(() => {
-  if (user) {
-    navigate("/logout");
-  }
-},[navigate,user]);
+  useEffect(() => {
+    if (user) {
+      navigate("/logout");
+    }
+  }, [navigate, user]);
   useEffect(() => {
     workerRef.current = new AuthValidationWorker();
 
@@ -53,13 +53,16 @@ useEffect(() => {
     };
   }, [dispatch, formData]);
 
-  const handleChange = useCallback((field) => (e) => {
-    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-    setFormErrors((prevErrors) => {
-      const { [field]: _, ...rest } = prevErrors;
-      return rest;
-    });
-  }, []);
+  const handleChange = useCallback(
+    (field) => (e) => {
+      setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+      setFormErrors((prevErrors) => {
+        const { [field]: _, ...rest } = prevErrors;
+        return rest;
+      });
+    },
+    []
+  );
 
   const showPassword = useCallback(() => setShow((prev) => !prev), []);
 

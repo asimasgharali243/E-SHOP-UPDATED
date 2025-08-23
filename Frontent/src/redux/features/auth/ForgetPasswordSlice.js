@@ -16,22 +16,26 @@ const ForgetPasswordSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-    .addCase(forgetPassword.pending, (state, action) => {
-      state.loading = true;
-    })
+      .addCase(forgetPassword.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(forgetPassword.fulfilled, (state, action) => {
-        state.timer = action.payload.data.timer || 0;
+        state.timer = action.payload?.data?.timer || 0;
         state.loading = false;
-        
-        ShowToast('success', action.payload.data.message || 'OTP sent successfully', 'top-right');
-        
+        ShowToast(
+          'success',
+          action.payload?.data?.message || 'OTP sent successfully',
+          'top-right'
+        );
       })
       .addCase(forgetPassword.rejected, (state, action) => {
-        state.timer = action.payload.timer || 0;
-        
+        state.timer = action.payload?.timer || 0;
         state.loading = false;
-        console.log(action.payload.message);
-        ShowToast('error', action.payload.message || 'Failed to send OTP', 'top-right');
+        ShowToast(
+          'error',
+          action.payload?.message || 'Failed to send OTP',
+          'top-right'
+        );
       });
   },
 });

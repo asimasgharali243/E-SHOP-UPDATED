@@ -5,7 +5,7 @@ export const register = createAsyncThunk(
   'user/register',
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await fetch(apis().registerUser, {
+      const response = await fetch(`${apis().baseUrl}${apis().registerUser}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -17,7 +17,7 @@ export const register = createAsyncThunk(
       const resdata = await response.json();
       console.log(resdata);
       if (!response.ok) {
-        console.error('Register error:', data);
+        console.error('Register error:', resdata);
         return rejectWithValue({
           message: resdata.message || 'Registration failed'
         });
@@ -38,7 +38,7 @@ export const login = createAsyncThunk(
   'user/login',
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await fetch(apis().loginUser, {
+      const response = await fetch(`${apis().baseUrl}${apis().loginUser}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ export const logout = createAsyncThunk(
   'user/logout',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(apis().logoutUser, {
+      const response = await fetch(`${apis().baseUrl}${apis().logoutUser}`, {
         method: 'POST',
         credentials: 'include',
       });

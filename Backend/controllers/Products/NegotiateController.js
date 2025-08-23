@@ -1,84 +1,79 @@
+// controllers/Products/NegotiateController.js
 import {
-  startNegotiation,
-  postMessage,
-  toggleAI,
-  updateStatus,
-  getNegotiationsForProduct
+  startNegotiation as startNegotiationService,
+  postMessage as postMessageService,
+  toggleAI as toggleAIService,
+  updateStatus as updateStatusService,
+  getNegotiationsForProduct as getNegotiationsForProductService,
 } from "../../utils/NegotiationServices.js";
 
+// --- Start Negotiation ---
 export async function startNegotiationController(req, res) {
+  const { productId, initialMessage } = req.body;
+  if (!productId || !initialMessage) {
+    return res
+      .status(400)
+      .json({ message: "productId and initialMessage are required." });
+  }
+
   try {
     const buyerId = req.userId;
-    const { productId, initialMessage } = req.body;
-    console.log("Starting negotiation:", { productId, initialMessage });
-    
-    if (!productId || !initialMessage) {
-      return res.status(400).json({ 
-        message: "productId and initialMessage are required" 
-      });
-    }
-
-    const negotiation = await startNegotiation(
-      productId, 
-      buyerId, 
+    const negotiation = await startNegotiationService(
+      productId,
+      buyerId,
       initialMessage
     );
-
-    return res.json({
-      negotiationId: negotiation._id,
-      messages: negotiation.messages,
-      useAI: negotiation.useAI,
-      status: negotiation.status,
-      negotiatedPrice: negotiation.negotiatedPrice
-    });
+    req.app
+      .get("io")
+      .to(negotiation._id.toString())
+      .emit("negotiationUpdate", negotiation);
+    return res.json(negotiation);
   } catch (error) {
     console.error("[startNegotiation] error:", error);
     return res.status(400).json({ message: error.message });
   }
 }
 
+// --- Post Message ---
 export async function postMessageController(req, res) {
+  const { negotiationId } = req.params;
+  const { message } = req.body;
+  if (!message) {
+    return res.status(400).json({ message: "message is required." });
+  }
+
   try {
     const userId = req.userId.toString();
-    const { negotiationId } = req.params;
-    const { message } = req.body;
-
-    if (!message) {
-      return res.status(400).json({ message: "message is required" });
-    }
-
-    const negotiation = await postMessage(
-      negotiationId, 
-      userId, 
+    const negotiation = await postMessageService(
+      negotiationId,
+      userId,
       message
     );
-
-    return res.json({
-      negotiationId: negotiation._id,
-      messages: negotiation.messages,
-      useAI: negotiation.useAI,
-      negotiatedPrice: negotiation.negotiatedPrice,
-      status: negotiation.status
-    });
+    req.app
+      .get("io")
+      .to(negotiation._id.toString())
+      .emit("negotiationUpdate", negotiation);
+    return res.json(negotiation);
   } catch (error) {
     console.error("[postMessage] error:", error);
     return res.status(400).json({ message: error.message });
   }
 }
 
+// --- Toggle AI ---
 export async function toggleAIController(req, res) {
+  const { negotiationId } = req.params;
+
   try {
     const userId = req.userId.toString();
-    const { negotiationId } = req.params;
-
-    const negotiation = await toggleAI(
-      negotiationId, 
-      userId
-    );
-
-    return res.json({ 
-      useAI: negotiation.useAI, 
-      message: `AI ${negotiation.useAI ? "enabled" : "disabled"}` 
+    const negotiation = await toggleAIService(negotiationId, userId);
+    req.app
+      .get("io")
+      .to(negotiation._id.toString())
+      .emit("negotiationUpdate", negotiation);
+    return res.json({
+      useAI: negotiation.useAI,
+      message: `AI ${negotiation.useAI ? "enabled" : "disabled"}.`,
     });
   } catch (error) {
     console.error("[toggleAI] error:", error);
@@ -86,40 +81,40 @@ export async function toggleAIController(req, res) {
   }
 }
 
+// --- Update Status (accept/reject) ---
 export async function updateStatusController(req, res) {
-  try {
-    const userId = req.userId.toString();
-    const { negotiationId } = req.params;
-    const { status, finalPrice } = req.body;
+  const { negotiationId } = req.params;
+  const { status, finalPrice } = req.body;
 
-    const negotiation = await updateStatus(
-      negotiationId, 
-      userId, 
-      status, 
+  try {
+    const userId = req.userId;
+    const negotiation = await updateStatusService(
+      negotiationId,
+      userId,
+      status,
       finalPrice
     );
-
-    return res.json({ 
-      negotiationId: negotiation._id, 
-      status: negotiation.status, 
-      negotiatedPrice: negotiation.negotiatedPrice 
-    });
+    req.app
+      .get("io")
+      .to(negotiation._id.toString())
+      .emit("negotiationUpdate", negotiation);
+    return res.json(negotiation);
   } catch (error) {
     console.error("[updateStatus] error:", error);
     return res.status(400).json({ message: error.message });
   }
 }
 
+// --- Get Negotiations by Product ---
 export async function getNegotiationsForProductController(req, res) {
+  const { productId } = req.params;
+
   try {
     const userId = req.userId.toString();
-    const { productId } = req.params;
-
-    const negotiations = await getNegotiationsForProduct(
-      productId, 
+    const negotiations = await getNegotiationsForProductService(
+      productId,
       userId
     );
-
     return res.json(negotiations);
   } catch (error) {
     console.error("[getNegotiationsForProduct] error:", error);

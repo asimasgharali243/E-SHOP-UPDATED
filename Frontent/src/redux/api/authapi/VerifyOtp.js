@@ -3,7 +3,7 @@ import apis from '../../../utils/apis';
 
 export const  VerifyOtpApi = createAsyncThunk('Otp/Verify', async (userData, { rejectWithValue }) => {
   try {
-    const response = await fetch(apis().otpVerify,{
+    const response = await fetch(`${apis().baseUrl}${apis().otpVerify}`,{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

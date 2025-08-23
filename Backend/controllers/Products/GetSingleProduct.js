@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 
 export const getSingleProduct = async (req, res, next) => {
   try {
+console.log("Fetching single product with ID:", req.params.id);
     // Validate if the id is a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).json({ message: "Invalid Product ID" });

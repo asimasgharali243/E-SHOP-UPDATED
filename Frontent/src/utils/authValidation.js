@@ -8,43 +8,53 @@ self.onmessage = function (e) {
 
     switch (field) {
       case "firstName":
-        if (!value) errors.firstName = "First name is required";
+        if (!value) {
+          errors.firstName = "First name required";
+        } else if (value.length < 4) {
+          errors.firstName = "Min 4 chars";
+        }
         break;
 
       case "lastName":
-        if (!value) errors.lastName = "Last name is required";
+        if (!value) {
+          errors.lastName = "Last name required";
+        } else if (value.length < 4) {
+          errors.lastName = "Min 4 chars";
+        }
         break;
 
       case "userName":
-        if (!value) errors.userName = "Username is required";
+        if (!value) {
+          errors.userName = "Username required";
+        } else if (value.length < 8) {
+          errors.userName = "Min 8 chars";
+        }
         break;
 
       case "email":
         if (!value) {
-          errors.email = "Email is required";
+          errors.email = "Email required";
         } else if (!emailPattern.test(value)) {
-          errors.email = "Email is invalid";
+          errors.email = "Invalid email";
         }
         break;
 
       case "password":
         if (!value) {
-          errors.password = "Password is required";
+          errors.password = "Password required";
         } else if (value.length < 6) {
-          errors.password = "Password must be at least 6 characters";
+          errors.password = "Min 6 chars";
         }
         break;
 
       case "conformPassword":
         if (!value) {
-          errors.conformPassword = "Confirm password is required";
+          errors.conformPassword = "Confirm password";
+        } else if (formData.password !== formData.conformPassword) {
+          errors.conformPassword = "Passwords differ";
         }
-        else if (formData.password !== formData.conformPassword) {
-          errors.conformPassword = "Passwords do not match";
-        }  
         break;
 
-      
       default:
         break;
     }

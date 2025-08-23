@@ -1,8 +1,10 @@
 const apis = () => {
-  const local = "http://localhost:5000"; // No trailing slash here, it's a base URL
+  const local = "http://localhost:5000"; // Backend base URL
 
   const list = {
-    baseUrl: `${local}/api`, // Set a consistent base URL for all API calls
+    baseUrl: `${local}/api`, // Prefix all routes with /api
+
+    // ---------- Auth ----------
     registerUser: `/auth/user/signup`,
     loginUser: `/auth/user/login`,
     logoutUser: `/auth/user/logout`,
@@ -10,27 +12,22 @@ const apis = () => {
     otpVerify: `/auth/user/otp/verify`,
     resetPassword: `/auth/user/resetpassword`,
 
-    getAllProduct: `/products`,
+    // ---------- Products ----------
+    getAllProducts: `/products`,
     getSingleProduct: (productId) => `/products/${productId}`,
-    createProduct: `/products/create/product`,
+    createProduct: `/products`,
     updateProduct: (productId) => `/products/${productId}`,
     deleteProduct: (productId) => `/products/${productId}`,
-    getSignature: (count) => `/products/get-signature/product?count=${count}`,
-    AddReview: (productid) => `/products/${productid}/reviews`,
+    getSignature: (count) => `/products/get/signature?count=${count}`,
+    addReview: (productId) => `/products/${productId}/reviews`,
+    rollbackProduct: `/products/rollback`,
 
-    getAllOrders: `/orders`,
-    getAllUsers: `/users`,
-    getSingleUser: `/users`,
-    RollbackProductDetails: `/products/roll/back`,
-
+    // ---------- Negotiation ----------
     negotiateStart: `/negotiation/start`,
-    negotiateMessage: (negotiationId) =>
-      `/negotiation/${negotiationId}/message`,
-    negotiateToggleAI: (negotiationId) =>
-      `/negotiation/${negotiationId}/toggle-ai`,
+    negotiateMessage: (negotiationId) => `/negotiation/${negotiationId}/message`,
+    negotiateToggleAI: (negotiationId) => `/negotiation/${negotiationId}/toggle-ai`,
     negotiateStatus: (negotiationId) => `/negotiation/${negotiationId}/status`,
-    getNegotiationsByProduct: (productId) =>
-      `/negotiation/product/${productId}`,
+    getNegotiationsByProduct: (productId) => `/negotiation/product/${productId}`,
   };
 
   return list;

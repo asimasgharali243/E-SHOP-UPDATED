@@ -3,7 +3,7 @@ import apis from '../../../utils/apis';
 
 export const  resetPasswordApi = createAsyncThunk('Reset/Password', async (userData, { rejectWithValue }) => {
   try {
-    const response = await fetch(apis().resetPassword,{
+    const response = await fetch(`${apis().baseUrl}${apis().resetPassword}`,{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

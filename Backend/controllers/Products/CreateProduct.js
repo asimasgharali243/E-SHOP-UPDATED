@@ -6,7 +6,7 @@ import sendResponse from '../../utils/sendResponse.js';
 export const createProduct = asyncHandler(async (req, res, next) => {
   const data = req.body;
   const userId = req.userId;
-// console.log(userId)
+  console.log("Creating product for user:", userId);
   // Validate input
   if (!data || !userId) {
     throw new AppError('Invalid input or unauthorized', 400);
