@@ -1,0 +1,38 @@
+.dashboard-container {
+  padding: 1rem;
+  .dashboard-title {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  .stat-card {
+    text-align: center;
+
+    .stat-icon {
+      margin-bottom: 10px;
+      &.users { color: #007bff; }
+      &.orders { color: #28a745; }
+      &.revenue { color: #ffc107; }
+      &.growth { color: #17a2b8; }
+    }
+
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    .trend {
+      font-size: 0.9rem;
+      &.positive { color: green; }
+      &.negative { color: red; }
+    }
+  }
+
+  .product-list {
+    .product-item {
+      .progress-bar {
+        background-color: #007bff;
+      }
+    }
+  }
+}
