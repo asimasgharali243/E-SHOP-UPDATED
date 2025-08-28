@@ -8,7 +8,7 @@ const Contact = lazy(() => import("./pages/Contact"));
 const About = lazy(() => import("./pages/About"));
 const Home = lazy(() => import("./pages/Home"));
 const Catalog = lazy(() => import("./pages/Catalog"));
-const Catalog = lazy(() => import("./pages/Catalog"));
+
 const Error = lazy(() => import("./pages/ErrorPage"));
 const Signup = lazy(() => import("./components/auth/Signup"));
 const Login = lazy(() => import("./components/auth/Login"));
@@ -18,10 +18,6 @@ const EmailVerification = lazy(() =>
   import("./components/auth/EmailVerification")
 );
 const ResetPassword = lazy(() => import("./components/auth/ResetPassword"));
-const SingleProductPage = lazy(() =>
-  import("./pages/SingleProductPage/SingleProductPage")
-);
-const Cart = lazy(() => import("./components/Cart"));
 const SingleProductPage = lazy(() =>
   import("./pages/SingleProductPage/SingleProductPage")
 );
@@ -39,7 +35,7 @@ const DashboardPage = lazy(() =>
   import("./pages/Dashboard/dashboardHomePage/DashboardPage")
 );
 const ProductLists = lazy(() =>
-  import("./pages/Dashboard/products/ProductLists")
+  import("./pages/Dashboard/products/Productlisting/ProductLists")
 );
 const ProductCreate = lazy(() =>
   import("./pages/Dashboard/products/ProductCreate")
@@ -52,12 +48,6 @@ const CompareProduct = lazy(() =>
 );
 const OrderLists = lazy(() => import("./pages/Dashboard/order/OrderLists"));
 const Orderdetails = lazy(() => import("./pages/Dashboard/order/Orderdetails"));
-const CustomerLists = lazy(() =>
-  import("./pages/Dashboard/customer/CustomerLists")
-);
-const CustomerDetails = lazy(() =>
-  import("./pages/Dashboard/customer/CustomerDetails")
-);
 const CustomerLists = lazy(() =>
   import("./pages/Dashboard/customer/CustomerLists")
 );
