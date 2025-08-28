@@ -1,22 +1,34 @@
-import React from 'react';
-import { Navbar, Nav, Form, FormControl, Dropdown, Image } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import './Sidebar.scss'
+import React from "react";
+import {
+  Navbar,
+  Nav,
+  Form,
+  FormControl,
+  Dropdown,
+  Image,
+} from "react-bootstrap";
+import { Link } from "react-router-dom";
+import "./Sidebar.scss";
 const DashboardHeader = ({ toggleSidebar, isMobile }) => {
   return (
-    <Navbar bg="light" expand="md" className="dashboard-header px-3 shadow-sm sticky-top justify-content-between">
-      <div className="toggle-button" onClick={toggleSidebar} style={{ cursor: 'pointer' }}>
+    <Navbar
+      bg="light"
+      expand="md"
+      className="dashboard-header px-3 shadow-sm sticky-top justify-content-between"
+    >
+      <div
+        className="toggle-button"
+        onClick={toggleSidebar}
+        style={{ cursor: "pointer" }}
+      >
         <i className="bi bi-list fs-4"></i>
-        <span className='d-block d-md-none'>E-SHOP</span>
+        <span className="d-block d-md-none">E-SHOP</span>
       </div>
 
-      <Navbar.Brand className="brand-title fw-bold d-flex align-items-center d-md-none justify-self-start "
-      >
-        
-      </Navbar.Brand>
+      <Navbar.Brand className="brand-title fw-bold d-flex align-items-center d-md-none justify-self-start "></Navbar.Brand>
 
       <Form className="search-form d-none d-md-flex align-items-center w-50 bg-light px-2 rounded border">
-        <i className="bi bi-search text-muted me-2 search-icon" />
+        {/* <i className="bi bi-search text-muted me-2 search-icon" /> */}
         <FormControl
           type="search"
           placeholder="Search..."
@@ -27,7 +39,10 @@ const DashboardHeader = ({ toggleSidebar, isMobile }) => {
 
       <Nav className="nav-area align-items-center flex-row gap-4">
         <Dropdown align="end" className="notification-dropdown">
-          <Dropdown.Toggle as="div" className="position-relative cursor-pointer bell-toggle">
+          <Dropdown.Toggle
+            as="div"
+            className="position-relative cursor-pointer bell-toggle"
+          >
             <i className="bi bi-bell bell-icon"></i>
             <span className="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle bell-badge"></span>
           </Dropdown.Toggle>
@@ -40,14 +55,17 @@ const DashboardHeader = ({ toggleSidebar, isMobile }) => {
         </Dropdown>
 
         <Dropdown align="end" className="user-dropdown">
-          <Dropdown.Toggle as="div" className="d-flex align-items-center cursor-pointer user-toggle">
+          <Dropdown.Toggle
+            as="div"
+            className="d-flex align-items-center cursor-pointer user-toggle"
+          >
             <Image
               src="https://via.placeholder.com/40"
               roundedCircle
               height="32"
               width="32"
               onError={(e) => {
-                e.target.src = '/placeholder.jpg';
+                e.target.src = "/placeholder.jpg";
                 e.target.onerror = null;
               }}
               className="user-avatar me-2"

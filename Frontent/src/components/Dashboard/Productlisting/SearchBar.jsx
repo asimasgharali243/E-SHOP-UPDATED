@@ -14,9 +14,9 @@ const SearchBar = ({ onSearch }) => {
   return (
     <div className="position-relative">
       <InputGroup className="mb-3">
-        <div className="search-icon">
+        <InputGroup.Text>
           <i className="bi bi-search fs-5"></i>
-        </div>
+        </InputGroup.Text>
         <Form.Control
           placeholder="Start typing to search for products"
           aria-label="Search products"
