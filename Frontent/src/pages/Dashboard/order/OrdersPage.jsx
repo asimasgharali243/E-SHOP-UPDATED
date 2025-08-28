@@ -12,7 +12,8 @@ import {
 } from "react-bootstrap-icons";
 import OrderCard from "./OrderCard";
 import OrdersStats from "./OrdersStats";
-import mockOrders from "../order/mockdata/MockOrders";
+// import mockOrders from "../order/mockdata/MockOrders";
+import { mockOrders } from "../../../pages/Dashboard/order/mockdata/MockOrders";
 const OrdersPage = () => {
   const [orders] = useState(mockOrders);
   const [searchTerm, setSearchTerm] = useState("");
