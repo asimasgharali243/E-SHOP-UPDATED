@@ -1,6 +1,6 @@
 import Negotiation from "../models/Negotiation.js";
 import Product from "../models/ProductsModel.js";
-import { generateNegotiationResponse } from "./OllamaServices.js";
+import { generateNegotiationResponse } from "./GPT4AllServices.js";
 
 async function handleAIResponse(negotiation, product, userMessage, messages) {
   try {
@@ -49,7 +49,7 @@ export async function startNegotiation(productId, buyerId, initialMessage) {
       negotiation = new Negotiation({
         productId,
         buyerId,
-        sellerId: product.userId ,
+        sellerId: product.userId ? product.userId.toString() : null,
         messages: [],
         useAI: !!product.negotiationEnabled,
       });
@@ -165,7 +165,7 @@ export async function updateStatus(negotiationId, userId, status, finalPrice) {
     }
 
     if (
-      userId !== (negotiation.sellerId )
+      userId !== (negotiation.sellerId ? negotiation.sellerId.toString() : null)
     ) {
       throw new Error("Only the seller can update status.");
     }

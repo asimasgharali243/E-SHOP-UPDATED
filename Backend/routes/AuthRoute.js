@@ -1,8 +1,9 @@
 import express from 'express';
-import { registerUser, loginUser, logoutUser } from '../controllers/authControler/AuthController.js'
+import { registerUser, loginUser, logoutUser,verifyUser } from '../controllers/authControler/AuthController.js'
 import { ForgetPassword } from '../controllers/authControler/ForgetPassword.js';
 import { verifyOtp } from '../controllers/authControler/VerifyOtp.js';
 import { resetPassword } from '../controllers/authControler/ResetPassword.js';
+
 const router = express.Router();
 
 router.post('/user/signup', registerUser);
@@ -11,4 +12,6 @@ router.post('/user/logout',logoutUser);
 router.post('/user/forgetpassword', ForgetPassword);
 router.post('/user/otp/verify', verifyOtp);
 router.post('/user/resetpassword', resetPassword);
+router.post('/user/verify-email', verifyUser);
+
 export default router;

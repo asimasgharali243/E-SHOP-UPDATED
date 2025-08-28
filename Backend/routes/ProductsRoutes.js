@@ -8,21 +8,27 @@ import { updateProduct } from "../controllers/Products/UpdateProduct.js";
 import { signUpload } from "../controllers/Products/SignUpload.js";
 import { rollbackProductDetails } from "../controllers/Products/RollbackProductDetails.js";
 import { addReview } from "../controllers/Products/AddProductReviews.js";
+import { fetchProductComparisons } from "../controllers/Products/ComparisionController.js";
+import { getFilterOptions } from "../controllers/Products/GetAllProduct.js";
+import { toggleLikeProduct, syncLikes, getProductsByIds } from "../controllers/Products/GetAllProduct.js";
 
 const router = express.Router();
 
-router.route("/")
-  .get(getAllProducts) // GET /api/products
-  .post(AuthUser, createProduct); // POST /api/products
+// CORRECT: POST route for getting products by IDs
+router.post("/like/product", AuthUser, getProductsByIds);
 
-router.route("/:id")
-  .get(getSingleProduct) // GET /api/products/:id
-  .put(AuthUser, updateProduct) // PUT /api/products/:id
-  .delete(AuthUser, deleteProduct); // DELETE /api/products/:id
-
-router.get("/get/signature", signUpload); // GET /api/products/get-signature?count=3
-router.delete("/rollback", rollbackProductDetails); // DELETE /api/products/rollback
-
-router.post("/:productId/reviews", AuthUser, addReview); // POST /api/products/:id/reviews
+router.route("/").get(getAllProducts).post(AuthUser, createProduct);
+router.get("/compare", fetchProductComparisons);
+router.delete("/rollback", rollbackProductDetails);
+router.put("/:id/like", AuthUser, toggleLikeProduct);
+router.get("/filters", getFilterOptions);
+router.post("/likes/sync", AuthUser, syncLikes);
+router
+  .route("/:id")
+  .get(getSingleProduct)
+  .put(AuthUser, updateProduct)
+  .delete(AuthUser, deleteProduct);
+router.get("/get/signature", signUpload);
+router.post("/:productId/reviews", AuthUser, addReview);
 
 export default router;

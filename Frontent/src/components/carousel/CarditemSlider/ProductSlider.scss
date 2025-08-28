@@ -1,0 +1,7 @@
+.two-row-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); // 3 items per row
+  grid-auto-rows: auto;
+  gap: 1rem;
+}
+

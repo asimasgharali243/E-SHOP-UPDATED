@@ -10,6 +10,7 @@ import {
 // --- Start Negotiation ---
 export async function startNegotiationController(req, res) {
   const { productId, initialMessage } = req.body;
+  console.log("Starting negotiation for productId:", productId,initialMessage);
   if (!productId || !initialMessage) {
     return res
       .status(400)
@@ -87,7 +88,7 @@ export async function updateStatusController(req, res) {
   const { status, finalPrice } = req.body;
 
   try {
-    const userId = req.userId;
+    const userId = req.userId.toString();
     const negotiation = await updateStatusService(
       negotiationId,
       userId,

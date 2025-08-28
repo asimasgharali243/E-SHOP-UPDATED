@@ -4,7 +4,7 @@ import AuthWorkerPool from "../controllers/workers/createWorkerPools.js";
 
 export const AuthUser = asyncHandler(async (req, res, next) => {
   const { myAccessToken, myRefreshToken } = req.cookies;
-  
+  // console.log("Auth Middleware: Tokens from cookies", { myAccessToken, myRefreshToken });
   // Check if tokens exist
   if (!myAccessToken && !myRefreshToken) {
     throw new AppError('Access denied. No tokens provided', 401);
@@ -72,7 +72,7 @@ export const AuthUser = asyncHandler(async (req, res, next) => {
         sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
         maxAge: parseInt(process.env.ACCESS_TOKEN_COOKIE_EXPIRE),
       });
-
+      console.log("New access token generated and set in cookies", decodedRefresh.data.userId);
       req.userId = decodedRefresh.data.userId;
       return next();
     } catch (err) {

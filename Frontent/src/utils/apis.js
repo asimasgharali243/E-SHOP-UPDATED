@@ -1,8 +1,8 @@
 const apis = () => {
-  const local = "http://localhost:5000"; // Backend base URL
+  const local = "http://localhost:5000";
 
   const list = {
-    baseUrl: `${local}/api`, // Prefix all routes with /api
+    baseUrl: `${local}/api`,
 
     // ---------- Auth ----------
     registerUser: `/auth/user/signup`,
@@ -21,6 +21,16 @@ const apis = () => {
     getSignature: (count) => `/products/get/signature?count=${count}`,
     addReview: (productId) => `/products/${productId}/reviews`,
     rollbackProduct: `/products/rollback`,
+    likeProduct: (productId) => `/products/${productId}/like`,
+    getLikeProduct: `/products/like/product`, // REMOVED THE PARAMETER
+    syncLikes: `/products/likes/sync`,
+
+    // ---------- Cart ----------
+    getCart: "/cart",
+    syncCart: "/cart/sync",
+    updateCartItem: (id) => `/cart/item/${id}`,
+    removeCartItem: (id) => `/cart/item/${id}`,
+    clearCart: "/cart/clear",
 
     // ---------- Negotiation ----------
     negotiateStart: `/negotiation/start`,

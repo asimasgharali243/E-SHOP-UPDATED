@@ -1,142 +1,165 @@
-import React from "react";
-import { Card, OverlayTrigger, Tooltip } from "react-bootstrap";
+import React, { useState } from "react";
+import { Card } from "react-bootstrap";
 import "./ProductCard.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleLocalLike } from "../../redux/features/products/LikeProduct";
+import { addToCart } from "../../redux/features/Cart/CartAction";
+import { useNavigate } from "react-router-dom";
+const ProductCard = ({ product }) => {
+  const {
+    _id,
+    name,
+    price,
+    discount,
+    ratings,
+    numOfReviews,
+    shortDescription,
+    featureImages,
+  } = product;
+  const navigate = useNavigate();
 
-const ProductCard = React.memo(({ product }) => {
-  const { id, image, name, price, discount, badge, rating, liked } = product;
+  const dispatch = useDispatch();
+  const [quickViewed, setQuickViewed] = useState(false);
 
-  // Prepare badge text
-  const badgeContent = discount ? `${discount}% OFF` : badge;
+  // Get liked products from Redux store with proper fallback
+  const { likedProducts = [] } = useSelector((state) => state.Likes || {});
+  const liked = likedProducts.includes(_id);
+  const inCart = useSelector((state) =>
+    state.cart.items.some((item) => item._id === _id)
+  );
+  const image = featureImages?.[0]?.thumbnailUrl || "/placeholder.jpg";
+  const badgeContent = discount ? `${discount}% OFF` : null;
 
-  // Render stars for rating
   const renderStars = () => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <i
-          key={i}
-          className={`bi bi-star${i <= rating ? "-fill" : ""}`}
-          data-action="rate"
-          data-value={i}
-          data-product-id={id}
-          role="button"
-          tabIndex={0}
-          aria-label={`Rate ${i} star${i > 1 ? "s" : ""}`}
-          style={{ cursor: "pointer", color: i <= rating ? "#ffc107" : "#ccc" }}
-        />
-      );
-    }
-    return stars;
+    return [...Array(5)].map((_, i) => (
+      <i
+        key={i}
+        className={`bi bi-star${i + 1 <= ratings ? "-fill" : ""}`}
+        style={{
+          cursor: "pointer",
+          color: i + 1 <= ratings ? "#ffc107" : "#ccc",
+        }}
+      />
+    ));
   };
+
+  // 🔹 Event delegation
+  const handleContainerClick = (e) => {
+    const action = e.target.closest("[data-action]")?.dataset.action;
+
+    if (action) {
+      e.stopPropagation();
+
+      switch (action) {
+        case "quick-view":
+          setQuickViewed((prev) => !prev);
+          break;
+        case "like":
+          // Dispatch to Redux only - no local state needed
+          if (_id) dispatch(toggleLocalLike(_id));
+          break;
+        case "add-to-cart":
+          dispatch(addToCart(product, 1));
+          break;
+        default:
+          break;
+      }
+      return;
+    }
+    navigate(`/product/${_id}`);
+  };
+  
 
   return (
     <article
       className="product-card shadow-sm"
-      data-product-id={id}
       aria-label={`Product: ${name}`}
-    style={{backgroundColor:`var(--white)`}}
+      onClick={handleContainerClick}
+      style={{ backgroundColor: "var(--white)" }}
     >
       <div className="position-relative overflow-hidden">
         <Card.Img
           variant="top"
           src={image}
-          onError={(e) => {e.target.src = "/placeholder.jpg"
-e.target.onerror=null;            
+          onError={(e) => {
+            e.target.src = "/placeholder.jpg";
+            e.target.onerror = null;
           }}
           alt={`Image of ${name}`}
           loading="lazy"
           className="product-image"
-          decoding="async"
-          fetchpriority="low"
         />
 
-        {(discount || badge) && (
-          <span
-            className="badge bg-danger position-absolute top-0 start-0 m-2"
-            aria-label={badgeContent}
-          >
+        {badgeContent && (
+          <span className="badge bg-danger position-absolute top-0 start-0 m-2">
             {badgeContent}
           </span>
         )}
 
-        <div className="action-icons position-absolute top-0 end-0 d-flex flex-column m-2 gap-2">
+        {/* 🔹 Delegated buttons */}
+        <div className="action-icons-container">
           <button
             type="button"
-            className="btn btn-light btn-sm"
+            className={`btn btn-light btn-sm action-btn ${
+              quickViewed ? "quick-viewed" : ""
+            }`}
             data-action="quick-view"
-            aria-label={`Quick view of ${name}`}
-            data-product-id={id}
+            aria-label="Quick view"
           >
-            <i className="bi bi-eye" aria-hidden="true"></i>
+            <i className={`bi bi-eye${quickViewed ? "-fill" : ""}`}></i>
           </button>
 
-          
           <button
             type="button"
-            className={`btn btn-light btn-sm ${liked ? "liked" : ""}`}
-            data-action="toggle-like"
-            aria-label={
-              liked ? `Remove ${name} from wishlist` : `Add ${name} to wishlist`
-            }
-            data-product-id={id}
+            className={`btn btn-light btn-sm action-btn ${
+              liked ? "liked" : ""
+            }`}
+            data-action="like"
+            aria-label={liked ? "Unlike product" : "Like product"}
           >
-            <i
-              className={`bi bi-heart${liked ? "-fill" : ""}`}
-              aria-hidden="true"
-            ></i>
+            <i className={`bi bi-heart${liked ? "-fill" : ""}`}></i>
           </button>
-        </div>
-        <div className=" position-absolute bottom-0  d-flex flex-column m-2 gap-2"
-        style={{right:'0'}}
-        >
+
           <button
             type="button"
-            className="btn btn-light btn-sm"
+            className={`btn btn-light btn-sm action-btn ${
+              inCart ? "in-cart" : ""
+            }`}
             data-action="add-to-cart"
-            aria-label={`Add ${name} to cart`}
-            data-product-id={id}
-            aria-role="add to card button "
+            aria-label="Add to cart"
           >
-            <i className="bi bi-cart-plus" aria-hidden="true"></i>
+            <i className={`bi bi-cart-plus${inCart ? "-fill" : ""}`}></i>
           </button>
-
         </div>
       </div>
 
-      <Card.Body
-        className="px-2 py-2"
-        aria-label={`Product name: ${name}, Price: $${price}, Rating: ${rating} out of 5 stars`}
-        style={{ fontSize: `clamp(12px, 1.2vw, 14px)` }}
-      >
-        <div className="body-desc"
-        aria-label="Product description"
-        >
-        <h3
-          style={{ fontSize: `clamp(12px, 1.2vw, 14px)` }}
-          className="card-description mb-1"
-          tabIndex="0"
-        >
-          {name}
-        </h3>
-        <p
-          className="fw-bold text-success mb-2"
-          aria-label={`Price: $${price}`}
-          style={{fontSize:`clamp(12px, 1.2vw, 14px)`}}
-        >
-          ${price}
-        </p>
+      <Card.Body className="px-2 py-2">
         <div
-          className="star-rating d-flex gap-2"
-          aria-label={`Rating: ${rating} out of 5 stars`}
+          className="card-description-wrapper"
+          style={{ fontSize: "clamp(12px, 1.2vw, 14px)" }}
         >
-          {renderStars()}
-        </div>
+          {shortDescription ? (
+            <p className="short-description mb-1">{shortDescription}</p>
+          ) : (
+            <p className="name-description mb-1">
+              {name}
+              {featureImages?.[0]?.description && (
+                <span className="details-description">
+                  {featureImages[0].description}
+                </span>
+              )}
+            </p>
+          )}
         </div>
 
+        <p className="fw-bold text-success mb-1">${price}</p>
 
+        <div className="star-rating d-flex align-items-center gap-2">
+          {renderStars()} <small>({numOfReviews})</small>
+        </div>
       </Card.Body>
     </article>
   );
-});
+};
 
 export default ProductCard;

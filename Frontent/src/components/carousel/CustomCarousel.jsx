@@ -9,7 +9,7 @@
 //  nextIcon,
 //   col,
 //   xs,
-//   sm,   
+//   sm,
 //   md,
 //   lg,
 //   xl,
@@ -54,14 +54,14 @@
 //     const updateItemsPerSlide = () => {
 //       if (initialItemsPerSlide === 1) {
 //         setItemsPerSlide(1); // Force single item per slide
-//       } 
-      
+//       }
+
 //       else if (window.innerWidth >= 1399.98) {
 //         setItemsPerSlide(initialItemsPerSlide.xxl); // Large screens
-//       }  
+//       }
 //       else if (window.innerWidth >= 1199.98) {
 //         setItemsPerSlide(initialItemsPerSlide.xl); // Large screens
-//       }  
+//       }
 //       else if (window.innerWidth >= 991.98) {
 //         setItemsPerSlide(initialItemsPerSlide.lg); // Large screens
 //       } else if (window.innerWidth >= 767.98) {
@@ -70,7 +70,7 @@
 //         setItemsPerSlide(initialItemsPerSlide.sm); // Small screens
 //       } else {
 //         setItemsPerSlide(initialItemsPerSlide.xs); // Extra small screens
-//       }
+//       }S
 //     };
 
 //     updateItemsPerSlide();
@@ -146,18 +146,24 @@
 // };
 
 // export default CustomCarousel;
-import React, { useState, useEffect, useMemo, useCallback, forwardRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  forwardRef,
+} from "react";
 import { Carousel, Row, Col } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 const debounce = (func, wait) => {
   let timeout;
-  return function(...args) {
+  return function (...args) {
     clearTimeout(timeout);
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
 };
-console.log(1)
+console.log(1);
 const CustomCarousel = forwardRef(
   (
     {
@@ -180,9 +186,10 @@ const CustomCarousel = forwardRef(
     },
     ref
   ) => {
-    const breakpoints = useMemo(() => ({ xs, sm, md, lg, xl, xxl }), [
-      xs, sm, md, lg, xl, xxl
-    ]);
+    const breakpoints = useMemo(
+      () => ({ xs, sm, md, lg, xl, xxl }),
+      [xs, sm, md, lg, xl, xxl]
+    );
 
     const calculateItemsPerSlide = useCallback(() => {
       const width = window.innerWidth;
@@ -199,7 +206,9 @@ const CustomCarousel = forwardRef(
     useEffect(() => {
       const handleResize = debounce(() => {
         const newItemsPerSlide = calculateItemsPerSlide();
-        setItemsPerSlide(prev => prev !== newItemsPerSlide ? newItemsPerSlide : prev);
+        setItemsPerSlide((prev) =>
+          prev !== newItemsPerSlide ? newItemsPerSlide : prev
+        );
       }, 100);
 
       window.addEventListener("resize", handleResize);
@@ -215,7 +224,7 @@ const CustomCarousel = forwardRef(
     const chunkedItems = useMemo(() => {
       const itemsPerPage = itemsPerSlide * numberOfRows;
       const chunks = [];
-      
+
       // Create unique chunks without overlapping items
       for (let i = 0; i < validChildren.length; i += itemsPerPage) {
         chunks.push(validChildren.slice(i, i + itemsPerPage));
@@ -239,7 +248,7 @@ const CustomCarousel = forwardRef(
               const startIdx = rowIndex * itemsPerSlide;
               const endIdx = startIdx + itemsPerSlide;
               const rowItems = pageItems.slice(startIdx, endIdx);
-              
+
               // Only render row if it has items
               return rowItems.length > 0 ? (
                 <Row key={`row-${rowIndex}`} className="align-items-stretch">

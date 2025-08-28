@@ -1,0 +1,351 @@
+// HeaderSlider.scss
+.header-slider-component {
+  border-radius: 8px;
+  overflow: hidden;
+margin-top: 1rem;
+  .header-slider-wrapper {
+    padding: 0;
+  }
+
+  .carousel-col {
+    
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease-in-out;
+
+    .main-carousel-container {
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+
+      .carousel-item-wrapper {
+        height: clamp(240px, 55vw, 430px);
+
+        .header-slide-item {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          position: relative;
+          color: #fff;
+          height: 100%;
+          width: 100%;
+          background-size: contain;
+          background-position: 80% center;
+          background-repeat: no-repeat;
+
+          &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+              90deg,
+              rgba(0, 0, 0, 0.6) 0%,
+              rgba(0, 0, 0, 0.4) 50%,
+              rgba(0, 0, 0, 0.2) 100%
+            );
+            z-index: 1;
+          }
+
+          .carousel-caption {
+            position: relative;
+            z-index: 2;
+            max-width: min(550px, 90%);
+            margin-left: clamp(20px, 5vw, 50px);
+            text-align: left;
+            padding: clamp(12px, 2.5vw, 20px);
+            text-wrap: wrap;
+
+            h1 {
+              font-size: clamp(1.3rem, 4vw, 2.5rem);
+              font-weight: 800;
+              line-height: 1.2;
+              margin-bottom: clamp(10px, 2vw, 15px);
+              text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+              color: #fff;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+            }
+
+            p {
+              font-size: clamp(0.7rem, 2vw, 1.1rem);
+              line-height: 1.5;
+              margin: 0 0 clamp(15px, 3vw, 25px) 0;
+              text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+              display: -webkit-box;
+              text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+             
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+            }
+
+            .shop-now-btn {
+              font-size: clamp(0.9rem, 2vw, 1.1rem);
+              font-weight: 700;
+              padding: clamp(7px, 2vw, 12px) clamp(12px, 3vw, 20px);
+              transition: all 0.3s ease;
+              background-color: var(--secondary);
+              color: var(--white);
+              border: none;
+              border-radius: 6px;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+              position: relative;
+              overflow: hidden;
+
+              &:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+                background-color: var(--secondary-hover);
+              }
+
+              &:active {
+                transform: translateY(0);
+                box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .custom-arrow {
+      position: absolute;
+      z-index: 10;
+      top: 50%;
+      transform: translateY(-50%);
+      width: clamp(40px, 8vw, 50px);
+      height: clamp(40px, 8vw, 50px);
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: #fff;
+        transform: translateY(-50%) scale(1.15);
+        color: var(--secondary);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      &.left-arrow {
+        left: clamp(10px, 3vw, 20px);
+      }
+
+      &.right-arrow {
+        right: clamp(10px, 3vw, 20px);
+      }
+    }
+
+    .react-multi-carousel-dot-list {
+      position: absolute;
+      bottom: clamp(10px, 3vw, 20px);
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      z-index: 5;
+      gap: clamp(5px, 1.5vw, 8px);
+    }
+
+    .react-multi-carousel-dot {
+      button {
+        border: none;
+        background-color: rgba(255, 255, 255, 0.7);
+        width: clamp(8px, 2vw, 12px);
+        height: clamp(8px, 2vw, 12px);
+        border-radius: 50%;
+        margin: 0;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        outline: none;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.9);
+          transform: scale(1.2);
+        }
+      }
+
+      &.react-multi-carousel-dot--active button {
+        background-color: var(--secondary);
+        transform: scale(1.3);
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+      }
+    }
+  }
+
+  .side-banners-col {
+    padding: 0;
+    margin-top: clamp(1rem, 2vw, 1.5rem);
+
+    .row {
+      height: 100%;
+    }
+
+    .sm-banner-item {
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      transition: all 0.4s ease;
+      height: clamp(110px, 25vw, 210px);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background-size: contain ;
+      background-position:center;
+      background-repeat: no-repeat;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.7) 0%,
+          rgba(0, 0, 0, 0.3) 50%,
+          rgba(0, 0, 0, 0.1) 100%
+        );
+        border-radius: 8px;
+        transition: all 0.4s ease;
+      }
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+
+        &::before {
+          background: linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.8) 0%,
+            rgba(0, 0, 0, 0.4) 50%,
+            rgba(0, 0, 0, 0.2) 100%
+          );
+        }
+
+        .banner-title {
+          transform: translateY(-8px);
+        }
+      }
+
+      .banner-title {
+        position: relative;
+        z-index: 2;
+        font-weight: 700;
+        font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+        color: #fff;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+        padding: clamp(0.8rem, 2vw, 1.2rem);
+        margin: 0;
+        text-align: center;
+        transition: transform 0.4s ease;
+      }
+    }
+  }
+
+  // Fallback for missing images
+  .sm-banner-item[style*="url('')"],
+  .sm-banner-item[style*='url("")'],
+  .sm-banner-item:not([style*="url("]) {
+    background: linear-gradient(
+      135deg,
+      var(--secondary) 0%,
+      var(--primary) 100%
+    ) !important;
+
+    &::before {
+      background: rgba(0, 0, 0, 0.3) !important;
+    }
+  }
+}
+
+/* --- Responsive Layout & Typography Adjustments --- */
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .header-slider-component {
+    .carousel-col {
+      padding-left: 15px;
+      padding-right: 15px;
+      .custom-arrow {
+        display: none;
+      }
+    }
+  }
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) {
+  .header-slider-component {
+    .carousel-col {
+      padding-left: 0;
+      padding-right: 15px;
+    }
+    .side-banners-col {
+      padding-left: 15px;
+      padding-right: 0;
+      margin-top: 0;
+    }
+    .sm-banner-item {
+      margin-bottom: 15px;
+    }
+  }
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {
+  .header-slider-component {
+    .carousel-col {
+      .custom-arrow {
+        display: flex;
+      }
+    }
+  }
+}
+
+@media (max-width: 991.98px) {
+  .header-slider-component .carousel-col .custom-arrow {
+    display: none;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .header-slider-component {
+    .carousel-col .main-carousel-container .carousel-caption {
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      margin-left: 0;
+    }
+  }
+}
+
+// Fix for partial slides
+.react-multi-carousel-track {
+  display: flex;
+  align-items: stretch;
+  
+  li {
+    display: flex;
+    flex: 1;
+  }
+}
+
+.react-multi-carousel-item {
+  display: flex;
+  flex: 1;
+}

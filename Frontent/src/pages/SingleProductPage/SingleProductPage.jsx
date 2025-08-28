@@ -1,10 +1,12 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import CustomContainer from "../../components/SubComponent/CustomContainer";
-import { useParams } from "react-router-dom";
 import { useGetSingleProductQuery } from "../../redux/api/productsApi/ProductApi";
 import ReviewForm from "./ReviewForm";
 import NegotiationChat from "./NegotiationChatBoard";
 import ReviewsList from "./ReviewsList";
+import { addToCart } from "../../redux/features/Cart/CartAction";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Col,
   Row,
@@ -14,18 +16,15 @@ import {
   Alert,
   Badge,
   Tabs,
-  Form,
   Tab,
-  InputGroup,
 } from "react-bootstrap";
 import Rating from "react-rating";
 import "./SingleProduct.scss";
-import { useSelector } from "react-redux";
-import { useId } from "react";
 
 export default function SingleProductPage() {
   const { id } = useParams();
-  console.log("🔄 SingleProductPage mounted with product ID:", id);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     data,
@@ -38,10 +37,14 @@ export default function SingleProductPage() {
   const product = data?.product;
   const userId = useSelector((state) => state.authUser.user);
 
-  // console.log("📦 Product data:", product, data, isError, error);
-  // console.log("👤 User ID:", userId);
+  console.log("🛍️ Product data fetched:", {
+    product,
+    isLoading,
+    isError,
+    error,
+  });
 
-  // State management
+  // local state
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [displayedSrc, setDisplayedSrc] = React.useState("");
   const [overlaySrc, setOverlaySrc] = React.useState(null);
@@ -50,57 +53,37 @@ export default function SingleProductPage() {
   const [selectedSize, setSelectedSize] = React.useState("");
   const [quantity, setQuantity] = React.useState(1);
   const [activeTab, setActiveTab] = React.useState("description");
-  const [message, setMessage] = React.useState("");
-  const [chatMessages, setChatMessages] = React.useState([]);
-  const [showReviewModal, setShowReviewModal] = React.useState(false);
 
-  // Memoized calculations - WITH SAFE ACCESS
+  // prevent crash when colors/sizes missing
+  const validColors = product?.colors?.filter((c) => c?.trim() !== "") || [];
+  const validSizes = product?.sizes?.filter((s) => s?.trim() !== "") || [];
+
+  // price calculation
   const discountedPrice = useMemo(() => {
-    if (!product) {
-      console.log("💳 Discounted price calculation: No product");
-      return 0;
-    }
-    const price = product.price * (1 - (product.discount || 0) / 100);
-    // console.log("💳 Discounted price calculated:", price);
-    return price;
+    if (!product) return 0;
+    return product.price * (1 - (product.discount || 0) / 100);
   }, [product]);
 
+  // image logic
   const currentImage = useMemo(() => {
-    if (!product?.featureImages?.length) {
-      // console.log("🖼️ Current image: No feature images");
-      return "";
-    }
-    const image = product.featureImages[currentIndex]?.url || "";
-    // console.log("🖼️ Current image set to index", currentIndex, ":", image);
-    return image;
+    if (!product?.featureImages?.length) return "";
+    return product.featureImages[currentIndex]?.url || "";
   }, [product, currentIndex]);
 
-  // Image handling functions
   const showImage = useCallback(
     (img) => {
-      // console.log("🖼️ showImage called with:", img);
-      if (!img || img === displayedSrc) {
-        // console.log("🖼️ Image unchanged or invalid");
-        return;
-      }
-
+      if (!img || img === displayedSrc) return;
       const pre = new window.Image();
       pre.src = img;
-
       const showOverlay = () => {
-        // console.log("🖼️ Showing overlay for image:", img);
         setOverlaySrc(img);
         requestAnimationFrame(() => setOverlayVisible(true));
       };
-
       if (pre.complete) {
-        // console.log("🖼️ Image already loaded");
         showOverlay();
       } else {
-        // console.log("🖼️ Loading image...");
         pre.onload = showOverlay;
         pre.onerror = () => {
-          // console.error("🖼️ Image load error:", img);
           setDisplayedSrc(img);
           setOverlaySrc(null);
           setOverlayVisible(false);
@@ -112,7 +95,6 @@ export default function SingleProductPage() {
 
   const handleThumbnailClick = useCallback(
     (img, index) => {
-      // console.log("🖼️ Thumbnail clicked - index:", index, "image:", img);
       setCurrentIndex(index);
       showImage(img);
     },
@@ -120,7 +102,6 @@ export default function SingleProductPage() {
   );
 
   const handleOverlayTransitionEnd = useCallback(() => {
-    // console.log("🖼️ Overlay transition ended");
     if (!overlayVisible || !overlaySrc) return;
     setDisplayedSrc(overlaySrc);
     setOverlaySrc(null);
@@ -128,122 +109,37 @@ export default function SingleProductPage() {
   }, [overlayVisible, overlaySrc]);
 
   const handleNext = useCallback(() => {
-    // console.log("➡️ Next button clicked");
     if (!product?.featureImages) return;
     const nextIndex = (currentIndex + 1) % product.featureImages.length;
-    // console.log("➡️ Moving to index:", nextIndex);
     setCurrentIndex(nextIndex);
     showImage(product.featureImages[nextIndex]?.url);
   }, [product?.featureImages, currentIndex, showImage]);
 
   const handlePrev = useCallback(() => {
-    // console.log("⬅️ Previous button clicked");
     if (!product?.featureImages) return;
     const prevIndex =
       (currentIndex - 1 + product.featureImages.length) %
       product.featureImages.length;
-    // console.log("⬅️ Moving to index:", prevIndex);
     setCurrentIndex(prevIndex);
     showImage(product.featureImages[prevIndex]?.url);
   }, [product?.featureImages, currentIndex, showImage]);
 
-  // Initialize displayed image
-  React.useEffect(() => {
-    // console.log("🖼️ Initializing displayed image");
+  useEffect(() => {
     if (product?.featureImages?.length && !displayedSrc) {
-      const firstImage = product.featureImages[0]?.url;
-      // console.log("🖼️ Setting initial image:", firstImage);
-      setDisplayedSrc(firstImage);
+      setDisplayedSrc(product.featureImages[0]?.url);
     }
   }, [product?.featureImages, displayedSrc]);
 
-  const handleQuantityChange = useCallback(
-    (newQuantity) => {
-      // console.log("🔢 Quantity change requested:", newQuantity);
-      const clampedQuantity = Math.max(
-        1,
-        Math.min(product?.stock || 1, newQuantity)
-      );
-      // console.log("🔢 Setting quantity to:", clampedQuantity);
-      setQuantity(clampedQuantity);
-    },
-    [product?.stock]
-  );
+  const handleQuantityChange = (newQuantity) => {
+    const clampedQuantity = Math.max(
+      1,
+      Math.min(product?.stock || 1, newQuantity)
+    );
+    setQuantity(clampedQuantity);
+  };
 
-  const handleSendMessage = useCallback(() => {
-    // console.log("💬 Send message clicked, current message:", message);
-    if (!message.trim()) {
-      // console.log("💬 Message is empty, not sending");
-      return;
-    }
-
-    const newMessage = {
-      id: chatMessages.length + 1,
-      sender: "buyer",
-      text: message,
-      time: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    };
-
-    // console.log("💬 Adding new message:", newMessage);
-    setChatMessages((prev) => [...prev, newMessage]);
-    setMessage("");
-
-    setTimeout(() => {
-      const reply = {
-        id: chatMessages.length + 2,
-        sender: "seller",
-        text: `I can do $${((product?.price || 0) * 0.9).toFixed(
-          2
-        )}. That's my best offer.`,
-        time: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      };
-      // console.log("🤖 Adding AI reply:", reply);
-      setChatMessages((prev) => [...prev, reply]);
-    }, 1000);
-  }, [message, chatMessages.length, product?.price]);
-
-  // Initialize chat if negotiation is enabled
-  React.useEffect(() => {
-    // console.log(
-    // "💬 Checking negotiation enabled:",
-    // product?.negotiationEnabled
-    // );
-    if (product?.negotiationEnabled) {
-      // console.log("💬 Initializing negotiation chat");
-      setChatMessages([
-        {
-          id: 1,
-          sender: "seller",
-          text: "Hello! Welcome to price negotiation. What's your offer?",
-          time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        },
-      ]);
-    }
-  }, [product?.negotiationEnabled]);
-
-  // Debug product data changes
-  React.useEffect(() => {
-    // console.log("📦 Product data updated:", {
-    //   hasProduct: !!product,
-    //   productId: product?._id,
-    //   name: product?.name,
-    //   negotiationEnabled: product?.negotiationEnabled,
-    //   price: product?.price,
-    //   discount: product?.discount,
-    // });
-  }, [product]);
-
+  // 🚨 handle loading
   if (isLoading) {
-    // console.log("⏳ Loading product data...");
     return (
       <CustomContainer
         className="d-flex justify-content-center align-items-center"
@@ -255,7 +151,6 @@ export default function SingleProductPage() {
   }
 
   if (isError) {
-    // console.error("❌ Error loading product:", error);
     return (
       <CustomContainer>
         <Alert variant="danger">
@@ -266,7 +161,6 @@ export default function SingleProductPage() {
   }
 
   if (!product) {
-    // console.log("⚠️ No product found");
     return (
       <CustomContainer>
         <Alert variant="warning">Product not found</Alert>
@@ -274,7 +168,7 @@ export default function SingleProductPage() {
     );
   }
 
-  // console.log("✅ Rendering product page for:", product.name);
+  // console.log(" Rendering product page for:", product.name);
 
   return (
     <CustomContainer className="product-page py-3">
@@ -304,9 +198,10 @@ export default function SingleProductPage() {
                 className="main-image main-image--base"
                 loading="eager"
                 decoding="async"
-                onError={(e) =>
-                  console.error("🖼️ Image load error:", e.target.src)
-                }
+                onError={(e) => {
+                  console.error(" Image load error:", e.target.src);
+                  e.target.src = "/placeholder.png";
+                }}
               />
 
               {overlaySrc && (
@@ -350,9 +245,10 @@ export default function SingleProductPage() {
                     className="w-100 h-100 object-fit-fill"
                     loading="lazy"
                     alt={`Thumbnail ${index + 1}`}
-                    onError={(e) =>
-                      console.error("🖼️ Thumbnail load error:", e.target.src)
-                    }
+                    onError={(e) => {
+                      console.error("🖼️ Thumbnail load error:", e.target.src);
+                      e.target.src = "/placeholder.png";
+                    }}
                   />
                 </div>
               ))}
@@ -427,7 +323,7 @@ export default function SingleProductPage() {
           <hr />
 
           {/* Color and Size Selection */}
-          {product.colors?.length > 0 && (
+          {validColors?.length > 0 && (
             <div className="color-selection mb-4">
               <h6 className="mb-2">
                 Color:{" "}
@@ -453,7 +349,7 @@ export default function SingleProductPage() {
             </div>
           )}
 
-          {product.sizes?.length > 0 && (
+          {validSizes?.length > 0 && (
             <div className="size-selection mb-4">
               <h6 className="mb-2">
                 Size:{" "}
@@ -521,20 +417,34 @@ export default function SingleProductPage() {
 
           <div className="action-buttons d-grid gap-2">
             <div className="d-flex align-items-center gap-2">
-              {/* Add to Cart Button */}
+              {/* Compare Prices */}
+              <Button
+                variant="outline-success"
+                size="lg"
+                className="w-100 py-3 compare-btn d-flex align-items-center justify-content-center gap-3"
+                onClick={() =>
+                  // Instead of path param, use query
+                  navigate(`/compare?query=${encodeURIComponent(product.name)}`)
+                }
+              >
+                <i className="bi bi-search"></i>
+                Compare Prices
+              </Button>
+              {/* Add to Cart */}
               <Button
                 variant="secondary"
                 size="lg"
-                className="w-100 add-to-cart-btn"
-                onClick={() => console.log("🛒 Add to cart clicked")}
+                className="h-100  add-to-cart-btn"
+                onClick={() => dispatch(addToCart(product, quantity))}
               >
-                Add to Cart
+                <i className="bi bi-cart"></i>
+                <i className="bi bi-cart-fill fill-layer"></i>
               </Button>
 
-              {/* Like Icon */}
+              {/* Like */}
               <Button
                 variant="outline-primary"
-                className="p-2 d-flex align-items-center justify-content-center like-btn"
+                className="h-100 p-2 d-flex align-items-center justify-content-center like-btn"
                 aria-label="Like product"
                 onClick={() => console.log("❤️ Like button clicked")}
               >
@@ -655,7 +565,7 @@ export default function SingleProductPage() {
                       product={product}
                       userId={userId}
                       onError={(error) =>
-                        console.error("💬 Negotiation error:", error)
+                        console.error(" Negotiation error:", error)
                       }
                     />
                   </Col>

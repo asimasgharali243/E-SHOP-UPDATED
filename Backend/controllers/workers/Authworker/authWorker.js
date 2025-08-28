@@ -103,6 +103,7 @@ export default async function (input) {
 
       case "verifyToken": {
         if (!data.token || !data.JWT_Secret) {
+          console.log("Token is require",data.token," Secret key is required",data.JWT_Secret)
           return { success: false, error: "Token and secret are required" };
         }
         const decoded = await verifyJwt(data.token, data.JWT_Secret);
@@ -117,11 +118,11 @@ export default async function (input) {
       }
 
       case "generateToken": {
-        if (!data.userId || !data.secret || !data.expiresIn) {
+        if ((!data.userId && !data?.payload?.email) || !data.secret || !data.expiresIn) {
           return { success: false, error: "Missing required fields" };
         }
         const token = await generateToken(
-          data.userId,
+          data?.userId || data?.payload?.email,
           data.secret,
           data.expiresIn
         );

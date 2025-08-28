@@ -1,135 +1,153 @@
-// import React, { useMemo, forwardRef } from 'react';
-// import Carousel from 'react-multi-carousel';
-// import './GeneralCustomCarousel.scss';
-import Carousel from "react-multi-carousel";
+import React from "react";
+import MultiCarousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import "./GeneralCustomCarousel.scss";
-import { useMemo } from "react";
-import ProductCard from "../Card/ProductCard";
-export default function GeneralCustomCarousel({ children }) {
-  const responsive = useMemo(
-    () => ({
-      xxl: { breakpoint: { max: 3000, min: 1400 }, items: 6 },
-      xl: { breakpoint: { max: 1399.98, min: 1200 }, items: 6 },
-      lg: { breakpoint: { max: 1199.98, min: 992 }, items: 5 },
-      md: { breakpoint: { max: 991.98, min: 768 }, items: 3 },
-      sm: { breakpoint: { max: 767.98, min: 576 }, items: 2 },
-      xs: { breakpoint: { max: 575.98, min: 0 }, items: 2 },
-    }),
-    []
-  );
+import "./generalCustomCarousel.scss";
+
+const GeneralCarousel = ({
+  children,
+  title,
+  showControls = true,
+  showTimer = false,
+  responsive = {
+    superLargeDesktop: { breakpoint: { max: 4000, min: 1400 }, items: 6 },
+    desktop: { breakpoint: { max: 1400, min: 992 }, items: 5 },
+    tablet: { breakpoint: { max: 992, min: 768 }, items: 4 },
+    mobile: { breakpoint: { max: 768, min: 576 }, items: 3 },
+    smallMobile: { breakpoint: { max: 576, min: 0 }, items: 2 },
+  },
+  additionalTransform = 0,
+  arrows = true,
+  autoPlay = false,
+  autoPlaySpeed = 3000,
+  centerMode = false,
+  className = "",
+  containerClass = "carousel-container",
+  dotListClass = "",
+  draggable = true,
+  focusOnSelect = false,
+  infinite = true,
+  itemClass = "",
+  keyBoardControl = true,
+  minimumTouchDrag = 80,
+  renderButtonGroupOutside = true,
+  renderDotsOutside = false,
+  showDots = false,
+  sliderClass = "",
+  swipeable = true,
+  customControlComponent,
+  numberOfRows = 1,
+}) => {
+  const carouselRef = React.useRef();
+
+  const next = () => {
+    if (carouselRef.current) {
+      carouselRef.current.next();
+    }
+  };
+
+  const previous = () => {
+    if (carouselRef.current) {
+      carouselRef.current.previous();
+    }
+  };
+
+  const CustomRightArrow = ({ onClick, ...rest }) => {
+    return (
+      <i
+        className="bi bi-arrow-right custom-arrow right-arrow"
+        onClick={() => onClick()}
+      />
+    );
+  };
+
+  const CustomLeftArrow = ({ onClick, ...rest }) => {
+    return (
+      <i
+        className="bi bi-arrow-left custom-arrow left-arrow"
+        onClick={() => onClick()}
+      />
+    );
+  };
 
   return (
-    <Carousel
-      responsive={responsive}
-      swipeable={true}
-      draggable={true}
-      // showDots={true}
-      ssr={true} // means to render carousel on server-side.
-      infinite={true}
-      autoPlay={true}
-      autoPlaySpeed={3000}
-      keyBoardControl={true}
-      customTransition="all .5"
-      transitionDuration={500}
-      containerClass="carousel-container"
-      removeArrowOnDeviceType={["tablet", "mobile"]}
-      // deviceType={this.props.deviceType}
-      dotListClass="custom-dot-list-style"
-      itemClass="carousel=item"
-    >
-      {children}
-    </Carousel>
+    <div className="general-carousel-container p-3">
+      {(title || showControls) && (
+        <>
+          <div className="title-container mt-3">
+            <div className="title">
+              <h2>{title}</h2>
+            </div>
+
+            <div className="header-controls">
+              {showTimer && (
+                <div className="offerTime">
+                  <p>
+                    <span>DAYS</span>
+                    <span>00</span>
+                  </p>
+                  <p>
+                    <span>HOURS</span>
+                    <span>00</span>
+                  </p>
+                  <p>
+                    <span>MIN</span>
+                    <span>00</span>
+                  </p>
+                  <p>
+                    <span>SEC</span>
+                    <span>00</span>
+                  </p>
+                </div>
+              )}
+
+              {showControls && (
+                <div className="control d-none d-md-flex">
+                  <i className="bi bi-arrow-left" onClick={previous}></i>
+                  <i className="bi bi-arrow-right" onClick={next}></i>
+                </div>
+              )}
+            </div>
+          </div>
+          <hr />
+        </>
+      )}
+
+      <div className="item-carousel-container">
+        <MultiCarousel
+          ref={carouselRef}
+          responsive={responsive}
+          additionalTransfrom={additionalTransform}
+          arrows={false}
+          autoPlay={autoPlay}
+          autoPlaySpeed={autoPlaySpeed}
+          centerMode={centerMode}
+          className={className}
+          containerClass={containerClass}
+          dotListClass={dotListClass}
+          draggable={draggable}
+          focusOnSelect={focusOnSelect}
+          infinite={infinite}
+          itemClass={itemClass}
+          keyBoardControl={keyBoardControl}
+          minimumTouchDrag={minimumTouchDrag}
+          renderButtonGroupOutside={renderButtonGroupOutside}
+          renderDotsOutside={renderDotsOutside}
+          showDots={showDots}
+          sliderClass={sliderClass}
+          swipeable={swipeable}
+          customRightArrow={<CustomRightArrow />}
+          customLeftArrow={<CustomLeftArrow />}
+          customControl={customControlComponent}
+        >
+          {React.Children.map(children, (child, index) => (
+            <div key={index} className="carousel-item-wrapper">
+              {child}
+            </div>
+          ))}
+        </MultiCarousel>
+      </div>
+    </div>
   );
-}
+};
 
-// const CustomCarousel = forwardRef(({
-//   items,
-//   slidesToSlide = 1,
-//   itemsPerView = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 },
-//   showDots = false,
-//   autoPlay = false,
-//   autoPlaySpeed = 3000,
-//   infinite = false,
-//   keyBoardControl = true,
-//   arrows = false,
-//   renderButtonGroupOutside = false,
-//   removeArrowOnDeviceType = ['tablet', 'mobile'],
-//   swipeable = true,
-//   draggable = true,
-//   lazyLoad = true,
-//   transitionDuration = 500,
-//   customTransition = "all 0.5s ease",
-//   dotListClass = "custom-dot-list-style",
-//   containerClass = "carousel-container",
-//   itemClass = "carousel-item",
-//   ariaLabel = "Image carousel",
-// }, ref) => {
-
-//   const responsive = useMemo(() => ({
-//     xxl: {
-//       breakpoint: { max: 3000, min: 1400 },
-//       items: itemsPerView.xxl || 5,
-//       slidesToSlide,
-//     },
-//     xl: {
-//       breakpoint: { max: 1399.98, min: 1200 },
-//       items: itemsPerView.xl || 4,
-//       slidesToSlide,
-//     },
-//     lg: {
-//       breakpoint: { max: 1199.98, min: 992 },
-//       items: itemsPerView.lg || 3,
-//       slidesToSlide,
-//     },
-//     md: {
-//       breakpoint: { max: 991.98, min: 768 },
-//       items: itemsPerView.md || 2,
-//       slidesToSlide,
-//     },
-//     sm: {
-//       breakpoint: { max: 767.98, min: 576 },
-//       items: itemsPerView.sm || 1,
-//       slidesToSlide,
-//     },
-//     xs: {
-//       breakpoint: { max: 575.98, min: 0 },
-//       items: itemsPerView.xs || 1,
-//       slidesToSlide,
-//     }
-//   }), [itemsPerView, slidesToSlide]);
-
-//   return (
-//     <section aria-label={ariaLabel}>
-//       <Carousel
-//         ref={ref}
-//         responsive={responsive}
-//         showDots={showDots}
-//         ssr
-//         infinite={infinite}
-//         keyBoardControl={keyBoardControl}
-//         arrows={arrows}
-//         swipeable={swipeable}
-//         draggable={draggable}
-//         autoPlay={autoPlay}
-//         autoPlaySpeed={autoPlaySpeed}
-//         lazyLoad={lazyLoad}
-//         transitionDuration={transitionDuration}
-//         customTransition={customTransition}
-//         containerClass={containerClass}
-//         dotListClass={dotListClass}
-//         itemClass={itemClass}
-//         renderButtonGroupOutside={renderButtonGroupOutside}
-//         removeArrowOnDeviceType={removeArrowOnDeviceType}
-//         focusOnSelect={false}
-//         rtl={false}
-//       >
-//         {items.map((item, index) => (
-//           <div key={index} className={itemClass}>{item}</div>
-//         ))}
-//       </Carousel>
-//     </section>
-//   );
-// });
-
-// export default React.memo(CustomCarousel);
+export default GeneralCarousel;

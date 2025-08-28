@@ -1,72 +1,89 @@
+// src/redux/api/productsApi/ProductApi.js
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import apis from "../../../utils/apis";
 
-const ProductApi = createApi({
-  reducerPath: 'ProductApi',
+export const productApi = createApi({
+  reducerPath: 'productApi',
   baseQuery: fetchBaseQuery({
     baseUrl: apis().baseUrl,
     credentials: 'include',
   }),
-  tagTypes: ["Product"], // For cache invalidation
+  tagTypes: ["Product", "Products"],
   endpoints: (builder) => ({
-    getAllProduct: builder.query({
-      query: () => apis().getAllProducts,
-      providesTags: ["Product"],
+    // Search products with filters
+    searchProducts: builder.query({
+      query: (filters = {}) => {
+        const params = new URLSearchParams();
+        Object.entries(filters).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== '') {
+            if (Array.isArray(value)) {
+              value.forEach(v => params.append(key, v));
+            } else {
+              params.append(key, value);
+            }
+          }
+        });
+        return `${apis().getAllProducts}?${params}`;
+      },
+      providesTags: ["Products"],
     }),
 
+    // Get filter options
+    getFilterOptions: builder.query({
+      query: () => `${apis().getAllProducts}/filters`,
+    }),
+
+    // ✅ Get single product
     getSingleProduct: builder.query({
       query: (productId) => apis().getSingleProduct(productId),
       providesTags: (result, error, id) => [{ type: "Product", id }],
     }),
 
+    // Get liked products
+ // Get liked products by IDs - CORRECTED
+getLikeProduct: builder.query({
+  query: (ids) => ({
+    url: apis().getLikeProduct, // This is now just the URL string
+    method: "POST",
+    body: { ids },
+  }),
+  providesTags: ["Likes"],
+}),
+
+
+    // Create product
     createProduct: builder.mutation({
       query: (data) => ({
         url: apis().createProduct,
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ["Product"],
+      invalidatesTags: ["Products"],
     }),
 
+    // Update product
     updateProduct: builder.mutation({
       query: ({ id, ...data }) => ({
         url: apis().updateProduct(id),
         method: 'PUT',
         body: data,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: "Product", id }],
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Product", id },
+        "Products"
+      ],
     }),
 
+    // Delete product
     deleteProduct: builder.mutation({
       query: (productId) => ({
         url: apis().deleteProduct(productId),
         method: 'DELETE',
       }),
-      invalidatesTags: ["Product"],
+      invalidatesTags: ["Products"],
     }),
 
-    uploadImage: builder.mutation({
-      query: (img) => ({
-        url: 'https://upload.imagekit.io/api/v1/files/upload',
-        method: 'POST',
-        body: img,
-        credentials: 'omit',
-      }),
-    }),
-
-    getSignature: builder.query({
-      query: (count) => apis().getSignature(count),
-    }),
-
-    rollbackProduct: builder.mutation({
-      query: (data) => ({
-        url: apis().rollbackProduct,
-        method: 'DELETE',
-        body: data,
-      }),
-      invalidatesTags: ["Product"],
-    }),
-
+    // Add review
     addReview: builder.mutation({
       query: ({ productId, rating, comment }) => ({
         url: apis().addReview(productId),
@@ -78,7 +95,29 @@ const ProductApi = createApi({
       ],
     }),
 
-    // Negotiation
+    // Product comparison
+    getProductComparison: builder.query({
+      query: (productName) => ({
+        url: `/products/compare?query=${encodeURIComponent(productName)}`,
+      }),
+    }),
+
+    // Image upload
+    uploadImage: builder.mutation({
+      query: (img) => ({
+        url: 'https://upload.imagekit.io/api/v1/files/upload',
+        method: 'POST',
+        body: img,
+        credentials: 'omit',
+      }),
+    }),
+
+    // Get signature
+    getSignature: builder.query({
+      query: (count) => apis().getSignature(count),
+    }),
+
+    // Negotiation endpoints
     startNegotiation: builder.mutation({
       query: ({ productId, initialMessage }) => ({
         url: apis().negotiateStart,
@@ -116,21 +155,25 @@ const ProductApi = createApi({
   }),
 });
 
+// ✅ Export hooks
 export const {
-  useGetAllProductQuery,
-  useGetSingleProductQuery,
+  useSearchProductsQuery,
+  useLazySearchProductsQuery,
+  useGetFilterOptionsQuery,
+  useGetSingleProductQuery, 
   useCreateProductMutation,
   useUpdateProductMutation,
   useDeleteProductMutation,
-  useUploadImageMutation,
-  useRollbackProductMutation,
-  useGetSignatureQuery,
   useAddReviewMutation,
+  useGetProductComparisonQuery,
+  useUploadImageMutation,
+  useGetSignatureQuery,
   useStartNegotiationMutation,
   usePostMessageMutation,
   useToggleAIMutation,
   useUpdateStatusMutation,
   useGetNegotiationsByProductQuery,
-} = ProductApi;
+  useGetLikeProductQuery,
+} = productApi;
 
-export default ProductApi;
+export default productApi;

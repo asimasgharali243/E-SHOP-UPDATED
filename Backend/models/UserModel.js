@@ -88,6 +88,19 @@ const UserSchema = new mongoose.Schema({
     enum: ['admin', 'seller', 'customer'],
     default: 'customer',
   },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+  
+  likesVersion: {
+    type: Number,
+    default: 0
+  },
+  lastLikesSync: {
+    type: Date,
+    default: Date.now
+  },
 }, {
   timestamps: true,
 });

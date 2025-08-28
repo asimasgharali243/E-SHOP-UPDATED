@@ -84,10 +84,7 @@ const MessageBubble = memo(({ message, onRetry, isCurrentUser }) => {
               title="Retry sending"
               aria-label="Retry sending message"
             >
-              <small>
-                <i className="bi bi-exclamation-triangle-fill text-warning"></i>
-                Retry
-              </small>
+              <small>⚠️ Retry</small>
             </Button>
           )}
         </div>
@@ -123,7 +120,17 @@ const NegotiationChat = ({ product, userId }) => {
   const endRef = useRef(null);
   const socketRef = useRef(null);
   const isMountedRef = useRef(true);
+  const reconnectAttemptsRef = useRef(0);
+  const maxReconnectAttempts = 3;
   const inputRef = useRef(null);
+
+  // reset isMounted on mount/unmount
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   // API hooks
   const [startNegotiation] = useStartNegotiationMutation();
@@ -136,6 +143,7 @@ const NegotiationChat = ({ product, userId }) => {
     isLoading,
     error: negotiationsError,
   } = useGetNegotiationsByProductQuery(product._id, { skip: !product._id });
+  console.log(negotiationsData);
 
   const activeNegotiation = useMemo(() => {
     if (!negotiationsData?.length) return null;
@@ -155,10 +163,14 @@ const NegotiationChat = ({ product, userId }) => {
   useEffect(() => {
     if (!negotiation?._id) return;
 
-    // Disconnect existing socket if any
     if (socketRef.current) {
-      socketRef.current.disconnect();
-      socketRef.current = null;
+      socketRef.current.disconnect(); // ✅ prevent duplicate sockets
+    }
+
+    if (reconnectAttemptsRef.current >= maxReconnectAttempts) {
+      setFallbackMode(true);
+      setSocketStatus(SOCKET_CONNECTION_STATES.DISCONNECTED);
+      return;
     }
 
     setSocketStatus(SOCKET_CONNECTION_STATES.CONNECTING);
@@ -166,9 +178,7 @@ const NegotiationChat = ({ product, userId }) => {
     const socket = io(SOCKET_SERVER_URL, {
       withCredentials: true,
       transports: ["websocket", "polling"],
-      reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
+      reconnectionAttempts: maxReconnectAttempts,
       timeout: 10000,
     });
 
@@ -178,19 +188,22 @@ const NegotiationChat = ({ product, userId }) => {
       if (!isMountedRef.current) return;
       setSocketStatus(SOCKET_CONNECTION_STATES.CONNECTED);
       socket.emit("joinNegotiation", negotiation._id);
-      setFallbackMode(false);
+      reconnectAttemptsRef.current = 0;
+      setFallbackMode(false); // ✅ reset fallback mode on success
     };
 
-    const handleDisconnect = () => {
+    const handleDisconnect = (reason) => {
       if (!isMountedRef.current) return;
       setSocketStatus(SOCKET_CONNECTION_STATES.DISCONNECTED);
+      if (reason === "io server disconnect") {
+        socket.connect();
+      }
     };
 
     const handleConnectError = (error) => {
       if (!isMountedRef.current) return;
       setSocketStatus(SOCKET_CONNECTION_STATES.ERROR);
-      // Enable fallback mode after connection error
-      setFallbackMode(true);
+      reconnectAttemptsRef.current += 1;
     };
 
     const handleNegotiationUpdate = (updated) => {
@@ -219,27 +232,22 @@ const NegotiationChat = ({ product, userId }) => {
     };
   }, [negotiation?._id]);
 
-  // Reset isMounted on mount/unmount
-  useEffect(() => {
-    isMountedRef.current = true;
-    return () => {
-      isMountedRef.current = false;
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-        socketRef.current = null;
-      }
-    };
-  }, []);
-
   // manual reconnect
   const handleReconnect = useCallback(() => {
     if (socketRef.current) {
       socketRef.current.disconnect();
       socketRef.current.connect();
+    } else if (negotiation?._id) {
+      reconnectAttemptsRef.current = 0;
+      setFallbackMode(false);
+      setSocketStatus(SOCKET_CONNECTION_STATES.CONNECTING);
+      socketRef.current = io(SOCKET_SERVER_URL, {
+        withCredentials: true,
+        transports: ["websocket", "polling"],
+      });
+      socketRef.current.emit("joinNegotiation", negotiation._id);
     }
-    setFallbackMode(false);
-    setSocketStatus(SOCKET_CONNECTION_STATES.CONNECTING);
-  }, []);
+  }, [negotiation?._id]);
 
   // auto-scroll
   useEffect(() => {
@@ -291,6 +299,7 @@ const NegotiationChat = ({ product, userId }) => {
         if (isMountedRef.current) {
           setNegotiation(result);
           setMessages(result.messages || []);
+          setIsSubmitting(false);
         }
       } catch (err) {
         if (isMountedRef.current) {
@@ -299,9 +308,6 @@ const NegotiationChat = ({ product, userId }) => {
               m._id === tempId ? { ...m, status: MESSAGE_STATUS.FAILED } : m
             )
           );
-        }
-      } finally {
-        if (isMountedRef.current) {
           setIsSubmitting(false);
         }
       }
@@ -352,10 +358,14 @@ const NegotiationChat = ({ product, userId }) => {
     [negotiation]
   );
 
-  // Simplified input disabled logic - allow sending even if socket is disconnected
   const isInputDisabled = useMemo(
-    () => isSubmitting || (negotiation && !isChatActive),
-    [isSubmitting, isChatActive, negotiation]
+    () =>
+      isSubmitting ||
+      (negotiation && !isChatActive) ||
+      (negotiation &&
+        socketStatus !== SOCKET_CONNECTION_STATES.CONNECTED &&
+        !fallbackMode),
+    [isSubmitting, isChatActive, socketStatus, fallbackMode, negotiation]
   );
 
   if (isLoading) {
@@ -398,16 +408,17 @@ const NegotiationChat = ({ product, userId }) => {
           <Badge bg={socketStatusVariant} className="me-2">
             {socketStatusText}
           </Badge>
-          {socketStatus !== SOCKET_CONNECTION_STATES.CONNECTED && (
-            <Button
-              variant="outline-primary"
-              size="sm"
-              onClick={handleReconnect}
-              disabled={socketStatus === SOCKET_CONNECTION_STATES.CONNECTING}
-            >
-              Reconnect
-            </Button>
-          )}
+          {socketStatus !== SOCKET_CONNECTION_STATES.CONNECTED &&
+            !fallbackMode && (
+              <Button
+                variant="outline-primary"
+                size="sm"
+                onClick={handleReconnect}
+                disabled={socketStatus === SOCKET_CONNECTION_STATES.CONNECTING}
+              >
+                Reconnect
+              </Button>
+            )}
           {isSubmitting && (
             <Spinner
               animation="border"
@@ -501,4 +512,4 @@ const NegotiationChat = ({ product, userId }) => {
   );
 };
 
-export default memo(NegotiationChat);
+export default NegotiationChat;

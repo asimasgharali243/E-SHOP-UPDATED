@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Contact from "./Contact";
 import { useRef } from "react";
@@ -111,6 +110,30 @@ export default function Home() {
       description: "Description for Product 6",
     },
   ];
+  const handleQuickView = (productId) => {
+    // Open quick view modal
+    console.log("Opening quick view for:", productId);
+    // Implement your quick view modal logic here
+  };
+
+  const handleToggleLike = (productId) => {
+    // Toggle like/wishlist status
+    console.log("Toggling like for:", productId);
+    // Implement your like/wishlist logic here
+  };
+
+  const handleAddToCart = (productId) => {
+    // Add product to cart
+    console.log("Adding to cart:", productId);
+    // Implement your add to cart logic here
+  };
+
+  const handleProductClick = (productId) => {
+    // Navigate to product detail page
+    console.log("Navigating to product:", productId);
+    // Implement your navigation logic here
+    // Example: navigate(`/product/${productId}`);
+  };
 
   const categories = [
     { name: "Dresses", icon: "bi bi-person-lines-fill" },
@@ -143,7 +166,6 @@ export default function Home() {
     { name: "Haircare", icon: "bi bi-scissors" },
     { name: "Perfumes", icon: "bi bi-droplet-half" },
     { name: "Wellness", icon: "bi bi-heart-pulse" },
-
   ];
 
   const control = useRef(null);
@@ -162,9 +184,22 @@ export default function Home() {
         {categories.map((category, index) => (
           <Col key={index} className="categories-container">
             <i className={`${category.icon} category-icon`}></i>
-            <p className="category-name" style={{  display: '-webkit-box',WebkitLineClamp: 1,WebkitBoxOrient: 'vertical',cursor: 'pointer',overflow: 'hidden',  textOverflow: 'ellipsis',textAlign: 'left',verticalAlign: 'middle',  justifySelf: 'center',
-}
-}>{category.name}</p>
+            <p
+              className="category-name"
+              style={{
+                display: "-webkit-box",
+                WebkitLineClamp: 1,
+                WebkitBoxOrient: "vertical",
+                cursor: "pointer",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                textAlign: "left",
+                verticalAlign: "middle",
+                justifySelf: "center",
+              }}
+            >
+              {category.name}
+            </p>
           </Col>
         ))}
       </CardItemSlide>
