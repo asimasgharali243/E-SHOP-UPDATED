@@ -8,6 +8,7 @@ const Contact = lazy(() => import("./pages/Contact"));
 const About = lazy(() => import("./pages/About"));
 const Home = lazy(() => import("./pages/Home"));
 const Catalog = lazy(() => import("./pages/Catalog"));
+const Catalog = lazy(() => import("./pages/Catalog"));
 const Error = lazy(() => import("./pages/ErrorPage"));
 const Signup = lazy(() => import("./components/auth/Signup"));
 const Login = lazy(() => import("./components/auth/Login"));
@@ -17,6 +18,10 @@ const EmailVerification = lazy(() =>
   import("./components/auth/EmailVerification")
 );
 const ResetPassword = lazy(() => import("./components/auth/ResetPassword"));
+const SingleProductPage = lazy(() =>
+  import("./pages/SingleProductPage/SingleProductPage")
+);
+const Cart = lazy(() => import("./components/Cart"));
 const SingleProductPage = lazy(() =>
   import("./pages/SingleProductPage/SingleProductPage")
 );
@@ -53,6 +58,12 @@ const CustomerLists = lazy(() =>
 const CustomerDetails = lazy(() =>
   import("./pages/Dashboard/customer/CustomerDetails")
 );
+const CustomerLists = lazy(() =>
+  import("./pages/Dashboard/customer/CustomerLists")
+);
+const CustomerDetails = lazy(() =>
+  import("./pages/Dashboard/customer/CustomerDetails")
+);
 const Analytics = lazy(() => import("./pages/Dashboard/analytics/Analytics"));
 const Setting = lazy(() => import("./pages/Dashboard/setting/Setting"));
 const Help = lazy(() => import("./pages/Dashboard/help/Help"));
@@ -66,7 +77,9 @@ const AppRouter = createBrowserRouter([
       { path: "home", element: <Home /> },
       { path: "contact", element: <Contact /> },
       { path: "catalog/:id?", element: <Catalog /> },
+      { path: "catalog/:id?", element: <Catalog /> },
       { path: "login", element: <Login /> },
+      { path: "about", element: <About /> },
       { path: "about", element: <About /> },
       { path: "signup", element: <Signup /> },
       { path: "forgetpassword", element: <ForgotPassword /> },
