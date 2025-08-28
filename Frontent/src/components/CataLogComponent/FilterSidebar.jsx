@@ -91,21 +91,57 @@ const FilterSidebar = React.memo(
       [filterOptions]
     );
 
+    // ✅ Brand filter with live search + highlight
     const renderBrands = useMemo(() => {
       if (!filterOptions?.brands) return null;
-      return filterOptions.brands.map((brand) => (
-        <Form.Check
-          key={brand}
-          type="checkbox"
-          label={`${brand}`}
-          name="brand"
-          value={brand}
-          checked={localFilters.brand?.includes(brand) || false}
-          onChange={handleCheckboxChange}
-          aria-label={`${brand} brand filter`}
-        />
-      ));
-    }, [filterOptions, localFilters.brand, handleCheckboxChange]);
+
+      const keyword = localFilters.brandSearch?.toLowerCase() || "";
+      const filteredBrands = filterOptions.brands.filter((brand) =>
+        brand.toLowerCase().includes(keyword)
+      );
+
+      if (filteredBrands.length === 0) {
+        return <div className="text-muted small">No brands found</div>;
+      }
+
+      return filteredBrands.map((brand) => {
+        // Highlight match in label
+        const startIndex = brand.toLowerCase().indexOf(keyword);
+        let label = brand;
+        if (keyword && startIndex !== -1) {
+          const before = brand.slice(0, startIndex);
+          const match = brand.slice(startIndex, startIndex + keyword.length);
+          const after = brand.slice(startIndex + keyword.length);
+          label = (
+            <>
+              {before}
+              <span style={{ fontWeight: "600", color: "var(--primary)" }}>
+                {match}
+              </span>
+              {after}
+            </>
+          );
+        }
+
+        return (
+          <Form.Check
+            key={brand}
+            type="checkbox"
+            label={label}
+            name="brand"
+            value={brand}
+            checked={localFilters.brand?.includes(brand) || false}
+            onChange={handleCheckboxChange}
+            aria-label={`${brand} brand filter`}
+          />
+        );
+      });
+    }, [
+      filterOptions,
+      localFilters.brand,
+      localFilters.brandSearch,
+      handleCheckboxChange,
+    ]);
 
     const renderSizes = useMemo(() => {
       if (!filterOptions?.sizes) return null;
@@ -186,17 +222,19 @@ const FilterSidebar = React.memo(
               />
             </Accordion.Body>
           </Accordion.Item>
-          {/* Brand Filter */}
+
+          {/* ✅ Brand Filter */}
           <Accordion.Item eventKey="brand">
             <Accordion.Header onClick={() => handleToggle("brand")}>
               Brand
             </Accordion.Header>
-            <Accordion.Body>
+            <Accordion.Body style={{ maxHeight: "250px", overflowY: "auto" }}>
               <Form.Control
                 type="text"
                 placeholder="Search brand..."
                 className="mb-2"
                 name="brandSearch"
+                value={localFilters.brandSearch || ""}
                 onChange={handleTextSearchChange}
               />
               {renderBrands}
@@ -247,7 +285,10 @@ const FilterSidebar = React.memo(
             <Accordion.Header onClick={() => handleToggle("size")}>
               Size
             </Accordion.Header>
-            <Accordion.Body className="d-flex flex-wrap gap-2">
+            <Accordion.Body
+              className="d-flex flex-wrap gap-2"
+              style={{ maxHeight: "250px", overflowY: "auto" }}
+            >
               {renderSizes}
             </Accordion.Body>
           </Accordion.Item>
@@ -265,7 +306,7 @@ const FilterSidebar = React.memo(
           <div className="p-3">
             <Button
               variant="primary"
-              className="w-100"
+              className="w-100 filter-button"
               onClick={handleApplyClick}
             >
               Apply Filters

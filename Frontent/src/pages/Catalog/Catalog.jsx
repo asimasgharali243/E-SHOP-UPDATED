@@ -1,25 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { Button, Offcanvas } from "react-bootstrap";
-import FilterSidebar from "../components/CataLogComponent/FilterSidebar";
-import CustomContainer from "../components/SubComponent/CustomContainer";
-import CustomGrid from "../components/CataLogComponent/CustomGrid";
+import { Button, Offcanvas, Pagination } from "react-bootstrap";
+import FilterSidebar from "../../components/CataLogComponent/FilterSidebar";
+import CustomContainer from "../../components/SubComponent/CustomContainer";
+import CustomGrid from "../../components/CataLogComponent/CustomGrid";
 import {
   useSearchProductsQuery,
   useGetFilterOptionsQuery,
-} from "../redux/api/productsApi/ProductApi";
+} from "../../redux/api/productsApi/ProductApi";
 import { toast } from "react-toastify";
 
 const CatalogPage = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [filters, setFilters] = useState({});
   const [sortOption, setSortOption] = useState("newest");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const {
     data: productData,
     isLoading,
     isFetching,
     error,
-  } = useSearchProductsQuery({ ...filters, sort: sortOption });
+  } = useSearchProductsQuery({
+    ...filters,
+    sort: sortOption,
+    page: currentPage,
+  });
 
   const {
     data: filterOptions,
@@ -39,6 +44,11 @@ const CatalogPage = () => {
     }
   }, [filterError]);
 
+  // Reset to page 1 when filters or sort change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters, sortOption]);
+
   const handleToggleFilter = () => setShowFilter((prev) => !prev);
 
   const handleApplyFilters = (newFilters) => {
@@ -49,6 +59,73 @@ const CatalogPage = () => {
 
   const handleSortChange = (option) => {
     setSortOption(option);
+  };
+
+  // Pagination functions
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Generate pagination items
+  const renderPaginationItems = () => {
+    if (!productData?.pagination) return null;
+
+    const { totalPages, currentPage } = productData.pagination;
+    const items = [];
+
+    // Always show first page
+    items.push(
+      <Pagination.Item
+        key={1}
+        active={1 === currentPage}
+        onClick={() => handlePageChange(1)}
+      >
+        1
+      </Pagination.Item>
+    );
+
+    // Add ellipsis if needed
+    if (currentPage > 3) {
+      items.push(<Pagination.Ellipsis key="ellipsis-start" />);
+    }
+
+    // Add current page and surrounding pages
+    for (
+      let i = Math.max(2, currentPage - 1);
+      i <= Math.min(totalPages - 1, currentPage + 1);
+      i++
+    ) {
+      items.push(
+        <Pagination.Item
+          key={i}
+          active={i === currentPage}
+          onClick={() => handlePageChange(i)}
+        >
+          {i}
+        </Pagination.Item>
+      );
+    }
+
+    // Add ellipsis if needed
+    if (currentPage < totalPages - 2) {
+      items.push(<Pagination.Ellipsis key="ellipsis-end" />);
+    }
+
+    // Always show last page if there is more than one page
+    if (totalPages > 1) {
+      items.push(
+        <Pagination.Item
+          key={totalPages}
+          active={totalPages === currentPage}
+          onClick={() => handlePageChange(totalPages)}
+        >
+          {totalPages}
+        </Pagination.Item>
+      );
+    }
+
+    return items;
   };
 
   return (
@@ -86,6 +163,23 @@ const CatalogPage = () => {
             onSortChange={handleSortChange}
             currentSort={sortOption}
           />
+
+          {/* Pagination */}
+          {productData?.pagination && productData.pagination.totalPages > 1 && (
+            <div className="d-flex justify-content-center mt-4">
+              <Pagination>
+                <Pagination.Prev
+                  disabled={currentPage === 1}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                />
+                {renderPaginationItems()}
+                <Pagination.Next
+                  disabled={currentPage === productData.pagination.totalPages}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                />
+              </Pagination>
+            </div>
+          )}
         </div>
       </div>
 

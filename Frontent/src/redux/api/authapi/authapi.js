@@ -48,7 +48,7 @@ export const login = createAsyncThunk(
       });
 
       const resdata = await response.json();
-      
+console.log(resdata);      
       if (!response.ok) {
         console.error('Login error:', resdata);
         return rejectWithValue({
@@ -77,7 +77,7 @@ export const logout = createAsyncThunk(
       });
 
       const resdata = await response.json();
-      
+      console.log(resdata);
       if (!response.ok) {
         console.error('Logout error:', resdata);
         return rejectWithValue({

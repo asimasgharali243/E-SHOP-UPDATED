@@ -24,7 +24,7 @@ const apis = () => {
     likeProduct: (productId) => `/products/${productId}/like`,
     getLikeProduct: `/products/like/product`, // REMOVED THE PARAMETER
     syncLikes: `/products/likes/sync`,
-
+    getCategories: `/products/getcategories`,
     // ---------- Cart ----------
     getCart: "/cart",
     syncCart: "/cart/sync",

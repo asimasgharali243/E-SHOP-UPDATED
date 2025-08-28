@@ -7,7 +7,7 @@ import WishListPage from "./pages/WishListPage/WishListPage";
 const Contact = lazy(() => import("./pages/Contact"));
 const About = lazy(() => import("./pages/About"));
 const Home = lazy(() => import("./pages/Home"));
-const Catalog = lazy(() => import("./pages/Catalog"));
+const Catalog = lazy(() => import("./pages/Catalog/Catalog"));
 
 const Error = lazy(() => import("./pages/ErrorPage"));
 const Signup = lazy(() => import("./components/auth/Signup"));
@@ -51,6 +51,9 @@ const Orderdetails = lazy(() => import("./pages/Dashboard/order/Orderdetails"));
 const CustomerLists = lazy(() =>
   import("./pages/Dashboard/customer/CustomerLists")
 );
+const SearchProsuctPage = lazy(() =>
+  import("./pages/SearchProductPage/SearchProductPage")
+);
 const CustomerDetails = lazy(() =>
   import("./pages/Dashboard/customer/CustomerDetails")
 );
@@ -78,7 +81,7 @@ const AppRouter = createBrowserRouter([
       { path: "reset/password", element: <ResetPassword /> },
       { path: "logout", element: <Logout /> },
       { path: "product/:id", element: <SingleProductPage /> },
-
+      { path: "search", element: <SearchProsuctPage /> },
       { path: "wishlist", element: <WishListPage /> },
       { path: "cart", element: <Cart /> },
       { path: "checkout", element: <Checkout /> },
