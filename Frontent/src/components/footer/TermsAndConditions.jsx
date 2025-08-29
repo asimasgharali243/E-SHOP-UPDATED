@@ -6,7 +6,7 @@ const TermsAndConditions = () => {
   return (
     <div>
       {/* Hero Section */}
-      <div className="bg-dark text-white text-center py-5 mb-4">
+      <div className="bg-dark text-white text-center py-5 mb-4 mt-4">
         <h1>Terms & Conditions</h1>
         <p className="lead">
           Please read our terms carefully before using our services.

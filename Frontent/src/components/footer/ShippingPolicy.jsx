@@ -5,7 +5,7 @@ import { Truck, ClockHistory, GeoAlt } from "react-bootstrap-icons";
 const ShippingPolicy = () => {
   return (
     <div>
-      <div className="bg-dark text-white text-center py-5 mb-4">
+      <div className="bg-dark text-white text-center py-5 mb-4 mt-4">
         <h1>Shipping Policy</h1>
         <p className="lead">
           Fast, reliable, and safe delivery to your doorstep.

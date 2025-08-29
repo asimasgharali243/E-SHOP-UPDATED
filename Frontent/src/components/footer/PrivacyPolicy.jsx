@@ -5,7 +5,7 @@ import { Lock, Person, Shield } from "react-bootstrap-icons";
 const PrivacyPolicy = () => {
   return (
     <div>
-      <div className="bg-dark text-white text-center py-5 mb-4">
+      <div className="bg-dark text-white text-center py-5 mb-4 mt-4">
         <h1>Privacy Policy</h1>
         <p className="lead">
           Your privacy matters. Here’s how we protect your data.

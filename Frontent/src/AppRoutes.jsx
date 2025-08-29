@@ -23,7 +23,13 @@ const SingleProductPage = lazy(() =>
 );
 const Checkout = lazy(() => import("./pages/CheckOut"));
 const Logout = lazy(() => import("./components/auth/Logout"));
-
+// Footer component
+const PrivacyPolicy = lazy(() => import("./components/footer/PrivacyPolicy"));
+const Return = lazy(() => import("./components/footer/Return"));
+const ShippingPolicy = lazy(() => import("./components/footer/ShippingPolicy"));
+const TermsAndConditions = lazy(() =>
+  import("./components/footer/TermsAndConditions")
+);
 {
   /* dashboard routes**/
 }
@@ -85,6 +91,11 @@ const AppRouter = createBrowserRouter([
       { path: "wishlist", element: <WishListPage /> },
       { path: "cart", element: <Cart /> },
       { path: "checkout", element: <Checkout /> },
+      { path: "privacy-policy", element: <PrivacyPolicy /> },
+      { path: "return-policy", element: <Return /> },
+      { path: "shipping-policy", element: <ShippingPolicy /> },
+      { path: "terms-and-conditions", element: <TermsAndConditions /> },
+      { path: "help", element: <Help /> },
 
       // Dashboard Routes
       {

@@ -35,7 +35,7 @@ const Footer = () => {
             <h5>Quick Links</h5>
             <ul>
               <li>
-                <a href="#">Shop</a>
+                <a href="home">Shop</a>
               </li>
               <li>
                 <a href="#">Categories</a>
@@ -57,19 +57,19 @@ const Footer = () => {
             <h5>Customer Service</h5>
             <ul>
               <li>
-                <a href="#">Help Center</a>
+                <a href="help">Help Center</a>
               </li>
               <li>
-                <a href="#">Returns</a>
+                <a href="return-policy">Returns</a>
               </li>
               <li>
-                <a href="#">Shipping</a>
+                <a href="shipping-policy">Shipping</a>
               </li>
               <li>
-                <a href="#">Privacy Policy</a>
+                <a href="privacy-policy">Privacy Policy</a>
               </li>
               <li>
-                <a href="#">Terms & Conditions</a>
+                <a href="terms-and-conditions">Terms & Conditions</a>
               </li>
             </ul>
           </Col>

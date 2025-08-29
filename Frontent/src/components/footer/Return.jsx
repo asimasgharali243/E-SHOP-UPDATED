@@ -5,7 +5,7 @@ import { ArrowRepeat, Cash, BoxArrowInLeft } from "react-bootstrap-icons";
 const Returns = () => {
   return (
     <div>
-      <div className="bg-dark text-white text-center py-5 mb-4">
+      <div className="bg-dark text-white text-center py-5 mb-4 mt-4">
         <h1>Returns & Refunds</h1>
         <p className="lead">We make returns simple and refunds quick.</p>
       </div>
