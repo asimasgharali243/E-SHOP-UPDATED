@@ -30,6 +30,7 @@ const ShippingPolicy = lazy(() => import("./components/footer/ShippingPolicy"));
 const TermsAndConditions = lazy(() =>
   import("./components/footer/TermsAndConditions")
 );
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 {
   /* dashboard routes**/
 }
@@ -62,6 +63,9 @@ const SearchProsuctPage = lazy(() =>
 );
 const CustomerDetails = lazy(() =>
   import("./pages/Dashboard/customer/CustomerDetails")
+);
+const OrderConfirmation = lazy(() =>
+  import("./pages/Dashboard/order/OrderConfirmation")
 );
 const Analytics = lazy(() => import("./pages/Dashboard/analytics/Analytics"));
 const Setting = lazy(() => import("./pages/Dashboard/setting/Setting"));
@@ -96,6 +100,7 @@ const AppRouter = createBrowserRouter([
       { path: "shipping-policy", element: <ShippingPolicy /> },
       { path: "terms-and-conditions", element: <TermsAndConditions /> },
       { path: "help", element: <Help /> },
+      { path: "profile", element: <ProfilePage /> },
 
       // Dashboard Routes
       {
@@ -119,6 +124,7 @@ const AppRouter = createBrowserRouter([
           { path: "analytics", element: <Analytics /> },
           { path: "settings", element: <Setting /> },
           { path: "help", element: <Help /> },
+          { path: "order/confirmation", element: <OrderConfirmation /> },
         ],
       },
     ],
