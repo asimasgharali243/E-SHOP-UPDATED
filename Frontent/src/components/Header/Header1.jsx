@@ -31,7 +31,8 @@ export default function Header1() {
   const dispatch = useDispatch();
 
   // Redux states
-  const likes = useSelector((state) => state.likes);
+  const likes = useSelector((state) => state.Likes);
+  console.log("likes+" + likes);
   const cart = useSelector((state) => state.cart);
   const user = useSelector((state) => state.authUser.user);
 
@@ -164,10 +165,13 @@ export default function Header1() {
                 )}
 
                 {/* Wishlist */}
+                {/* Wishlist */}
                 <Nav.Link as={Link} to="/wishlist" className="d-none d-md-flex">
                   <span>
                     <i className="bi bi-heart"></i>
-                    <Badge bg="secondary">{likes?.length || 0}</Badge>
+                    <Badge bg="secondary">
+                      {likes?.likedProducts?.length || 0}
+                    </Badge>
                   </span>{" "}
                   <span className="d-none d-lg-flex">Wishlist</span>
                 </Nav.Link>

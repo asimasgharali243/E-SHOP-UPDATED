@@ -1,44 +1,62 @@
 // utils/GPT4AllNegotiation.js
 import pkg from "gpt4all";
-const { loadModel, downloadModel } = pkg; // latest API uses functions
+const { loadModel, downloadModel } = pkg;
 
-const MODEL_NAME = process.env.GPT4ALL_MODEL || "phi-3-mini-instruct";
-let model = null;
+const MODEL_NAME = process.env.GPT4ALL_MODEL || "DeepSeek-R1-Distill-Qwen-1.5B~2";
+let gptModel = null;
 
-// Initialize GPT4All model
-async function initModel() {
-  if (!model) {
-    // download model if not present
+// ----------------------
+// Initialize GPT4All model once
+// ----------------------
+export async function initGPT4All() {
+  if (!gptModel) {
     const modelPath = await downloadModel(MODEL_NAME);
-    model = await loadModel(modelPath);
+    gptModel = await loadModel(modelPath);
+    console.log(`[GPT4All] Model loaded: ${MODEL_NAME}`);
   }
-  return model;
+  return gptModel;
 }
 
-// Fallback response if AI fails
-function fallback(product, userMessage, vars) {
+// ----------------------
+// Fallback response generator
+// ----------------------
+function fallbackResponse(product, vars) {
   const { currentPrice, floor, buyerOffer } = vars;
-  const finalPrice = Math.max(buyerOffer || 0, floor, currentPrice * 0.95);
+  let finalPrice = Math.max(buyerOffer || 0, floor, currentPrice * 0.95);
+  const status = buyerOffer && finalPrice >= floor ? "accepted" : "counter";
+
   return {
     reply: `The best offer I can provide for ${product.name} is $${finalPrice.toFixed(2)}.`,
     negotiateFinalPrice: finalPrice,
-    status: buyerOffer && finalPrice >= floor ? "accepted" : "counter",
+    status,
     quantityConsidered: 1,
+    isFallback: true,
   };
 }
 
+// ----------------------
+// Extract buyer offer
+// ----------------------
+function extractOffer(message) {
+  if (!message) return null;
+  const matches = message.match(/\$?\d+(?:\.\d{1,2})?/g);
+  if (!matches) return null;
+  return Math.max(...matches.map(m => parseFloat(m.replace("$", ""))));
+}
+
+// ----------------------
 // Generate AI negotiation response
+// ----------------------
 export async function generateNegotiationResponse(product, userMessage, conversationHistory = []) {
+  const model = await initGPT4All();
+
   const currentPrice = product.discount
     ? product.price * (1 - product.discount / 100)
     : product.price;
 
   const floor = product?.minAcceptablePrice ?? currentPrice;
 
-  const buyerOffer = Math.max(
-    ...(userMessage.match(/\$?\d+(?:\.\d{1,2})?/g)?.map(m => parseFloat(m.replace("$", ""))) || [0])
-  ) || null;
-
+  const buyerOffer = extractOffer(userMessage);
   const vars = { currentPrice, floor, buyerOffer };
 
   const lastHistory = (conversationHistory.slice(-4) || [])
@@ -46,16 +64,22 @@ export async function generateNegotiationResponse(product, userMessage, conversa
     .join("\n");
 
   const prompt = `
-You are a seller negotiation assistant. Reply in JSON only:
-- reply (string)
-- negotiateFinalPrice (number)
-- status ("accepted", "counter", "rejected", "pending")
+You are a seller negotiation assistant. Respond ONLY in JSON:
+{
+  "reply": "string",
+  "negotiateFinalPrice": number,
+  "status": "accepted" | "counter" | "rejected" | "pending",
+  "quantityConsidered": number
+}
+
+RULES:
+- MIN_PRICE ${floor} must NOT be crossed.
+- If BUYER_OFFER >= MIN_PRICE → "accepted", else "counter".
 
 PRODUCT: ${product.name}
-PRICE: ${currentPrice.toFixed(2)}
-MIN_PRICE: ${floor.toFixed(2)}
-BUYER_OFFER: ${buyerOffer !== null ? buyerOffer.toFixed(2) : "None"}
-RULES: MIN_PRICE must not be crossed. If BUYER_OFFER >= MIN_PRICE → accepted, else counter.
+PRICE: ${currentPrice}
+MIN_PRICE: ${floor}
+BUYER_OFFER: ${buyerOffer !== null ? buyerOffer : "None"}
 
 HISTORY:
 ${lastHistory}
@@ -64,16 +88,15 @@ USER_MESSAGE: "${userMessage}"
 `;
 
   try {
-    const gpt = await initModel();
-    const raw = await gpt.prompt(prompt); // use loaded model's prompt method
-    const jsonMatch = raw.match(/\{[\s\S]*\}/);
+    const rawResponse = await model.prompt(prompt);
 
-    if (!jsonMatch) return fallback(product, userMessage, vars);
+    const jsonMatch = rawResponse.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) return fallbackResponse(product, vars);
 
     const aiResp = JSON.parse(jsonMatch[0]);
 
     if (!aiResp.negotiateFinalPrice || aiResp.negotiateFinalPrice < floor) {
-      return fallback(product, userMessage, vars);
+      return fallbackResponse(product, vars);
     }
 
     if (!aiResp.reply || typeof aiResp.reply !== "string") {
@@ -88,7 +111,7 @@ USER_MESSAGE: "${userMessage}"
 
     return aiResp;
   } catch (err) {
-    console.error("AI fallback:", err.message);
-    return fallback(product, userMessage, vars);
+    console.error("[GPT4All] AI fallback triggered:", err.message);
+    return fallbackResponse(product, vars);
   }
 }

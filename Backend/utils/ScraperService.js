@@ -239,7 +239,7 @@ export async function scrapeBestBuy(browser, searchUrl) {
 
 }
 
-export async function scrapeDaraz(browser, searchUrl, maxProducts = 5) {
+export async function scrapeDaraz(browser, searchUrl, maxProducts = 8) {
   const $ = await getPageContent(browser, searchUrl);
   if (!$) return null;
 

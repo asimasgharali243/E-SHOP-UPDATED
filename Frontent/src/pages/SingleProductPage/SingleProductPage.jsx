@@ -1,13 +1,6 @@
 import React, { useCallback, useMemo, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import CustomContainer from "../../components/SubComponent/CustomContainer";
-import { useGetSingleProductQuery } from "../../redux/api/productsApi/ProductApi";
-import ReviewForm from "./ReviewForm";
-import NegotiationChat from "./NegotiationChatBoard";
-import ReviewsList from "./ReviewsList";
-import { addToCart } from "../../redux/features/Cart/CartAction";
-import { useDispatch, useSelector } from "react-redux";
-import { toggleLocalLike } from "../../redux/features/products/LikeProduct";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import {
   Col,
   Row,
@@ -20,15 +13,22 @@ import {
   Tab,
 } from "react-bootstrap";
 import Rating from "react-rating";
+
+import CustomContainer from "../../components/SubComponent/CustomContainer";
+import { useGetSingleProductQuery } from "../../redux/api/productsApi/ProductApi";
+import ReviewForm from "./ReviewForm";
+import ReviewsList from "./ReviewsList";
+import NegotiationChat from "./NegotiationChatBoard";
+import { addToCart } from "../../redux/features/Cart/CartAction";
+import { toggleLocalLike } from "../../redux/features/products/LikeProduct";
+
 import "./SingleProduct.scss";
-import { use } from "react";
 
 export default function SingleProductPage() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const inCard = useSelector((state) => state.cart);
-  const likes = useSelector((state) => state.likes);
+
   const {
     data,
     isLoading,
@@ -36,18 +36,9 @@ export default function SingleProductPage() {
     error,
     refetch: refetchProduct,
   } = useGetSingleProductQuery(id);
+  const product = data?.product || {};
 
-  const product = data?.product;
-  const userId = useSelector((state) => state.authUser.user);
-
-  console.log("🛍️ Product data fetched:", {
-    product,
-    isLoading,
-    isError,
-    error,
-  });
-
-  // local state
+  // Local state
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [displayedSrc, setDisplayedSrc] = React.useState("");
   const [overlaySrc, setOverlaySrc] = React.useState(null);
@@ -57,17 +48,17 @@ export default function SingleProductPage() {
   const [quantity, setQuantity] = React.useState(1);
   const [activeTab, setActiveTab] = React.useState("description");
 
-  // prevent crash when colors/sizes missing
+  // Prevent crash when colors/sizes missing
   const validColors = product?.colors?.filter((c) => c?.trim() !== "") || [];
   const validSizes = product?.sizes?.filter((s) => s?.trim() !== "") || [];
 
-  // price calculation
+  // Price calculation
   const discountedPrice = useMemo(() => {
     if (!product) return 0;
     return product.price * (1 - (product.discount || 0) / 100);
   }, [product]);
 
-  // image logic
+  // Image logic
   const currentImage = useMemo(() => {
     if (!product?.featureImages?.length) return "";
     return product.featureImages[currentIndex]?.url || "";
@@ -141,14 +132,21 @@ export default function SingleProductPage() {
     setQuantity(clampedQuantity);
   };
 
-  // Redux selectors for current product
-  const likedProducts = useSelector((state) => state.likes || []);
-  const cartItems = useSelector((state) => state.cart.items || []);
+  // Redux selectors
+  const likedProducts = useSelector(
+    (state) => state.likes?.products || [],
+    shallowEqual
+  );
+  const cartItems = useSelector(
+    (state) => state.cart?.items || [],
+    shallowEqual
+  );
+  const userId = useSelector((state) => state.authUser?.user?._id || null);
 
   const liked = likedProducts.includes(product._id);
   const inCart = cartItems.some((item) => item._id === product._id);
 
-  // 🚨 handle loading
+  // Loading/Error states
   if (isLoading) {
     return (
       <CustomContainer
@@ -178,12 +176,10 @@ export default function SingleProductPage() {
     );
   }
 
-  // console.log(" Rendering product page for:", product.name);
-
   return (
     <CustomContainer className="product-page py-3">
       <Row className="g-2">
-        {/* Product Images Section */}
+        {/* Product Images */}
         <Col
           lg={8}
           md={7}
@@ -208,10 +204,7 @@ export default function SingleProductPage() {
                 className="main-image main-image--base"
                 loading="eager"
                 decoding="async"
-                onError={(e) => {
-                  console.error(" Image load error:", e.target.src);
-                  e.target.src = "/placeholder.png";
-                }}
+                onError={(e) => (e.target.src = "/placeholder.png")}
               />
 
               {overlaySrc && (
@@ -255,10 +248,7 @@ export default function SingleProductPage() {
                     className="w-100 h-100 object-fit-fill"
                     loading="lazy"
                     alt={`Thumbnail ${index + 1}`}
-                    onError={(e) => {
-                      console.error(" Thumbnail load error:", e.target.src);
-                      e.target.src = "/placeholder.png";
-                    }}
+                    onError={(e) => (e.target.src = "/placeholder.png")}
                   />
                 </div>
               ))}
@@ -266,13 +256,11 @@ export default function SingleProductPage() {
           </Col>
         </Col>
 
-        {/* Product Details Section */}
+        {/* Product Details */}
         <Col lg={4} md={5} sm={12} className="product-details p-3 p-md-0">
-          <div className="position-relative">
-            <h1 className="product-title mb-2">{product.name}</h1>
-          </div>
+          <h1 className="product-title mb-2">{product.name}</h1>
 
-          <div className="d-flex align-items-center mb-2 ">
+          <div className="d-flex align-items-center mb-2">
             <Rating
               initialRating={product.ratings || 0}
               readonly
@@ -298,7 +286,7 @@ export default function SingleProductPage() {
           </div>
 
           <div className="price-section mb-3">
-            <span className="product-price text-danger fs-2  fw-bold">
+            <span className="product-price text-danger fs-2 fw-bold">
               ${discountedPrice.toFixed(2)}
             </span>
             {product.discount > 0 && (
@@ -316,13 +304,12 @@ export default function SingleProductPage() {
           <div className="availability mb-3">
             {product.stock > 0 ? (
               <span className="text-success">
-                <i className="bi bi-check-circle-fill me-1"></i>
-                In Stock ({product.stock} available)
+                <i className="bi bi-check-circle-fill me-1"></i>In Stock (
+                {product.stock} available)
               </span>
             ) : (
               <span className="text-danger">
-                <i className="bi bi-x-circle-fill me-1"></i>
-                Out of Stock
+                <i className="bi bi-x-circle-fill me-1"></i>Out of Stock
               </span>
             )}
           </div>
@@ -332,7 +319,7 @@ export default function SingleProductPage() {
           </p>
           <hr />
 
-          {/* Color and Size Selection */}
+          {/* Colors */}
           {validColors?.length > 0 && (
             <div className="color-selection mb-4">
               <h6 className="mb-2">
@@ -346,11 +333,8 @@ export default function SingleProductPage() {
                     className={`color-option ${
                       selectedColor === color ? "active" : ""
                     }`}
-                    style={{ backgroundColor: `${color}` }}
-                    onClick={() => {
-                      // console.log("🎨 Color selected:", color);
-                      setSelectedColor(color);
-                    }}
+                    style={{ backgroundColor: color }}
+                    onClick={() => setSelectedColor(color)}
                     aria-label={`Select color ${color}`}
                     title={color}
                   />
@@ -359,6 +343,7 @@ export default function SingleProductPage() {
             </div>
           )}
 
+          {/* Sizes */}
           {validSizes?.length > 0 && (
             <div className="size-selection mb-4">
               <h6 className="mb-2">
@@ -372,10 +357,7 @@ export default function SingleProductPage() {
                     className={`btn btn-outline-dark ${
                       selectedSize === size ? "active" : ""
                     }`}
-                    onClick={() => {
-                      console.log("📏 Size selected:", size);
-                      setSelectedSize(size);
-                    }}
+                    onClick={() => setSelectedSize(size)}
                   >
                     {size}
                   </button>
@@ -384,17 +366,14 @@ export default function SingleProductPage() {
             </div>
           )}
 
+          {/* Quantity */}
           <div className="quantity-selector mb-4">
             <h6 className="mb-2">Quantity</h6>
             <div className="d-flex align-items-center">
               <Button
                 variant="outline-secondary"
-                onClick={() => {
-                  // console.log("➖ Decrease quantity");
-                  handleQuantityChange(quantity - 1);
-                }}
+                onClick={() => handleQuantityChange(quantity - 1)}
                 disabled={quantity <= 1}
-                aria-label="Decrease quantity"
               >
                 -
               </Button>
@@ -403,44 +382,35 @@ export default function SingleProductPage() {
                 min="1"
                 max={product.stock}
                 value={quantity}
-                onChange={(e) => {
-                  console.log("🔢 Quantity input changed:", e.target.value);
-                  handleQuantityChange(parseInt(e.target.value) || 1);
-                }}
+                onChange={(e) =>
+                  handleQuantityChange(parseInt(e.target.value) || 1)
+                }
                 className="form-control text-center mx-2"
                 style={{ width: "60px" }}
-                aria-label="Product quantity"
               />
               <Button
                 variant="outline-secondary"
-                onClick={() => {
-                  console.log("➕ Increase quantity");
-                  handleQuantityChange(quantity + 1);
-                }}
+                onClick={() => handleQuantityChange(quantity + 1)}
                 disabled={quantity >= product.stock}
-                aria-label="Increase quantity"
               >
                 +
               </Button>
             </div>
           </div>
 
+          {/* Actions */}
           <div className="action-buttons d-grid gap-2">
             <div className="d-flex align-items-center gap-2">
-              {/* Compare Prices */}
               <Button
                 variant="outline-success"
                 size="lg"
-                className="w-100 py-3 compare-btn d-flex align-items-center justify-content-center gap-3"
+                className="w-100 py-3 compare-btn"
                 onClick={() =>
-                  // Instead of path param, use query
                   navigate(`/compare?query=${encodeURIComponent(product.name)}`)
                 }
               >
-                <i className="bi bi-search"></i>
-                Compare Prices
+                <i className="bi bi-search"></i> Compare Prices
               </Button>
-              {/* Add to Cart */}
               <Button
                 variant="secondary"
                 size="lg"
@@ -450,10 +420,9 @@ export default function SingleProductPage() {
                 <i className={`bi bi-cart${inCart ? "-fill" : ""}`}></i>
                 <i className="bi bi-cart-fill fill-layer"></i>
               </Button>
-              {/* Like */}
               <Button
                 variant="outline-primary"
-                className="h-100 p-2 d-flex align-items-center justify-content-center like-btn"
+                className="h-100 p-2 like-btn"
                 aria-label={liked ? "Unlike product" : "Like product"}
                 onClick={() => dispatch(toggleLocalLike(product._id))}
               >
@@ -461,14 +430,11 @@ export default function SingleProductPage() {
                 <i className="bi bi-heart-fill fill-layer"></i>
               </Button>
             </div>
-
-            {/* Buy Now */}
             <Button
               variant="outline-primary"
               size="lg"
               className="py-3 buy-now-btn"
               disabled={product.stock <= 0}
-              onClick={() => console.log("🚀 Buy now clicked")}
             >
               Buy Now
             </Button>
@@ -476,20 +442,16 @@ export default function SingleProductPage() {
         </Col>
       </Row>
 
-      {/* Product Tabs Section */}
+      {/* Tabs */}
       <Row className="mb-5">
         <Col>
           <Tabs
             activeKey={activeTab}
-            onSelect={(key) => {
-              console.log("📑 Tab selected:", key);
-              setActiveTab(key);
-            }}
+            onSelect={setActiveTab}
             id="product-tabs"
             className="mb-4 custom-tabs mt-2 mt-md-5"
             justify
           >
-            {/* Details Tab */}
             <Tab
               eventKey="description"
               title={
@@ -508,7 +470,6 @@ export default function SingleProductPage() {
               </div>
             </Tab>
 
-            {/* Reviews Tab */}
             <Tab
               eventKey="reviews"
               title={
@@ -519,45 +480,16 @@ export default function SingleProductPage() {
               }
             >
               <div className="p-3">
-                <div className="d-flex justify-content-between align-items-center mb-4">
-                  <div>
-                    <h4 className="mb-1">Customer Reviews</h4>
-                    <div className="d-flex align-items-center mb-1">
-                      <Rating
-                        initialRating={product.ratings || 0}
-                        readonly
-                        emptySymbol={
-                          <i className="bi bi-star text-warning"></i>
-                        }
-                        fullSymbol={
-                          <i className="bi bi-star-fill text-warning"></i>
-                        }
-                        fractions={2}
-                      />
-                      <span className="ms-2">
-                        {(product.ratings || 0)?.toFixed(1)} out of 5
-                      </span>
-                    </div>
-                    <p className="text-muted small mb-0">
-                      Based on {product.numOfReviews || 0} reviews
-                    </p>
-                  </div>
-                </div>
-
                 <div className="mb-3">
                   <ReviewForm
                     productId={product._id}
                     refetchProduct={refetchProduct}
                   />
                 </div>
-
-                <div>
-                  <ReviewsList reviews={product.reviews || []} />
-                </div>
+                <ReviewsList reviews={product.reviews || []} />
               </div>
             </Tab>
 
-            {/* Negotiation Tab */}
             {product.negotiationEnabled && (
               <Tab
                 eventKey="negotiation"
@@ -570,13 +502,7 @@ export default function SingleProductPage() {
               >
                 <Row className="mt-4">
                   <Col>
-                    <NegotiationChat
-                      product={product}
-                      userId={userId}
-                      onError={(error) =>
-                        console.error(" Negotiation error:", error)
-                      }
-                    />
+                    <NegotiationChat product={product} userId={userId} />
                   </Col>
                 </Row>
               </Tab>
