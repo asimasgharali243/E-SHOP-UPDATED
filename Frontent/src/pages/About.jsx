@@ -1,6 +1,5 @@
 import React from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
-import { People, Globe, Award, CartCheck } from "react-bootstrap-icons";
 
 const About = () => {
   return (
@@ -21,13 +20,13 @@ const About = () => {
             <Card className="h-100 shadow-sm p-4">
               <Card.Body>
                 <h3 className="fw-bold">
-                  <CartCheck className="me-2 text-primary" />
+                  <i className="bi bi-cart-check me-2 text-primary"></i>
                   Our Mission
                 </h3>
                 <p>
                   To provide high-quality products at affordable prices with
                   seamless shopping experiences. We aim to bring convenience and
-                  trust to every customer’s doorstep.
+                  trust to every customer's doorstep.
                 </p>
               </Card.Body>
             </Card>
@@ -36,7 +35,7 @@ const About = () => {
             <Card className="h-100 shadow-sm p-4">
               <Card.Body>
                 <h3 className="fw-bold">
-                  <Globe className="me-2 text-success" />
+                  <i className="bi bi-globe me-2 text-success"></i>
                   Our Vision
                 </h3>
                 <p>
@@ -56,7 +55,10 @@ const About = () => {
         <Row className="g-4">
           <Col md={4}>
             <Card className="h-100 shadow-sm p-4 text-center">
-              <Award size={40} className="text-warning mb-3" />
+              <i
+                className="bi bi-award text-warning mb-3"
+                style={{ fontSize: "40px" }}
+              ></i>
               <h5>Trusted Quality</h5>
               <p className="text-muted">
                 We ensure top-quality products with verified sellers and strict
@@ -66,7 +68,10 @@ const About = () => {
           </Col>
           <Col md={4}>
             <Card className="h-100 shadow-sm p-4 text-center">
-              <People size={40} className="text-primary mb-3" />
+              <i
+                className="bi bi-people text-primary mb-3"
+                style={{ fontSize: "40px" }}
+              ></i>
               <h5>Customer First</h5>
               <p className="text-muted">
                 We prioritize your satisfaction with secure payments and
@@ -76,7 +81,10 @@ const About = () => {
           </Col>
           <Col md={4}>
             <Card className="h-100 shadow-sm p-4 text-center">
-              <Globe size={40} className="text-success mb-3" />
+              <i
+                className="bi bi-globe text-success mb-3"
+                style={{ fontSize: "40px" }}
+              ></i>
               <h5>Global Reach</h5>
               <p className="text-muted">
                 With fast delivery options, we connect millions of customers
