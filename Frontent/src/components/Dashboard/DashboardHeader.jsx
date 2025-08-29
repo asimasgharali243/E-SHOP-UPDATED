@@ -27,16 +27,6 @@ const DashboardHeader = ({ toggleSidebar, isMobile }) => {
 
       <Navbar.Brand className="brand-title fw-bold d-flex align-items-center d-md-none justify-self-start "></Navbar.Brand>
 
-      <Form className="search-form d-none d-md-flex align-items-center w-50 bg-light px-2 rounded border">
-        {/* <i className="bi bi-search text-muted me-2 search-icon" /> */}
-        <FormControl
-          type="search"
-          placeholder="Search..."
-          className="search-input border-0 bg-light text-muted w-100"
-          aria-label="Search"
-        />
-      </Form>
-
       <Nav className="nav-area align-items-center flex-row gap-4">
         <Dropdown align="end" className="notification-dropdown">
           <Dropdown.Toggle

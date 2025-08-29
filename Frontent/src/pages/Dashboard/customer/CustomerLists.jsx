@@ -22,7 +22,6 @@ const Customers = () => {
       name: "John Doe",
       email: "john.doe@example.com",
       phone: "+1 (555) 123-4567",
-      status: "Active",
       joinDate: "2025-08-10",
       orders: 15,
     },
@@ -31,7 +30,6 @@ const Customers = () => {
       name: "Jane Smith",
       email: "jane.smith@example.com",
       phone: "+1 (555) 987-6543",
-      status: "Inactive",
       joinDate: "2025-07-22",
       orders: 8,
     },
@@ -40,7 +38,6 @@ const Customers = () => {
       name: "Robert Johnson",
       email: "robert.j@example.com",
       phone: "+1 (555) 456-7890",
-      status: "Active",
       joinDate: "2025-08-05",
       orders: 23,
     },
@@ -49,7 +46,6 @@ const Customers = () => {
       name: "Sarah Williams",
       email: "sarah.w@example.com",
       phone: "+1 (555) 234-5678",
-      status: "Active",
       joinDate: "2025-07-15",
       orders: 12,
     },
@@ -58,14 +54,12 @@ const Customers = () => {
       name: "Michael Brown",
       email: "michael.b@example.com",
       phone: "+1 (555) 876-5432",
-      status: "Inactive",
       joinDate: "2025-06-30",
       orders: 5,
     },
   ]);
 
   const [search, setSearch] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -78,8 +72,7 @@ const Customers = () => {
     (customer) =>
       customer.id.toString().includes(search) ||
       customer.name.toLowerCase().includes(search.toLowerCase()) ||
-      (customer.email.toLowerCase().includes(search.toLowerCase()) &&
-        (filterStatus ? customer.status === filterStatus : true))
+      customer.email.toLowerCase().includes(search.toLowerCase())
   );
 
   // Pagination logic
@@ -118,9 +111,9 @@ const Customers = () => {
     <Container fluid className="p-3">
       <h2 className="mb-4">Customer Management</h2>
 
-      {/* Search & Filter */}
+      {/* Search */}
       <Row className="mb-3">
-        <Col md={6} className="mb-2">
+        <Col md={6}>
           <InputGroup>
             <InputGroup.Text>
               <i className="bi bi-search"></i>
@@ -131,16 +124,6 @@ const Customers = () => {
               onChange={(e) => setSearch(e.target.value)}
             />
           </InputGroup>
-        </Col>
-        <Col md={6}>
-          <Form.Select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-          >
-            <option value="">Filter by Status</option>
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-          </Form.Select>
         </Col>
       </Row>
 
@@ -157,14 +140,6 @@ const Customers = () => {
               </p>
               <p>
                 <strong>Phone:</strong> {customer.phone}
-              </p>
-              <p>
-                <strong>Status:</strong>{" "}
-                <Badge
-                  bg={customer.status === "Active" ? "success" : "secondary"}
-                >
-                  {customer.status}
-                </Badge>
               </p>
               <p>
                 <strong>Join Date:</strong> {customer.joinDate}
@@ -194,7 +169,6 @@ const Customers = () => {
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
-                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -205,15 +179,6 @@ const Customers = () => {
                   <td>{customer.name}</td>
                   <td>{customer.email}</td>
                   <td>{customer.phone}</td>
-                  <td>
-                    <Badge
-                      bg={
-                        customer.status === "Active" ? "success" : "secondary"
-                      }
-                    >
-                      {customer.status}
-                    </Badge>
-                  </td>
                   <td>
                     <Button
                       size="sm"
@@ -285,15 +250,13 @@ const Customers = () => {
                 </Col>
                 <Col md={6}>
                   <Form.Group>
-                    <Form.Label>Status</Form.Label>
-                    <Form.Select
-                      name="status"
-                      value={selectedCustomer.status}
+                    <Form.Label>Join Date</Form.Label>
+                    <Form.Control
+                      type="date"
+                      name="joinDate"
+                      value={selectedCustomer.joinDate}
                       onChange={handleChange}
-                    >
-                      <option value="Active">Active</option>
-                      <option value="Inactive">Inactive</option>
-                    </Form.Select>
+                    />
                   </Form.Group>
                 </Col>
               </Row>
@@ -312,11 +275,11 @@ const Customers = () => {
                 </Col>
                 <Col md={6}>
                   <Form.Group>
-                    <Form.Label>Join Date</Form.Label>
+                    <Form.Label>Total Orders</Form.Label>
                     <Form.Control
-                      type="date"
-                      name="joinDate"
-                      value={selectedCustomer.joinDate}
+                      type="number"
+                      name="orders"
+                      value={selectedCustomer.orders}
                       onChange={handleChange}
                     />
                   </Form.Group>
@@ -347,16 +310,6 @@ const Customers = () => {
                   </Form.Group>
                 </Col>
               </Row>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Total Orders</Form.Label>
-                <Form.Control
-                  type="number"
-                  name="orders"
-                  value={selectedCustomer.orders}
-                  onChange={handleChange}
-                />
-              </Form.Group>
             </Form>
           )}
         </Modal.Body>

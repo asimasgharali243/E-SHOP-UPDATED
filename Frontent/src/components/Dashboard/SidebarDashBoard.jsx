@@ -7,7 +7,6 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
   const { pathname } = useLocation();
 
   const navItems = [
-    { path: "/dashboard/analytics", label: "Analytics", icon: "bi-graph-up" },
     { path: "/dashboard/settings", label: "Settings", icon: "bi-gear" },
     { path: "/dashboard/help", label: "Help", icon: "bi-question-circle" },
     { path: "/logout", label: "Logout", icon: "bi-box-arrow-right" },
@@ -77,12 +76,6 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
             style={{ backgroundColor: `var(--background)` }}
           >
             {renderLink("/dashboard/orders/list", "Order List", null, true)}
-            {renderLink(
-              "/dashboard/orders/details",
-              "Order Details",
-              null,
-              true
-            )}
           </Accordion.Body>
         </Accordion.Item>
 
@@ -100,12 +93,6 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
             {renderLink(
               "/dashboard/customers/list",
               "Customer List",
-              null,
-              true
-            )}
-            {renderLink(
-              "/dashboard/customers/details",
-              "Customer Details",
               null,
               true
             )}

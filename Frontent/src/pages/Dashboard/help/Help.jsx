@@ -8,17 +8,6 @@ import {
   Button,
   Card,
 } from "react-bootstrap";
-import {
-  Search,
-  ChatDots,
-  Telephone,
-  Envelope,
-  BoxSeam,
-  Truck,
-  ArrowRepeat,
-  PersonCircle,
-  CreditCard,
-} from "react-bootstrap-icons";
 import "./Help.scss";
 
 const Help = () => {
@@ -78,7 +67,7 @@ const Help = () => {
               onChange={(e) => setQuery(e.target.value)}
             />
             <Button variant="primary" className="ms-2">
-              <Search />
+              <i className="bi bi-search"></i>
             </Button>
           </div>
         </Col>
@@ -91,7 +80,7 @@ const Help = () => {
         </Col>
         <Col xs={12} md={4}>
           <Card className="support-card p-4">
-            <ChatDots size={30} />
+            <i className="bi bi-chat-dots" style={{ fontSize: "30px" }}></i>
             <h6 className="mt-2">Live Chat</h6>
             <Button variant="outline-primary" className="mt-2">
               Start Chat
@@ -100,14 +89,14 @@ const Help = () => {
         </Col>
         <Col xs={12} md={4}>
           <Card className="support-card p-4">
-            <Telephone size={30} />
+            <i className="bi bi-telephone" style={{ fontSize: "30px" }}></i>
             <h6 className="mt-2">Call Us</h6>
             <p className="small">+1 800 123 456</p>
           </Card>
         </Col>
         <Col xs={12} md={4}>
           <Card className="support-card p-4">
-            <Envelope size={30} />
+            <i className="bi bi-envelope" style={{ fontSize: "30px" }}></i>
             <h6 className="mt-2">Email</h6>
             <p className="small">support@eshop.com</p>
           </Card>
