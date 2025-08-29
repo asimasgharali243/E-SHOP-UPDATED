@@ -1,13 +1,20 @@
 import React from "react";
 import GeneralCarousel from "../GeneralCustomCarousel";
 import CategoryCard from "../../Card/Categories";
-import "./Categories.scss"; // Import the specific SCSS file
+import "./Categories.scss";
 
 const CategorySlider = ({ title, categories, showControls = true }) => {
+  // Flatten subcategories: each subcategory becomes a single item
+  const flattenedSubcategories = categories.flatMap((cat) =>
+    cat.subcategories.map((sub) => ({
+      name: sub.name, // subcategory name
+      key: sub.key, // subcategory key
+      icon: sub.image, // use subcategory image as icon
+    }))
+  );
+
   return (
     <div className="category-slider-component">
-      {" "}
-      {/* Added wrapper with specific class */}
       <GeneralCarousel
         title={title}
         autoPlay={true}
@@ -48,9 +55,9 @@ const CategorySlider = ({ title, categories, showControls = true }) => {
         containerClass="category-slider-container"
         itemClass="category-slider-item"
       >
-        {categories.map((category, index) => (
-          <div key={index} className="category-item-wrapper">
-            <CategoryCard category={category} />
+        {flattenedSubcategories.map((sub) => (
+          <div key={sub.key} className="category-item-wrapper">
+            <CategoryCard category={sub} />
           </div>
         ))}
       </GeneralCarousel>

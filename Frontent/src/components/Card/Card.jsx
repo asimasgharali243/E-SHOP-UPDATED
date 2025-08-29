@@ -1,84 +1,173 @@
+// src/components/Card/ProductCard.jsx
 import React, { useState } from "react";
-import { Row, Col, Card, Button } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
-const ProductCard = ({ image, name, price, discount}) => {
+import { Card } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleLocalLike } from "../../redux/features/products/LikeProduct";
+import { addToCart } from "../../redux/features/Cart/CartAction";
+import { useNavigate } from "react-router-dom";
+import "./ProductCard.scss";
 
-  const [hoveredStarIndex, setHoveredStarIndex] = useState(-1);
-const [islike, setIslike] = useState(false);
-const [isview, setIsview] = useState(false);
-const [rating, setRating] = useState(0);
-const [addcart, setAddcart] = useState(false);
-const theme = useSelector((state) => state.theme.theme);
-const dark_mode = useSelector((state) => state.theme.dark_mode);
+const ProductCard = ({ product }) => {
+  // Safe destructuring with defaults
+  const {
+    _id,
+    name = "Unnamed Product",
+    price = 0,
+    discount = 0,
+    ratings = 0,
+    numOfReviews = 0,
+    shortDescription,
+    featureImages = [],
+  } = product || {};
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [quickViewed, setQuickViewed] = useState(false);
 
+  // Safe state access with defaults
+  const { likedProducts = [] } = useSelector((state) => state.Likes || {});
+  const liked = _id ? likedProducts.includes(_id) : false;
 
-const handleMouseEnter = (index) => {
-    setHoveredStarIndex(index);
+  const inCart = useSelector(
+    (state) => state.cart?.items?.some((item) => item?._id === _id) || false
+  );
+
+  const image = featureImages[0]?.thumbnailUrl || "/placeholder.jpg";
+  const badgeContent = discount > 0 ? `${discount}% OFF` : null;
+
+  const renderStars = () => {
+    return [...Array(5)].map((_, i) => (
+      <i
+        key={i}
+        className={`bi bi-star${i + 1 <= ratings ? "-fill" : ""}`}
+        style={{
+          cursor: "pointer",
+          color: i + 1 <= ratings ? "#ffc107" : "#ccc",
+        }}
+      />
+    ));
   };
 
-  const handleMouseLeave = () => {
-    setHoveredStarIndex(-1);
+  // Event delegation with safe checks
+  const handleContainerClick = (e) => {
+    const action = e.target.closest("[data-action]")?.dataset.action;
+
+    if (action) {
+      e.stopPropagation();
+
+      switch (action) {
+        case "quick-view":
+          setQuickViewed((prev) => !prev);
+          break;
+        case "like":
+          if (_id) dispatch(toggleLocalLike(_id));
+          break;
+        case "add-to-cart":
+          if (product) dispatch(addToCart(product, 1));
+          break;
+        default:
+          break;
+      }
+      return;
+    }
+
+    if (_id) {
+      navigate(`/product/${_id}`);
+    }
   };
-const handleRatingStar=(index)=>{
- 
-  setRating(index +1)
 
-}
-  const handlelike=()=>{
-
-    setIslike(!islike)
+  if (!product) {
+    return null; // Don't render if no product
   }
-  const handleview=()=>{
-
-    setIsview(!isview)
-  }
-
-
-  const handleAddItem = () => {
-  
-    setAddcart(!addcart);
-  
-  };
 
   return (
-    <Card   className={ `h-100 ${dark_mode?`${theme} text-light`:`${theme} text-dark`}`}  >
-      
-      <div className=" p-1 responsive-img  ">
-        <Card.Img 
-          
+    <article
+      className="product-card shadow-sm"
+      aria-label={`Product: ${name}`}
+      onClick={handleContainerClick}
+      style={{ backgroundColor: "var(--white)" }}
+    >
+      <div className="position-relative overflow-hidden">
+        <Card.Img
+          variant="top"
           src={image}
-          alt={name}
-          className="img-fluid card-img-top"
+          onError={(e) => {
+            e.target.src = "/placeholder.jpg";
+            e.target.onerror = null;
+          }}
+          alt={`Image of ${name}`}
           loading="lazy"
+          className="product-image"
         />
-        <Button  className="d-none d-md-flex ">
-          Add to Cart
-        </Button>
-<i className={`bi bi-heart${islike ? "-fill islike" : ""}`}  onClick={handlelike}></i>
-        <i className={`bi  d-none d-md-block bi-eye${isview?'-fill isview':''} `} onClick={handleview}></i>
-        <i className={`bi bi-cart${addcart ? "-fill addcart" : ""}   d-block d-md-none`} onClick={handleAddItem}></i>
-        <span>{discount}</span>
-      </div>
-      <Card.Body className="">
-        <Card.Title className="card-title">{name}</Card.Title>
-        <Card.Text className="card-price">${price}</Card.Text>
-        <div className="card-rating d-none d-sm-flex  ">
-          {[...Array(5)].map((_, index) => (
-            <i
-              key={index}
-              className={`bi bi-star${
-                hoveredStarIndex >= index || rating > index ? "-fill" : ""
-              }`}
-              onMouseEnter={() => handleMouseEnter(index)}
-              onMouseLeave={handleMouseLeave}
-              onClick={() => handleRatingStar(index)}
-            ></i>
-          ))}
+
+        {badgeContent && (
+          <span className="badge bg-danger position-absolute top-0 start-0 m-2">
+            {badgeContent}
+          </span>
+        )}
+
+        <div className="action-icons-container">
+          <button
+            type="button"
+            className={`btn btn-light btn-sm action-btn ${
+              quickViewed ? "quick-viewed" : ""
+            }`}
+            data-action="quick-view"
+            aria-label="Quick view"
+          >
+            <i className={`bi bi-eye${quickViewed ? "-fill" : ""}`}></i>
+          </button>
+
+          <button
+            type="button"
+            className={`btn btn-light btn-sm action-btn ${
+              liked ? "liked" : ""
+            }`}
+            data-action="like"
+            aria-label={liked ? "Unlike product" : "Like product"}
+          >
+            <i className={`bi bi-heart${liked ? "-fill" : ""}`}></i>
+          </button>
+
+          <button
+            type="button"
+            className={`btn btn-light btn-sm action-btn ${
+              inCart ? "in-cart" : ""
+            }`}
+            data-action="add-to-cart"
+            aria-label="Add to cart"
+          >
+            <i className={`bi bi-cart-plus${inCart ? "-fill" : ""}`}></i>
+          </button>
         </div>
-        
+      </div>
+
+      <Card.Body className="px-2 py-2">
+        <div
+          className="card-description-wrapper"
+          style={{ fontSize: "clamp(12px, 1.2vw, 14px)" }}
+        >
+          {shortDescription ? (
+            <p className="short-description mb-1">{shortDescription}</p>
+          ) : (
+            <p className="name-description mb-1">
+              {name}
+              {featureImages[0]?.description && (
+                <span className="details-description">
+                  {featureImages[0].description}
+                </span>
+              )}
+            </p>
+          )}
+        </div>
+
+        <p className="fw-bold text-success mb-1">${price.toFixed(2)}</p>
+
+        <div className="star-rating d-flex align-items-center gap-2">
+          {renderStars()} <small>({numOfReviews})</small>
+        </div>
       </Card.Body>
-    </Card>
+    </article>
   );
 };
 

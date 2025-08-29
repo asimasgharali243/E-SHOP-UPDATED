@@ -4,35 +4,27 @@ import HeaderSlider from "../components/carousel/HeaderSlider/HeaderSlider";
 import ProductSlider from "../components/carousel/CarditemSlider/CardItemSlider";
 import CategoriesSlider from "../components/carousel/categorySlider/CategorySlider";
 import SecondBannerSlider from "../components/carousel/SecondBannerSlider/SecondBannerSlider";
+import { useGetAllProductsQuery } from "../redux/api/productsApi/ProductApi";
+import { useGetCategoriesQuery } from "../redux/api/productsApi/ProductApi";
 
 export default function Home() {
-  const categories = [
-    { name: "Dresses", icon: "bi bi-person-lines-fill" },
-    { name: "Handbags", icon: "bi bi-bag-fill" },
-    { name: "Jewelry", icon: "bi bi-gem" },
-    { name: "Shoes", icon: "bi bi-handbag-fill" },
-  ];
+  // Fetch products
+  const {
+    data: productData,
+    isLoading: productLoading,
+    isError: productError,
+  } = useGetAllProductsQuery();
+  const products = Array.isArray(productData)
+    ? productData
+    : productData?.products ?? [];
 
-  const productData = [
-    {
-      _id: "1",
-      image: "/assets/products_4_1.jpg",
-      name: "Samsung Galaxy Pro",
-      price: 19.99,
-    },
-    {
-      _id: "2",
-      image: "/assets/products_1_1_1920x.jpg",
-      name: "iPhone 13",
-      price: 29.99,
-    },
-    {
-      _id: "3",
-      image: "https://via.placeholder.com/200",
-      name: "Product 3",
-      price: 39.99,
-    },
-  ];
+  // Fetch categories
+  const {
+    data: categoriesData,
+    isLoading: categoriesLoading,
+    isError: categoriesError,
+  } = useGetCategoriesQuery();
+  const categories = Array.isArray(categoriesData) ? categoriesData : [];
 
   const handleQuickView = (productId) => console.log("Quick view:", productId);
   const handleToggleLike = (productId) =>
@@ -40,32 +32,101 @@ export default function Home() {
   const handleProductClick = (productId) =>
     console.log("Product clicked:", productId);
 
+  if (productLoading || categoriesLoading) return <p>Loading...</p>;
+  if (productError || categoriesError) return <p>Error fetching data!</p>;
+
+  // Product sections
+  const flashSalesProducts = products.filter((p) => p.discount > 0);
+  const featuredProducts = products
+    .slice()
+    .sort((a, b) => b.ratings - a.ratings || b.numOfReviews - a.numOfReviews)
+    .slice(0, 10);
+  const newArrivals = products
+    .slice()
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 10);
+  const topRated = products
+    .slice()
+    .sort((a, b) => b.ratings - a.ratings)
+    .slice(0, 10);
+  const trending = products
+    .slice()
+    .sort((a, b) => b.numOfReviews - a.numOfReviews)
+    .slice(0, 10);
+  const recommended = products
+    .slice()
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 10); // random example
+
   return (
     <Container style={{ overflow: "hidden" }}>
       <HeaderSlider />
-      <ProductSlider
-        title="Flash Sales"
-        products={productData}
-        onQuickView={handleQuickView}
-        onToggleLike={handleToggleLike}
-        onProductClick={handleProductClick}
-      />
-      <CategoriesSlider title="Shop by Category" categories={categories} />
-      <ProductSlider
-        title="Featured Products"
-        products={productData}
-        onQuickView={handleQuickView}
-        onToggleLike={handleToggleLike}
-        onProductClick={handleProductClick}
-      />
+
+      {flashSalesProducts.length > 0 && (
+        <ProductSlider
+          title="Flash Sales"
+          products={flashSalesProducts}
+          onQuickView={handleQuickView}
+          onToggleLike={handleToggleLike}
+          onProductClick={handleProductClick}
+        />
+      )}
+
+      {categories.length > 0 && (
+        <CategoriesSlider title="Shop by Category" categories={categories} />
+      )}
+
+      {featuredProducts.length > 0 && (
+        <ProductSlider
+          title="Featured Products"
+          products={featuredProducts}
+          onQuickView={handleQuickView}
+          onToggleLike={handleToggleLike}
+          onProductClick={handleProductClick}
+        />
+      )}
+
       <SecondBannerSlider />
-      <ProductSlider
-        title="New Arrivals"
-        products={productData}
-        onQuickView={handleQuickView}
-        onToggleLike={handleToggleLike}
-        onProductClick={handleProductClick}
-      />
+
+      {newArrivals.length > 0 && (
+        <ProductSlider
+          title="New Arrivals"
+          products={newArrivals}
+          onQuickView={handleQuickView}
+          onToggleLike={handleToggleLike}
+          onProductClick={handleProductClick}
+        />
+      )}
+
+      {topRated.length > 0 && (
+        <ProductSlider
+          title="Top Rated"
+          products={topRated}
+          onQuickView={handleQuickView}
+          onToggleLike={handleToggleLike}
+          onProductClick={handleProductClick}
+        />
+      )}
+
+      {trending.length > 0 && (
+        <ProductSlider
+          title="Trending Products"
+          products={trending}
+          onQuickView={handleQuickView}
+          onToggleLike={handleToggleLike}
+          onProductClick={handleProductClick}
+        />
+      )}
+
+      {recommended.length > 0 && (
+        <ProductSlider
+          title="Recommended for You"
+          products={recommended}
+          onQuickView={handleQuickView}
+          onToggleLike={handleToggleLike}
+          onProductClick={handleProductClick}
+        />
+      )}
     </Container>
   );
 }

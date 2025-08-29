@@ -1,15 +1,5 @@
 import React from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import {
-  Facebook,
-  Twitter,
-  Instagram,
-  Linkedin,
-  CreditCard,
-  Paypal,
-  Wallet2,
-  Cart,
-} from "react-bootstrap-icons";
 import "./Footer.scss";
 
 const Footer = () => {
@@ -26,16 +16,16 @@ const Footer = () => {
             </p>
             <div className="social-icons">
               <a href="#">
-                <Facebook />
+                <i className="bi bi-facebook"></i>
               </a>
               <a href="#">
-                <Twitter />
+                <i className="bi bi-twitter"></i>
               </a>
               <a href="#">
-                <Instagram />
+                <i className="bi bi-instagram"></i>
               </a>
               <a href="#">
-                <Linkedin />
+                <i className="bi bi-linkedin"></i>
               </a>
             </div>
           </Col>
@@ -98,11 +88,11 @@ const Footer = () => {
                 Subscribe
               </Button>
             </Form>
-            <div className="payment-icons mt-3">
-              <CreditCard />
-              <Paypal />
-              <Wallet2 />
-              <Cart />
+            <div className="payment-icons mt-3 d-flex gap-3 fs-4">
+              <i className="bi bi-credit-card"></i>
+              <i className="bi bi-paypal"></i>
+              <i className="bi bi-wallet2"></i>
+              <i className="bi bi-cart"></i>
             </div>
           </Col>
         </Row>

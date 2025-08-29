@@ -7,6 +7,7 @@ import NegotiationChat from "./NegotiationChatBoard";
 import ReviewsList from "./ReviewsList";
 import { addToCart } from "../../redux/features/Cart/CartAction";
 import { useDispatch, useSelector } from "react-redux";
+import { toggleLocalLike } from "../../redux/features/products/LikeProduct";
 import {
   Col,
   Row,
@@ -20,12 +21,14 @@ import {
 } from "react-bootstrap";
 import Rating from "react-rating";
 import "./SingleProduct.scss";
+import { use } from "react";
 
 export default function SingleProductPage() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const inCard = useSelector((state) => state.cart);
+  const likes = useSelector((state) => state.likes);
   const {
     data,
     isLoading,
@@ -138,6 +141,13 @@ export default function SingleProductPage() {
     setQuantity(clampedQuantity);
   };
 
+  // Redux selectors for current product
+  const likedProducts = useSelector((state) => state.likes || []);
+  const cartItems = useSelector((state) => state.cart.items || []);
+
+  const liked = likedProducts.includes(product._id);
+  const inCart = cartItems.some((item) => item._id === product._id);
+
   // 🚨 handle loading
   if (isLoading) {
     return (
@@ -246,7 +256,7 @@ export default function SingleProductPage() {
                     loading="lazy"
                     alt={`Thumbnail ${index + 1}`}
                     onError={(e) => {
-                      console.error("🖼️ Thumbnail load error:", e.target.src);
+                      console.error(" Thumbnail load error:", e.target.src);
                       e.target.src = "/placeholder.png";
                     }}
                   />
@@ -434,21 +444,20 @@ export default function SingleProductPage() {
               <Button
                 variant="secondary"
                 size="lg"
-                className="h-100  add-to-cart-btn"
+                className="h-100 add-to-cart-btn"
                 onClick={() => dispatch(addToCart(product, quantity))}
               >
-                <i className="bi bi-cart"></i>
+                <i className={`bi bi-cart${inCart ? "-fill" : ""}`}></i>
                 <i className="bi bi-cart-fill fill-layer"></i>
               </Button>
-
               {/* Like */}
               <Button
                 variant="outline-primary"
                 className="h-100 p-2 d-flex align-items-center justify-content-center like-btn"
-                aria-label="Like product"
-                onClick={() => console.log("❤️ Like button clicked")}
+                aria-label={liked ? "Unlike product" : "Like product"}
+                onClick={() => dispatch(toggleLocalLike(product._id))}
               >
-                <i className="bi bi-heart"></i>
+                <i className={`bi bi-heart${liked ? "-fill" : ""}`}></i>
                 <i className="bi bi-heart-fill fill-layer"></i>
               </Button>
             </div>

@@ -1,24 +1,23 @@
 // src/redux/api/productsApi/ProductApi.js
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import apis from "../../../utils/apis";
-import { getCategories } from '../../../../../Backend/controllers/Products/GetCategory';
 
 export const productApi = createApi({
-  reducerPath: 'productApi',
+  reducerPath: "productApi",
   baseQuery: fetchBaseQuery({
     baseUrl: apis().baseUrl,
-    credentials: 'include',
+    credentials: "include",
   }),
-  tagTypes: ["Product", "Products"],
+  tagTypes: ["Product", "Products", "Likes"],
   endpoints: (builder) => ({
     // Search products with filters
     searchProducts: builder.query({
       query: (filters = {}) => {
         const params = new URLSearchParams();
         Object.entries(filters).forEach(([key, value]) => {
-          if (value !== undefined && value !== null && value !== '') {
+          if (value !== undefined && value !== null && value !== "") {
             if (Array.isArray(value)) {
-              value.forEach(v => params.append(key, v));
+              value.forEach((v) => params.append(key, v));
             } else {
               params.append(key, value);
             }
@@ -34,32 +33,38 @@ export const productApi = createApi({
       query: () => `${apis().getAllProducts}/filters`,
     }),
 
-    // ✅ Get single product
+    // Get all products
+    getAllProducts: builder.query({
+      query: () => apis().getAllProducts,
+      providesTags: ["Products"],
+    }),
+
+    // Get single product
     getSingleProduct: builder.query({
       query: (productId) => apis().getSingleProduct(productId),
       providesTags: (result, error, id) => [{ type: "Product", id }],
     }),
+
+    // Get categories
     getCategories: builder.query({
       query: () => `${apis().baseUrl}${apis().getCategories}`,
     }),
 
-    // Get liked products
- // Get liked products by IDs - CORRECTED
-getLikeProduct: builder.query({
-  query: (ids) => ({
-    url: apis().getLikeProduct, // This is now just the URL string
-    method: "POST",
-    body: { ids },
-  }),
-  providesTags: ["Likes"],
-}),
-
+    // Get liked products by IDs
+    getLikeProduct: builder.query({
+      query: (ids) => ({
+        url: apis().getLikeProduct,
+        method: "POST",
+        body: { ids },
+      }),
+      providesTags: ["Likes"],
+    }),
 
     // Create product
     createProduct: builder.mutation({
       query: (data) => ({
         url: apis().createProduct,
-        method: 'POST',
+        method: "POST",
         body: data,
       }),
       invalidatesTags: ["Products"],
@@ -69,12 +74,12 @@ getLikeProduct: builder.query({
     updateProduct: builder.mutation({
       query: ({ id, ...data }) => ({
         url: apis().updateProduct(id),
-        method: 'PUT',
+        method: "PUT",
         body: data,
       }),
       invalidatesTags: (result, error, { id }) => [
         { type: "Product", id },
-        "Products"
+        "Products",
       ],
     }),
 
@@ -82,7 +87,17 @@ getLikeProduct: builder.query({
     deleteProduct: builder.mutation({
       query: (productId) => ({
         url: apis().deleteProduct(productId),
-        method: 'DELETE',
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Products"],
+    }),
+
+    // Rollback product
+    rollbackProduct: builder.mutation({
+      query: (productId) => ({
+        url: apis().rollbackProduct,
+        method: "POST",
+        body: { productId },
       }),
       invalidatesTags: ["Products"],
     }),
@@ -109,10 +124,10 @@ getLikeProduct: builder.query({
     // Image upload
     uploadImage: builder.mutation({
       query: (img) => ({
-        url: 'https://upload.imagekit.io/api/v1/files/upload',
-        method: 'POST',
+        url: "https://upload.imagekit.io/api/v1/files/upload",
+        method: "POST",
         body: img,
-        credentials: 'omit',
+        credentials: "omit",
       }),
     }),
 
@@ -159,15 +174,17 @@ getLikeProduct: builder.query({
   }),
 });
 
-// ✅ Export hooks
+// Export hooks
 export const {
+  useGetAllProductsQuery,
   useSearchProductsQuery,
   useLazySearchProductsQuery,
   useGetFilterOptionsQuery,
-  useGetSingleProductQuery, 
+  useGetSingleProductQuery,
   useCreateProductMutation,
   useUpdateProductMutation,
   useDeleteProductMutation,
+  useRollbackProductMutation, // ✅ Added rollback hook
   useAddReviewMutation,
   useGetProductComparisonQuery,
   useUploadImageMutation,
@@ -178,7 +195,7 @@ export const {
   useUpdateStatusMutation,
   useGetNegotiationsByProductQuery,
   useGetLikeProductQuery,
-  useGetCategoriesQuery
+  useGetCategoriesQuery,
 } = productApi;
 
 export default productApi;

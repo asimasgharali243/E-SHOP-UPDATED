@@ -1,0 +1,39 @@
+.categories-container {
+  text-align: center;
+  margin-bottom: 20px;
+
+  .category-icon img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+  }
+
+  .category-name {
+    font-weight: bold;
+    margin-top: 5px;
+  }
+
+  .subcategories-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+
+    .subcategory-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 5px;
+
+      img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+
+      span {
+        font-size: 12px;
+        margin-top: 2px;
+      }
+    }
+  }
+}
