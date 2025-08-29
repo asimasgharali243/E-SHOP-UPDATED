@@ -1,0 +1,42 @@
+.help-center {
+  h2 {
+    font-weight: 700;
+    color: #222;
+  }
+
+  .search-bar input {
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .search-bar button {
+    border-radius: 8px;
+  }
+
+  .help-categories .category-card {
+    cursor: pointer;
+    transition: 0.3s;
+    background: #f9f9f9;
+    border-radius: 12px;
+    &:hover {
+      background: #007bff;
+      color: #fff;
+      transform: translateY(-4px);
+    }
+    p {
+      margin: 0;
+      font-weight: 500;
+    }
+  }
+
+  .support-card {
+    border-radius: 12px;
+    background: #f8f9fa;
+    transition: 0.3s;
+   
+  }
+
+  .accordion-button {
+    font-weight: 500;
+  }
+}
