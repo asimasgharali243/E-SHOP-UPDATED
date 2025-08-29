@@ -13,7 +13,7 @@ import {
   Tab,
 } from "react-bootstrap";
 import Rating from "react-rating";
-
+import ProductSlider from "../../components/carousel/CarditemSlider/CardItemSlider";
 import CustomContainer from "../../components/SubComponent/CustomContainer";
 import { useGetSingleProductQuery } from "../../redux/api/productsApi/ProductApi";
 import ReviewForm from "./ReviewForm";
@@ -37,7 +37,7 @@ export default function SingleProductPage() {
     refetch: refetchProduct,
   } = useGetSingleProductQuery(id);
   const product = data?.product || {};
-
+  const similarProducts = data?.relatedProducts || [];
   // Local state
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [displayedSrc, setDisplayedSrc] = React.useState("");
@@ -508,6 +508,18 @@ export default function SingleProductPage() {
               </Tab>
             )}
           </Tabs>
+        </Col>
+      </Row>
+      <Row
+        className=""
+        style={{ justifyContent: "center", marginTop: "150px" }}
+      >
+        <Col>
+          <ProductSlider
+            title={"Similar Products"}
+            products={similarProducts}
+            autoplay={true}
+          />
         </Col>
       </Row>
     </CustomContainer>

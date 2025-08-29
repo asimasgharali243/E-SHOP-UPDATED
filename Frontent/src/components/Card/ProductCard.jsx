@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleLocalLike } from "../../redux/features/products/LikeProduct";
 import { addToCart } from "../../redux/features/Cart/CartAction";
 import { useNavigate } from "react-router-dom";
+import ProductModel from "./ProductModel";
+
 const ProductCard = ({ product }) => {
   const {
     _id,
@@ -17,7 +19,6 @@ const ProductCard = ({ product }) => {
     featureImages,
   } = product;
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
   const [quickViewed, setQuickViewed] = useState(false);
 
@@ -68,7 +69,6 @@ const ProductCard = ({ product }) => {
     }
     navigate(`/product/${_id}`);
   };
-  
 
   return (
     <article
@@ -158,6 +158,14 @@ const ProductCard = ({ product }) => {
           {renderStars()} <small>({numOfReviews})</small>
         </div>
       </Card.Body>
+
+      {quickViewed && (
+        <ProductModel
+          show={quickViewed}
+          handleClose={() => setQuickViewed(false)}
+          product={product}
+        />
+      )}
     </article>
   );
 };
