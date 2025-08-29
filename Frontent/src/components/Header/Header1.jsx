@@ -278,16 +278,7 @@ export default function Header1() {
                   >
                     Catalog
                   </Nav.Link>
-                  <Nav.Link
-                    as={Link}
-                    onClick={handleClose}
-                    to="/store"
-                    className={`${
-                      location.pathname === "/store" ? "active" : ""
-                    }`}
-                  >
-                    Store
-                  </Nav.Link>
+
                   <Nav.Link
                     as={Link}
                     onClick={handleClose}
