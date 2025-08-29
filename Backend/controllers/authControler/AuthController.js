@@ -7,7 +7,7 @@ import { Mailer } from "../../utils/Mailer.js"; // The nodemailer transporter
 
 export const registerUser = asyncHandler(async (req, res) => {
   const { firstName, lastName, userName, email, password } = req.body;
-
+console.log(firstName,lastName,userName,email,password);
   // Validation
   if (!firstName || !lastName || !userName || !email || !password) {
     throw new AppError("All fields are required", 400);
@@ -137,13 +137,13 @@ export const registerUser = asyncHandler(async (req, res) => {
     201,
     "Registration successful. Please check your email for a verification link.",
     {
-      user: { userId: user._id.toString() },
+      user: { userId: user._id.toString(),userName:user.userName },
     }
   );
 });
 export const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-
+console.log(email, password);
   if (!email || !password) {
     throw new AppError("Email and password are required", 400);
   }
@@ -152,7 +152,7 @@ export const loginUser = asyncHandler(async (req, res) => {
   if (!user) {
     throw new AppError("Invalid credentials", 401);
   }
-
+console.log(user);
   const tokenResult = await AuthWorkerPool.run({
     type: "compareAndToken",
     data: {
@@ -165,7 +165,7 @@ export const loginUser = asyncHandler(async (req, res) => {
       ExpiresIn_refreshToken: process.env.JWT_REFRESH_EXPIRATION,
     },
   });
-
+console.log(tokenResult);
   if (!tokenResult.success) {
     throw new AppError(tokenResult.error || "Invalid credentials", 401);
   }
@@ -186,7 +186,7 @@ export const loginUser = asyncHandler(async (req, res) => {
   });
 
   return sendResponse(res, 200, "Login successful", {
-    user: { userId: user._id.toString() },
+    userId: user._id.toString(),userName:user.userName,
   });
 });
 

@@ -137,7 +137,7 @@
   background-color: rgba(220, 53, 69, 0.3) !important;
 }
 .action-icons-container .action-btn[data-action=add-to-cart]:hover {
-  color: #ffe100 !important;
+  color: #d8c112 !important;
 }
 .action-icons-container .action-btn.in-cart {
   color: #ffe100 !important;

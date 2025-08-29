@@ -11,11 +11,12 @@ import { addReview } from "../controllers/Products/AddProductReviews.js";
 import { fetchProductComparisons } from "../controllers/Products/ComparisionController.js";
 import { getFilterOptions } from "../controllers/Products/GetAllProduct.js";
 import { toggleLikeProduct, syncLikes, getProductsByIds } from "../controllers/Products/GetAllProduct.js";
-
+import { getCategories } from "../controllers/Products/GetCategory.js";
 const router = express.Router();
 
 // CORRECT: POST route for getting products by IDs
 router.post("/like/product", AuthUser, getProductsByIds);
+router.get("/getcategories", getCategories);
 
 router.route("/").get(getAllProducts).post(AuthUser, createProduct);
 router.get("/compare", fetchProductComparisons);

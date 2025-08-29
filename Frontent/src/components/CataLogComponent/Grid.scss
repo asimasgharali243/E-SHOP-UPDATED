@@ -81,3 +81,249 @@
     }
   }
 }
+
+.filter-button {
+  font-size: clamp(12px, 1.2vw, 14px) !important;
+  font-weight: 500 !important;
+  padding: 6px 14px !important;
+  background-color: var(--primary) !important;
+  color: var(--white) !important;
+  border: none !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease-in-out !important;
+
+  &:hover {
+    background-color: var(--primary-hover) !important;
+    transform: translateY(-2px) scale(1.02); // subtle lift
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); // soft shadow
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.98); // press-down effect
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+}
+
+
+
+// Pagination SCSS
+.pagination {
+  margin-bottom: 0;
+  gap: 8px;
+
+  .page-item {
+    .page-link {
+      border-radius: 6px;
+      border: 1px solid #dee2e6;
+      color: #495057;
+      min-width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease-in-out;
+      font-weight: 500;
+      background-color: #ffffff;
+
+      &:hover {
+        background-color: #f8f9fa;
+        border-color: #adb5bd;
+        color: #212529;
+        text-decoration: none;
+      }
+
+      &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        background-color: #f8f9fa;
+      }
+    }
+
+    &.active .page-link {
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+      color: #ffffff;
+      
+      &:hover {
+        background-color: #0b5ed7;
+        border-color: #0a58ca;
+        color: #ffffff;
+      }
+    }
+
+    &.disabled .page-link {
+      color: #6c757d;
+      background-color: #e9ecef;
+      border-color: #dee2e6;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+
+  // Ellipsis styling
+  .page-item:not(.active):not(.disabled):not(:first-child):not(:last-child) .page-link {
+    background-color: #f8f9fa;
+    
+    &:hover {
+      background-color: #e9ecef;
+    }
+  }
+
+  // Responsive adjustments for mobile
+  @media (max-width: 576px) {
+    gap: 4px;
+    
+    .page-item {
+      .page-link {
+        min-width: 32px;
+        height: 32px;
+        font-size: 14px;
+        padding: 4px 8px;
+      }
+    }
+  }
+}
+
+// Custom pagination variants
+.pagination-primary {
+  .page-item {
+    .page-link {
+      border-color: #0d6efd;
+      
+      &:hover {
+        background-color: #0d6efd;
+        color: #ffffff;
+      }
+    }
+    
+    &.active .page-link {
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+    }
+  }
+}
+
+.pagination-outline {
+  .page-item {
+    .page-link {
+      background-color: transparent;
+      border: 2px solid #dee2e6;
+      
+      &:hover {
+        background-color: #f8f9fa;
+        border-color: #6c757d;
+      }
+    }
+    
+    &.active .page-link {
+      background-color: transparent;
+      border: 2px solid #0d6efd;
+      color: #0d6efd;
+      font-weight: 600;
+      
+      &:hover {
+        background-color: #0d6efd;
+        color: #ffffff;
+      }
+    }
+  }
+}
+
+// Dark mode support
+[data-bs-theme="dark"] {
+  .pagination {
+    .page-item {
+      .page-link {
+        background-color: #2b3035;
+        border-color: #495057;
+        color: #dee2e6;
+        
+        &:hover {
+          background-color: #495057;
+          border-color: #6c757d;
+          color: #ffffff;
+        }
+      }
+      
+      &.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: #ffffff;
+      }
+      
+      &.disabled .page-link {
+        background-color: #212529;
+        border-color: #343a40;
+        color: #6c757d;
+      }
+    }
+  }
+}
+
+// Animation for page changes
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+// Custom utility classes for pagination sizes
+.pagination-sm-custom {
+  .page-item {
+    .page-link {
+      min-width: 32px;
+      height: 32px;
+      font-size: 14px;
+      padding: 4px 8px;
+    }
+  }
+}
+
+.pagination-lg-custom {
+  .page-item {
+    .page-link {
+      min-width: 48px;
+      height: 48px;
+      font-size: 18px;
+      padding: 8px 16px;
+    }
+  }
+}
+
+// Center pagination by default
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin: 32px 0;
+  
+  @media (max-width: 576px) {
+    margin: 24px 0;
+  }
+}
+
+// Additional styling for better visual hierarchy
+.pagination-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #6c757d;
+  margin: 0;
+  
+  @media (max-width: 576px) {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 12px;
+  }
+}

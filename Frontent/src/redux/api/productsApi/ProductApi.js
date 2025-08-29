@@ -1,6 +1,7 @@
 // src/redux/api/productsApi/ProductApi.js
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import apis from "../../../utils/apis";
+import { getCategories } from '../../../../../Backend/controllers/Products/GetCategory';
 
 export const productApi = createApi({
   reducerPath: 'productApi',
@@ -37,6 +38,9 @@ export const productApi = createApi({
     getSingleProduct: builder.query({
       query: (productId) => apis().getSingleProduct(productId),
       providesTags: (result, error, id) => [{ type: "Product", id }],
+    }),
+    getCategories: builder.query({
+      query: () => `${apis().baseUrl}${apis().getCategories}`,
     }),
 
     // Get liked products
@@ -174,6 +178,7 @@ export const {
   useUpdateStatusMutation,
   useGetNegotiationsByProductQuery,
   useGetLikeProductQuery,
+  useGetCategoriesQuery
 } = productApi;
 
 export default productApi;

@@ -122,7 +122,7 @@ const CustomDropdownMenu = ({
                 {category.subcategories?.length ? (
                   <>
                     <div className="d-flex justify-content-between align-items-center">
-                      <span >{category.name}</span>
+                      <span>{category.name}</span>
                       <i
                         className={`bi bi-caret-${
                           openSubIndex === index ? "right" : "down"
@@ -154,7 +154,7 @@ const CustomDropdownMenu = ({
                             height="64"
                             className="rounded-circle"
                             onError={(e) => {
-                              e.target.src="/placeholder.jpg";
+                              e.target.src = "/placeholder.jpg";
                               e.target.onerror = null;
                             }}
                             loading="lazy"
@@ -202,8 +202,17 @@ const CustomDropdownMenu = ({
                     <Accordion.Body>
                       <Row>
                         {category.subcategories?.slice(0, 20).map((sub) => (
-                          <Col key={sub.key} xs={4} className="text-center mb-3"
-                          style={{color:`${theme==='light'?`var(--text1)`:`var(--white)`}`}}
+                          <Col
+                            key={sub.key}
+                            xs={4}
+                            className="text-center mb-3"
+                            style={{
+                              color: `${
+                                theme === "light"
+                                  ? `var(--text1)`
+                                  : `var(--white)`
+                              }`,
+                            }}
                           >
                             <div
                               data-role="subcategory"
@@ -222,10 +231,9 @@ const CustomDropdownMenu = ({
                                 width="64"
                                 height="64"
                                 className="rounded-circle"
-                                onError={(e)=>{
-e.target.src="/placeholder.jpg";
-e.target.onerror=null;
-
+                                onError={(e) => {
+                                  e.target.src = "/placeholder.jpg";
+                                  e.target.onerror = null;
                                 }}
                                 style={{
                                   objectFit: "cover",
@@ -253,7 +261,6 @@ e.target.onerror=null;
 };
 
 export default React.memo(CustomDropdownMenu);
-
 
 // import React, { useState, useRef, useEffect } from "react";
 // import { Dropdown, Row, Col, Modal, Button } from "react-bootstrap";

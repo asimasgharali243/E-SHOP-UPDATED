@@ -1,0 +1,41 @@
+.dashboard-container {
+  padding: 1rem;
+}
+.dashboard-container .dashboard-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+.dashboard-container .stat-card {
+  text-align: center;
+}
+.dashboard-container .stat-card .stat-icon {
+  margin-bottom: 10px;
+}
+.dashboard-container .stat-card .stat-icon.users {
+  color: #007bff;
+}
+.dashboard-container .stat-card .stat-icon.orders {
+  color: #28a745;
+}
+.dashboard-container .stat-card .stat-icon.revenue {
+  color: #ffc107;
+}
+.dashboard-container .stat-card .stat-icon.growth {
+  color: #17a2b8;
+}
+.dashboard-container .stat-card h2 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+.dashboard-container .stat-card .trend {
+  font-size: 0.9rem;
+}
+.dashboard-container .stat-card .trend.positive {
+  color: green;
+}
+.dashboard-container .stat-card .trend.negative {
+  color: red;
+}
+.dashboard-container .product-list .product-item .progress-bar {
+  background-color: #007bff;
+}/*# sourceMappingURL=dashboard.css.map */
