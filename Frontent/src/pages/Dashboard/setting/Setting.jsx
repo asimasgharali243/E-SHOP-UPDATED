@@ -9,15 +9,6 @@ import {
   Form,
   Modal,
 } from "react-bootstrap";
-import {
-  Gear,
-  Lock,
-  Bell,
-  CreditCard,
-  Palette,
-  Globe,
-  Person,
-} from "react-bootstrap-icons";
 
 const Settings = () => {
   const [activeSection, setActiveSection] = useState("account");
@@ -34,7 +25,7 @@ const Settings = () => {
           <Card className="shadow-sm">
             <Card.Body>
               <h5 className="fw-bold mb-3">
-                <Gear className="me-2" />
+                <i className="bi bi-gear me-2"></i>
                 Settings Menu
               </h5>
               <ListGroup variant="flush">
@@ -43,28 +34,28 @@ const Settings = () => {
                   active={activeSection === "account"}
                   onClick={() => setActiveSection("account")}
                 >
-                  <Person className="me-2" /> Account Info
+                  <i className="bi bi-person me-2"></i> Account Info
                 </ListGroup.Item>
                 <ListGroup.Item
                   action
                   active={activeSection === "security"}
                   onClick={() => setActiveSection("security")}
                 >
-                  <Lock className="me-2" /> Security
+                  <i className="bi bi-lock me-2"></i> Security
                 </ListGroup.Item>
                 <ListGroup.Item
                   action
                   active={activeSection === "notifications"}
                   onClick={() => setActiveSection("notifications")}
                 >
-                  <Bell className="me-2" /> Notifications
+                  <i className="bi bi-bell me-2"></i> Notifications
                 </ListGroup.Item>
                 <ListGroup.Item
                   action
                   active={activeSection === "payments"}
                   onClick={() => setActiveSection("payments")}
                 >
-                  <CreditCard className="me-2" /> Payment Methods
+                  <i className="bi bi-credit-card me-2"></i> Payment Methods
                 </ListGroup.Item>
               </ListGroup>
             </Card.Body>
@@ -77,7 +68,7 @@ const Settings = () => {
             <Card className="shadow-sm mb-3">
               <Card.Body>
                 <h5 className="fw-bold mb-3">
-                  <Person className="me-2" />
+                  <i className="bi bi-person me-2"></i>
                   Account Information
                 </h5>
                 <Form>
@@ -103,7 +94,7 @@ const Settings = () => {
             <Card className="shadow-sm mb-3">
               <Card.Body>
                 <h5 className="fw-bold mb-3">
-                  <Lock className="me-2" />
+                  <i className="bi bi-lock me-2"></i>
                   Security Settings
                 </h5>
                 <Form>
@@ -129,7 +120,7 @@ const Settings = () => {
             <Card className="shadow-sm mb-3">
               <Card.Body>
                 <h5 className="fw-bold mb-3">
-                  <Bell className="me-2" />
+                  <i className="bi bi-bell me-2"></i>
                   Notifications
                 </h5>
                 <Form.Check
@@ -146,7 +137,7 @@ const Settings = () => {
             <Card className="shadow-sm mb-3">
               <Card.Body>
                 <h5 className="fw-bold mb-3">
-                  <CreditCard className="me-2" />
+                  <i className="bi bi-credit-card me-2"></i>
                   Payment Methods
                 </h5>
 
@@ -160,38 +151,8 @@ const Settings = () => {
                 </Card>
 
                 <Button variant="primary" onClick={handleShow}>
-                  <CreditCard className="me-2" /> Add New Card
+                  <i className="bi bi-credit-card me-2"></i> Add New Card
                 </Button>
-              </Card.Body>
-            </Card>
-          )}
-
-          {activeSection === "language" && (
-            <Card className="shadow-sm mb-3">
-              <Card.Body>
-                <h5 className="fw-bold mb-3">
-                  <Globe className="me-2" />
-                  Language
-                </h5>
-                <Form.Select>
-                  <option>English</option>
-                  <option>Urdu</option>
-                  <option>Spanish</option>
-                  <option>French</option>
-                </Form.Select>
-              </Card.Body>
-            </Card>
-          )}
-
-          {activeSection === "appearance" && (
-            <Card className="shadow-sm mb-3">
-              <Card.Body>
-                <h5 className="fw-bold mb-3">
-                  <Palette className="me-2" />
-                  Appearance
-                </h5>
-                <Form.Check type="radio" name="theme" label="Light Mode" />
-                <Form.Check type="radio" name="theme" label="Dark Mode" />
               </Card.Body>
             </Card>
           )}
@@ -202,7 +163,7 @@ const Settings = () => {
       <Modal show={showAddCard} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>
-            <CreditCard className="me-2 text-primary" />
+            <i className="bi bi-credit-card me-2 text-primary"></i>
             Add New Card
           </Modal.Title>
         </Modal.Header>
