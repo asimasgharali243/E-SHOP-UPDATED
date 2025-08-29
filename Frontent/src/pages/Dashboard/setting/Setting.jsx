@@ -50,13 +50,15 @@ const Settings = () => {
                 >
                   <i className="bi bi-bell me-2"></i> Notifications
                 </ListGroup.Item>
-                <ListGroup.Item
+
+                {/* <ListGroup.Item
                   action
                   active={activeSection === "payments"}
                   onClick={() => setActiveSection("payments")}
                 >
                   <i className="bi bi-credit-card me-2"></i> Payment Methods
                 </ListGroup.Item>
+              </ListGroup> */}
               </ListGroup>
             </Card.Body>
           </Card>

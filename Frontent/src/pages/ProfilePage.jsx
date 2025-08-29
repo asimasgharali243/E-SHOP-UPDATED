@@ -332,7 +332,7 @@ const Profile = () => {
                   <i className="bi bi-geo-alt me-2"></i>
                   Addresses
                 </button>
-                <button
+                {/* <button
                   className={`list-group-item list-group-item-action ${
                     activeTab === "payment" ? "active" : ""
                   }`}
@@ -340,7 +340,7 @@ const Profile = () => {
                 >
                   <i className="bi bi-credit-card me-2"></i>
                   Payment Methods
-                </button>
+                </button> */}
                 <button
                   className={`list-group-item list-group-item-action ${
                     activeTab === "security" ? "active" : ""
@@ -598,7 +598,7 @@ const Profile = () => {
                 )}
 
                 {/* Payment Methods Tab */}
-                {activeTab === "payment" && (
+                {/* {activeTab === "payment" && (
                   <div className="tab-content">
                     <div className="d-flex justify-content-between align-items-center mb-4">
                       <h3 className="mb-0">Payment Methods</h3>
@@ -659,7 +659,7 @@ const Profile = () => {
                       ))}
                     </div>
                   </div>
-                )}
+                )} */}
 
                 {/* Security Tab */}
                 {activeTab === "security" && (
