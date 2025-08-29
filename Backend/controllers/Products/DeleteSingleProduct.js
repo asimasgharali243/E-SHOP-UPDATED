@@ -1,35 +1,44 @@
-import cloudinary from "cloudinary";
-import product from "../../models/ProductsModel.js"
+import Product from "../../models/ProductsModel.js";
 import mongoose from "mongoose";
-export const deleteProduct = async (req, res, next) => {
-    try{
+import { imagekitInstance } from "../../index.js";
 
-      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-        return res.status(400).json({ message: "Invalid Product ID" });
-      }
-      console.log(req.params.id);
-    const deletableProduct = await product.findById(req.params.id);
-  
+export const deleteProduct = async (req, res, next) => {
+  try {
+    const productId = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(400).json({ message: "Invalid Product ID" });
+    }
+
+    const deletableProduct = await Product.findById(productId);
+
     if (!deletableProduct) {
-      return res.status(404).json({message:"Product not found"});
+      return res.status(404).json({ message: "Product not found" });
     }
-  
-    // Deleting Images From Cloudinary
-    for (let i = 0; i < deletableProduct.images.length; i++) {
-      await cloudinary.v2.uploader.destroy(product.images[i].public_id);
-    }
-  
+
+    // Delete all feature images from ImageKit
+    const imageDeletionPromises = deletableProduct.featureImages.map(async (img) => {
+      if (img.fileId) {
+        try {
+          await imagekitInstance.deleteFile(img.fileId);
+          console.log(`Deleted image: ${img.fileId}`);
+        } catch (err) {
+          console.error(`Failed to delete image ${img.fileId}:`, err.message);
+        }
+      }
+    });
+
+    await Promise.all(imageDeletionPromises);
+
+    // Delete product from DB
     await deletableProduct.remove();
-  
+
     res.status(200).json({
       success: true,
-      message: "Product Delete Successfully",
+      message: "Product deleted successfully",
     });
-  }catch(error){
-    console.log(error.message)
-     res.status(500).json({message:"internal server Error"})
-
-  }}
-  
-  ;
-  
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

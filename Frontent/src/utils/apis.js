@@ -16,7 +16,7 @@ const apis = () => {
     getAllProducts: `/products`,
     getSingleProduct: (productId) => `/products/${productId}`,
     createProduct: `/products`,
-    updateProduct: (productId) => `/products/${productId}`,
+    updateProduct: (productId) => `/products/update/${productId}`,
     deleteProduct: (productId) => `/products/${productId}`,
     getSignature: (count) => `/products/get/signature?count=${count}`,
     addReview: (productId) => `/products/${productId}/reviews`,

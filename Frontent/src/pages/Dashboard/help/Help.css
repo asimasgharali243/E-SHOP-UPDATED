@@ -1,0 +1,34 @@
+.help-center h2 {
+  font-weight: 700;
+  color: #222;
+}
+.help-center .search-bar input {
+  border-radius: 8px;
+  padding: 10px;
+}
+.help-center .search-bar button {
+  border-radius: 8px;
+}
+.help-center .help-categories .category-card {
+  cursor: pointer;
+  transition: 0.3s;
+  background: #f9f9f9;
+  border-radius: 12px;
+}
+.help-center .help-categories .category-card:hover {
+  background: #007bff;
+  color: #fff;
+  transform: translateY(-4px);
+}
+.help-center .help-categories .category-card p {
+  margin: 0;
+  font-weight: 500;
+}
+.help-center .support-card {
+  border-radius: 12px;
+  background: #f8f9fa;
+  transition: 0.3s;
+}
+.help-center .accordion-button {
+  font-weight: 500;
+}/*# sourceMappingURL=Help.css.map */

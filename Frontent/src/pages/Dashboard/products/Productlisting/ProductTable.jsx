@@ -22,6 +22,10 @@ const ProductTable = ({
   totalItems,
   onPageChange,
   onRowsPerPageChange,
+  selectedProducts,
+  onSelectProduct,
+  onSelectAll,
+  onDeleteProduct,
 }) => {
   const renderSortIcon = (field) => {
     if (sortField !== field) return null;
@@ -102,6 +106,10 @@ const ProductTable = ({
     );
   };
 
+  const allSelected =
+    products.length > 0 &&
+    products.every((product) => selectedProducts.has(product._id));
+
   return (
     <div className="bg-white rounded shadow-sm">
       {/* Desktop View */}
@@ -111,7 +119,11 @@ const ProductTable = ({
             <thead>
               <tr>
                 <th width="40">
-                  <Form.Check type="checkbox" id="selectAll" />
+                  <Form.Check
+                    type="checkbox"
+                    checked={allSelected}
+                    onChange={(e) => onSelectAll(e.target.checked)}
+                  />
                 </th>
                 <th className="header-sort" onClick={() => onSort("name")}>
                   Product {renderSortIcon("name")}
@@ -119,11 +131,8 @@ const ProductTable = ({
                 <th className="header-sort" onClick={() => onSort("category")}>
                   Category {renderSortIcon("category")}
                 </th>
-                <th
-                  className="header-sort"
-                  onClick={() => onSort("stockStatus")}
-                >
-                  Stock {renderSortIcon("stockStatus")}
+                <th className="header-sort" onClick={() => onSort("stock")}>
+                  Stock {renderSortIcon("stock")}
                 </th>
                 <th className="header-sort" onClick={() => onSort("price")}>
                   Price {renderSortIcon("price")}
@@ -133,7 +142,13 @@ const ProductTable = ({
             </thead>
             <tbody>
               {products.map((product) => (
-                <ProductRow key={product.id} product={product} />
+                <ProductRow
+                  key={product._id}
+                  product={product}
+                  isSelected={selectedProducts.has(product._id)}
+                  onSelect={onSelectProduct}
+                  onDelete={onDeleteProduct}
+                />
               ))}
             </tbody>
           </Table>
@@ -145,9 +160,12 @@ const ProductTable = ({
         <Accordion>
           {products.map((product, index) => (
             <ProductRowMobile
-              key={product.id}
+              key={product._id}
               product={product}
               eventKey={index.toString()}
+              isSelected={selectedProducts.has(product._id)}
+              onSelect={onSelectProduct}
+              onDelete={onDeleteProduct}
             />
           ))}
         </Accordion>

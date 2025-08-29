@@ -184,7 +184,7 @@ export const {
   useCreateProductMutation,
   useUpdateProductMutation,
   useDeleteProductMutation,
-  useRollbackProductMutation, // ✅ Added rollback hook
+  useRollbackProductMutation, 
   useAddReviewMutation,
   useGetProductComparisonQuery,
   useUploadImageMutation,

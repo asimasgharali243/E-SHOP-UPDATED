@@ -1,28 +1,32 @@
-import React from 'react';
-import { Offcanvas, Nav, Accordion } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
-import './Sidebar.scss';
+import React from "react";
+import { Offcanvas, Nav, Accordion } from "react-bootstrap";
+import { Link, useLocation } from "react-router-dom";
+import "./Sidebar.scss";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
   const { pathname } = useLocation();
 
   const navItems = [
-    { path: '/dashboard/analytics', label: 'Analytics', icon: 'bi-graph-up' },
-    { path: '/dashboard/settings', label: 'Settings', icon: 'bi-gear' },
-    { path: '/dashboard/help', label: 'Help', icon: 'bi-question-circle' },
-    { path: '/logout', label: 'Logout', icon: 'bi-box-arrow-right' },
+    { path: "/dashboard/analytics", label: "Analytics", icon: "bi-graph-up" },
+    { path: "/dashboard/settings", label: "Settings", icon: "bi-gear" },
+    { path: "/dashboard/help", label: "Help", icon: "bi-question-circle" },
+    { path: "/logout", label: "Logout", icon: "bi-box-arrow-right" },
   ];
 
   const renderLink = (path, label, icon = null, subLink = false) => (
     <Link
       key={path}
       to={path}
-      className={`sidebar-link${subLink ? ' sub-link' : ''} ${pathname === path ? 'active' : ''}`}
+      className={`sidebar-link${subLink ? " sub-link" : ""} ${
+        pathname === path ? "active" : ""
+      }`}
       onClick={isMobile ? toggleSidebar : undefined}
     >
       {icon && <i className={`bi ${icon} fs-5`}></i>}
       {isSidebarOpen && <span className="ms-2">{label}</span>}
-      {!isSidebarOpen && !subLink && icon && <span className="visually-hidden">{label}</span>}
+      {!isSidebarOpen && !subLink && icon && (
+        <span className="visually-hidden">{label}</span>
+      )}
     </Link>
   );
 
@@ -30,9 +34,9 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
     if (!isSidebarOpen && !isMobile) {
       return (
         <>
-          {renderLink('/dashboard/products/list', 'Products', 'bi-box-seam')}
-          {renderLink('/dashboard/orders/list', 'Orders', 'bi-receipt')}
-          {renderLink('/dashboard/customers/list', 'Customers', 'bi-people')}
+          {renderLink("/dashboard/products/list", "Products", "bi-box-seam")}
+          {renderLink("/dashboard/orders/list", "Orders", "bi-receipt")}
+          {renderLink("/dashboard/customers/list", "Customers", "bi-people")}
         </>
       );
     }
@@ -46,12 +50,18 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
               <span className="ms-2">Products</span>
             </div>
           </Accordion.Header>
-          <Accordion.Body className="p-0"
-          style={{backgroundColor:`var(--background)`}}
+          <Accordion.Body
+            className="p-0"
+            style={{ backgroundColor: `var(--background)` }}
           >
-            {renderLink('/dashboard/products/list', 'Product List', null, true)}
-            {renderLink('/dashboard/products/details', 'Product Details', null, true)}
-            {renderLink('/dashboard/products/add', 'Add Product', null, true)}
+            {renderLink("/dashboard/products/list", "Product List", null, true)}
+            {renderLink(
+              "/dashboard/products/details/:id",
+              "Product Details",
+              null,
+              true
+            )}
+            {renderLink("/dashboard/products/add", "Add Product", null, true)}
           </Accordion.Body>
         </Accordion.Item>
 
@@ -62,12 +72,17 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
               <span className="ms-2">Orders</span>
             </div>
           </Accordion.Header>
-          <Accordion.Body className="p-0"
-          style={{backgroundColor:`var(--background)`}}
-          
+          <Accordion.Body
+            className="p-0"
+            style={{ backgroundColor: `var(--background)` }}
           >
-            {renderLink('/dashboard/orders/list', 'Order List', null, true)}
-            {renderLink('/dashboard/orders/details', 'Order Details', null, true)}
+            {renderLink("/dashboard/orders/list", "Order List", null, true)}
+            {renderLink(
+              "/dashboard/orders/details",
+              "Order Details",
+              null,
+              true
+            )}
           </Accordion.Body>
         </Accordion.Item>
 
@@ -78,12 +93,22 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
               <span className="ms-2">Customers</span>
             </div>
           </Accordion.Header>
-          <Accordion.Body className="p-0"
-          style={{backgroundColor:`var(--background)`}}
-          
+          <Accordion.Body
+            className="p-0"
+            style={{ backgroundColor: `var(--background)` }}
           >
-            {renderLink('/dashboard/customers/list', 'Customer List', null, true)}
-            {renderLink('/dashboard/customers/details', 'Customer Details', null, true)}
+            {renderLink(
+              "/dashboard/customers/list",
+              "Customer List",
+              null,
+              true
+            )}
+            {renderLink(
+              "/dashboard/customers/details",
+              "Customer Details",
+              null,
+              true
+            )}
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
@@ -95,30 +120,32 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
 
   if (isMobile) {
     return (
-<Offcanvas
-  show={isSidebarOpen}
-  onHide={toggleSidebar}
-  placement="start"
->
-  <Offcanvas.Header className="custom-sidebar-header" closeButton>
-    <Offcanvas.Title>E-SHOP</Offcanvas.Title>
-  </Offcanvas.Header>
-  <Offcanvas.Body className="custom-sidebar-body">
-    <Nav className="flex-column">
-      {renderAccordionItems()}
-      {renderNavItems()}
-    </Nav>
-  </Offcanvas.Body>
-</Offcanvas>
-
-
+      <Offcanvas show={isSidebarOpen} onHide={toggleSidebar} placement="start">
+        <Offcanvas.Header className="custom-sidebar-header" closeButton>
+          <Offcanvas.Title>E-SHOP</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body className="custom-sidebar-body">
+          <Nav className="flex-column">
+            {renderAccordionItems()}
+            {renderNavItems()}
+          </Nav>
+        </Offcanvas.Body>
+      </Offcanvas>
     );
   }
 
   return (
-    <div className={`custom-sidebar d-none d-md-block position-sticky ${isSidebarOpen ? 'open' : 'collapsed'}`}>
+    <div
+      className={`custom-sidebar d-none d-md-block position-sticky ${
+        isSidebarOpen ? "open" : "collapsed"
+      }`}
+    >
       <div className="sidebar-header">
-        {isSidebarOpen ? <h5 className="fw-bold">E-SHOP</h5> : <i className="bi bi-shop fs-4"></i>}
+        {isSidebarOpen ? (
+          <h5 className="fw-bold">E-SHOP</h5>
+        ) : (
+          <i className="bi bi-shop fs-4"></i>
+        )}
       </div>
       <Nav className="flex-column">
         {renderAccordionItems()}

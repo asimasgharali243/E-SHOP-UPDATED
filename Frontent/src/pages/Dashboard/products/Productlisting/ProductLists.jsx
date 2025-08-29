@@ -1,61 +1,73 @@
-import React, { useState } from "react";
-import { Container, Row, Col, Button, Breadcrumb } from "react-bootstrap";
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Breadcrumb,
+  Spinner,
+  Alert,
+} from "react-bootstrap";
 import ProductTable from "./ProductTable";
 import SearchBar from "./SearchBar";
-import { mockProducts } from "./mockData";
+import {
+  useGetAllProductsQuery,
+  useDeleteProductMutation,
+} from "../../../../redux/api/productsApi/ProductApi";
 import "./Product.scss";
 
 const ProductLists = () => {
-  const [products, setProducts] = useState(mockProducts);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [sortField, setSortField] = useState(null);
-  // Initially null, means no sorting is applied.
-
   const [sortDirection, setSortDirection] = useState("asc");
+  const [selectedProducts, setSelectedProducts] = useState(new Set());
 
-  //   This filter will return true for any product where: The name, or
-  // The ID, or The SKU, or The category
-  // contains the text typed into the search box (stored in searchTerm).
-  // Only those matching products are included in filteredProducts,
-  // and this filtered list can then be shown on the page.
+  // Fetch products from backend
+  const {
+    data: productsData,
+    isLoading,
+    error,
+    refetch,
+  } = useGetAllProductsQuery();
 
+  const [deleteProduct] = useDeleteProductMutation();
+
+  const products = productsData?.products || [];
+
+  // Filter products based on search term
   const filteredProducts = products.filter(
     (product) =>
-      //   .includes() checks if the search term typed by the user exists anywhere inside
-      //  the product’s name, ignoring case sensitivity.
-
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      // stock keeping unit
-      product.sku.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (product.sku &&
+        product.sku.toLowerCase().includes(searchTerm.toLowerCase())) ||
       product.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Sort products
   const sortedProducts = sortField
     ? [...filteredProducts].sort((a, b) => {
-        // The spread operator makes a copy of filteredProducts array so the original isn't modified.
-        if (a[sortField] < b[sortField])
-          return sortDirection === "asc" ? -1 : 1;
-        // a will come before b
-        if (a[sortField] > b[sortField])
-          return sortDirection === "asc" ? 1 : -1;
-        // a will come after b
+        const aValue = a[sortField] || "";
+        const bValue = b[sortField] || "";
+
+        if (aValue < bValue) return sortDirection === "asc" ? -1 : 1;
+        if (aValue > bValue) return sortDirection === "asc" ? 1 : -1;
         return 0;
       })
     : filteredProducts;
 
+  // Pagination
   const indexOfLastProduct = currentPage * rowsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - rowsPerPage;
-  // slice doesn't modify original array and makes a copy of selected range of products
   const currentProducts = sortedProducts.slice(
     indexOfFirstProduct,
     indexOfLastProduct
   );
-  // math.ceil rounds up the decimals into whole number
   const totalPages = Math.ceil(sortedProducts.length / rowsPerPage);
 
+  // Handlers
   const handleSearch = (term) => {
     setSearchTerm(term);
     setCurrentPage(1);
@@ -79,21 +91,104 @@ const ProductLists = () => {
     setCurrentPage(1);
   };
 
+  const handleSelectProduct = (productId, isSelected) => {
+    setSelectedProducts((prev) => {
+      const newSelection = new Set(prev);
+      if (isSelected) {
+        newSelection.add(productId);
+      } else {
+        newSelection.delete(productId);
+      }
+      return newSelection;
+    });
+  };
+
+  const handleSelectAll = (isSelected) => {
+    if (isSelected) {
+      const allIds = currentProducts.map((product) => product._id);
+      setSelectedProducts(new Set(allIds));
+    } else {
+      setSelectedProducts(new Set());
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    if (selectedProducts.size === 0) return;
+
+    try {
+      const deletePromises = Array.from(selectedProducts).map((id) =>
+        deleteProduct(id).unwrap()
+      );
+
+      await Promise.all(deletePromises);
+      setSelectedProducts(new Set());
+      refetch();
+    } catch (error) {
+      console.error("Failed to delete products:", error);
+    }
+  };
+
+  const handleDeleteProduct = async (productId) => {
+    try {
+      await deleteProduct(productId).unwrap();
+      refetch();
+    } catch (error) {
+      console.error("Failed to delete product:", error);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <Container fluid className="py-4">
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ height: "50vh" }}
+        >
+          <Spinner animation="border" variant="primary" />
+        </div>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container fluid className="py-4">
+        <Alert variant="danger">
+          Failed to load products: {error?.data?.message || error.message}
+          <Button variant="outline-danger" className="ms-3" onClick={refetch}>
+            Retry
+          </Button>
+        </Alert>
+      </Container>
+    );
+  }
+
   return (
     <Container fluid className="py-4">
       <Row className="mb-4">
         <Col>
           <Breadcrumb>
-            <Breadcrumb.Item href="dashboard">Dashboard</Breadcrumb.Item>
+            <Breadcrumb.Item href="/dashboard">Dashboard</Breadcrumb.Item>
             <Breadcrumb.Item active>Products</Breadcrumb.Item>
           </Breadcrumb>
           <h2 className="mb-0">Products</h2>
         </Col>
         <Col xs="auto" className="d-flex align-items-center gap-2">
-          <Button variant="light" className="fw-medium">
-            Import
-          </Button>
-          <Button variant="warning" className="fw-medium">
+          {selectedProducts.size > 0 && (
+            <Button
+              variant="danger"
+              className="fw-medium"
+              onClick={handleDeleteSelected}
+            >
+              Delete Selected ({selectedProducts.size})
+            </Button>
+          )}
+
+          <Button
+            variant="primary"
+            className="fw-medium px-4"
+            href="/dashboard/products/add"
+          >
             New product
           </Button>
         </Col>
@@ -116,6 +211,10 @@ const ProductLists = () => {
         totalItems={sortedProducts.length}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
+        selectedProducts={selectedProducts}
+        onSelectProduct={handleSelectProduct}
+        onSelectAll={handleSelectAll}
+        onDeleteProduct={handleDeleteProduct}
       />
     </Container>
   );

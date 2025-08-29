@@ -1,0 +1,73 @@
+.footer {
+  background: #111;
+  color: #ddd;
+  font-size: 14px;
+}
+.footer .footer-top {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.footer .footer-top h4.footer-logo {
+  color: #fff;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+.footer .footer-top h5 {
+  color: #fff;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+.footer .footer-top p {
+  font-size: 14px;
+  line-height: 1.6;
+}
+.footer .footer-top ul {
+  list-style: none;
+  padding: 0;
+}
+.footer .footer-top ul li {
+  margin-bottom: 8px;
+}
+.footer .footer-top ul li a {
+  color: #bbb;
+  text-decoration: none;
+}
+.footer .footer-top ul li a:hover {
+  color: #fff;
+}
+.footer .footer-top .social-icons {
+  display: flex;
+  gap: 12px;
+  margin-top: 15px;
+}
+.footer .footer-top .social-icons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #222;
+  color: #fff;
+  font-size: 18px;
+  transition: 0.3s;
+}
+.footer .footer-top .social-icons a:hover {
+  background: #007bff;
+}
+.footer .footer-top .newsletter-form input {
+  border-radius: 8px;
+}
+.footer .footer-top .newsletter-form button {
+  border-radius: 8px;
+}
+.footer .footer-top .payment-icons {
+  font-size: 28px;
+  display: flex;
+  gap: 15px;
+  color: #fff;
+}
+.footer .footer-bottom {
+  background: #0d0d0d;
+  font-size: 13px;
+  color: #aaa;
+}/*# sourceMappingURL=Footer.css.map */

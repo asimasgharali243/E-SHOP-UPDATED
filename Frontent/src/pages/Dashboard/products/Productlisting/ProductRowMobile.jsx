@@ -1,19 +1,28 @@
 import React from "react";
-import { Accordion, Dropdown } from "react-bootstrap";
+import { Accordion, Dropdown, Form, Button } from "react-bootstrap";
 
-const ProductRowMobile = ({ product, eventKey }) => {
-  const getStockBadgeClass = (status) => {
-    switch (status.toLowerCase()) {
-      case "in stock":
-        return "in-stock";
-      case "out of stock":
-        return "out-of-stock";
-      case "on backorder":
-        return "low-stock";
-      case "preorder":
-        return "preorder";
-      default:
-        return "in-stock";
+const ProductRowMobile = ({
+  product,
+  eventKey,
+  isSelected,
+  onSelect,
+  onDelete,
+}) => {
+  const getStockBadgeClass = (stock) => {
+    if (stock === 0) return "out-of-stock";
+    if (stock < 10) return "low-stock";
+    return "in-stock";
+  };
+
+  const getStockText = (stock) => {
+    if (stock === 0) return "Out of Stock";
+    if (stock < 10) return `${stock} Low Stock`;
+    return `${stock} In Stock`;
+  };
+
+  const handleDelete = () => {
+    if (window.confirm(`Are you sure you want to delete "${product.name}"?`)) {
+      onDelete(product._id);
     }
   };
 
@@ -24,10 +33,20 @@ const ProductRowMobile = ({ product, eventKey }) => {
           <Accordion.Header>
             <div className="d-flex align-items-center justify-content-between w-100">
               <div className="d-flex align-items-center gap-3">
+                <Form.Check
+                  type="checkbox"
+                  checked={isSelected}
+                  onChange={(e) => onSelect(product._id, e.target.checked)}
+                  onClick={(e) => e.stopPropagation()}
+                />
                 <img
-                  src={product.image}
+                  src={
+                    product.featureImages?.[0]?.url ||
+                    "/placeholder-product.jpg"
+                  }
                   alt={product.name}
                   className="product-img"
+                  style={{ width: "40px", height: "40px", objectFit: "cover" }}
                 />
                 <div>
                   <div className="product-name">{product.name}</div>
@@ -42,12 +61,14 @@ const ProductRowMobile = ({ product, eventKey }) => {
             <div className="product-details">
               <div className="detail-row">
                 <span className="detail-label">ID:</span>
-                <span className="detail-value">{product.id}</span>
+                <span className="detail-value">{product._id}</span>
               </div>
-              <div className="detail-row">
-                <span className="detail-label">SKU:</span>
-                <span className="detail-value">{product.sku}</span>
-              </div>
+              {product.sku && (
+                <div className="detail-row">
+                  <span className="detail-label">SKU:</span>
+                  <span className="detail-value">{product.sku}</span>
+                </div>
+              )}
               <div className="detail-row">
                 <span className="detail-label">Category:</span>
                 <span className="detail-value">{product.category}</span>
@@ -55,41 +76,37 @@ const ProductRowMobile = ({ product, eventKey }) => {
               <div className="detail-row">
                 <span className="detail-label">Stock:</span>
                 <span
-                  className={`stock-badge ${getStockBadgeClass(
-                    product.stockStatus
-                  )}`}
+                  className={`stock-badge ${getStockBadgeClass(product.stock)}`}
                 >
-                  {product.stockCount > 0
-                    ? `${product.stockCount} In Stock`
-                    : product.stockStatus}
+                  {getStockText(product.stock)}
                 </span>
               </div>
             </div>
-            <div className="mt-3 d-flex justify-content-end"></div>
+            <div className="mt-3 d-flex justify-content-end">
+              <Dropdown align="end">
+                <Dropdown.Toggle
+                  as={Button}
+                  variant="outline-secondary"
+                  size="sm"
+                >
+                  Actions
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    href={`/dashboard/products/details/${product._id}`}
+                  >
+                    Edit
+                  </Dropdown.Item>
+
+                  <Dropdown.Divider />
+                  <Dropdown.Item className="text-danger" onClick={handleDelete}>
+                    Delete
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
           </Accordion.Body>
         </Accordion.Item>
-      </div>
-      <div style={{ maxWidth: "50px" }}>
-        <Dropdown align="end">
-          <Dropdown.Toggle
-            as="button"
-            className="action-btn btn btn-link p-0 border-0"
-            style={{ maxWidth: "50px" }}
-            id={`dropdown-${product.id}`}
-          >
-            <i className="bi bi-three-dots-vertical"></i>
-          </Dropdown.Toggle>
-
-          <Dropdown.Menu>
-            <Dropdown.Item href="#/edit">Edit</Dropdown.Item>
-            <Dropdown.Item href="#/duplicate">Duplicate</Dropdown.Item>
-            <Dropdown.Item href="#/archive">Archive</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item href="#/delete" className="text-danger">
-              Delete
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
       </div>
     </div>
   );

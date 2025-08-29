@@ -4,7 +4,6 @@ import { createProduct } from "../controllers/Products/CreateProduct.js";
 import { deleteProduct } from "../controllers/Products/DeleteSingleProduct.js";
 import { getAllProducts } from "../controllers/Products/GetAllProduct.js";
 import { getSingleProduct } from "../controllers/Products/GetSingleProduct.js";
-import { updateProduct } from "../controllers/Products/UpdateProduct.js";
 import { signUpload } from "../controllers/Products/SignUpload.js";
 import { rollbackProductDetails } from "../controllers/Products/RollbackProductDetails.js";
 import { addReview } from "../controllers/Products/AddProductReviews.js";
@@ -12,12 +11,13 @@ import { fetchProductComparisons } from "../controllers/Products/ComparisionCont
 import { getFilterOptions } from "../controllers/Products/GetAllProduct.js";
 import { toggleLikeProduct, syncLikes, getProductsByIds } from "../controllers/Products/GetAllProduct.js";
 import { getCategories } from "../controllers/Products/GetCategory.js";
+import {updateProduct} from "../controllers/Products/UpdateProduct.js"
 const router = express.Router();
 
 // CORRECT: POST route for getting products by IDs
 router.post("/like/product", AuthUser, getProductsByIds);
 router.get("/getcategories", getCategories);
-
+router.put("/update/:id", AuthUser, updateProduct);
 router.route("/").get(getAllProducts).post(AuthUser, createProduct);
 router.get("/compare", fetchProductComparisons);
 router.delete("/rollback", rollbackProductDetails);

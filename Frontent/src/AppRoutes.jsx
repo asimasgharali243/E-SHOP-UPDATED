@@ -94,7 +94,7 @@ const AppRouter = createBrowserRouter([
           { index: true, element: <DashboardPage /> },
           { path: "products/list", element: <ProductLists /> },
           { path: "products/add", element: <ProductCreate /> },
-          { path: "products/details", element: <ProductDetails /> },
+          { path: "products/details/:id", element: <ProductDetails /> },
           {
             path: "compare",
             element: <CompareProduct />,
