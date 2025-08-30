@@ -285,7 +285,7 @@ const Profile = () => {
                     className="profile-avatar rounded-circle"
                   />
                   <button
-                    className="btn btn-primary btn-sm avatar-edit-btn"
+                    className="btn btn-danger btn-sm avatar-edit-btn"
                     onClick={triggerFileInput}
                   >
                     <i className="bi bi-camera"></i>
@@ -389,7 +389,7 @@ const Profile = () => {
                             className="profile-avatar-lg rounded-circle"
                           />
                           <button
-                            className="btn btn-primary avatar-edit-btn-lg"
+                            className="btn btn-danger avatar-edit-btn-lg"
                             onClick={triggerFileInput}
                           >
                             <i className="bi bi-camera"></i>
@@ -403,7 +403,7 @@ const Profile = () => {
                           />
                         </div>
                         <button
-                          className="btn btn-outline-primary btn-sm"
+                          className="btn btn-outline-danger btn-sm"
                           onClick={triggerFileInput}
                         >
                           Change Photo
@@ -449,12 +449,12 @@ const Profile = () => {
                             />
                           </div>
                           <div className="d-flex gap-2">
-                            <button type="submit" className="btn btn-primary">
+                            <button type="submit" className="btn btn-danger">
                               Save Changes
                             </button>
                             <button
                               type="button"
-                              className="btn btn-outline-secondary"
+                              className="btn btn-outline-danger"
                               onClick={() =>
                                 setFormData({ name: "", email: "", phone: "" })
                               }
