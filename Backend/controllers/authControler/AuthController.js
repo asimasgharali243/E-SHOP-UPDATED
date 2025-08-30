@@ -184,7 +184,9 @@ console.log(tokenResult);
     httpOnly: true,
     maxAge: parseInt(process.env.REFRESH_TOKEN_COOKIE_EXPIRE),
   });
-
+  // Also set tokens in headers
+  res.setHeader("x-access-token", tokenResult.accessToken);
+  res.setHeader("x-refresh-token", tokenResult.refreshToken);
   return sendResponse(res, 200, "Login successful", {
     userId: user._id.toString(),userName:user.userName,
   });
@@ -265,6 +267,8 @@ export const verifyUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     maxAge: parseInt(process.env.REFRESH_TOKEN_COOKIE_EXPIRE),
   });
+  res.setHeader("x-access-token", tokenResult.accessToken);
+  res.setHeader("x-refresh-token", tokenResult.refreshToken);
 
   return sendResponse(
     res,

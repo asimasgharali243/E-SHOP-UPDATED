@@ -141,8 +141,8 @@ export default function SingleProductPage() {
     (state) => state.cart?.items || [],
     shallowEqual
   );
-  const userId = useSelector((state) => state.authUser?.user?._id || null);
-
+  const userId = useSelector((state) => state.authUser?.user?.userId || null);
+  console.log("likedProducts:", userId);
   const liked = likedProducts.includes(product._id);
   const inCart = cartItems.some((item) => item._id === product._id);
 

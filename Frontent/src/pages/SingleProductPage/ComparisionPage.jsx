@@ -11,10 +11,6 @@ import {
   Table,
   Badge,
   Modal,
-  Form,
-  InputGroup,
-  Tabs,
-  Tab,
 } from "react-bootstrap";
 import { useGetProductComparisonQuery } from "../../redux/api/productsApi/ProductApi";
 import CustomContainer from "../../components/SubComponent/CustomContainer";
@@ -46,9 +42,7 @@ const ComparisonPage = () => {
     }
   }, [productName, refetch]);
 
-  const handleRetry = () => {
-    refetch();
-  };
+  const handleRetry = () => refetch();
 
   const handleViewProduct = (product) => {
     setSelectedProduct(product);
@@ -59,16 +53,17 @@ const ComparisonPage = () => {
     comparisonData?.products
       ?.filter(
         (product) =>
-          filterBy === "all" || product.source.toLowerCase().includes(filterBy)
+          filterBy === "all" ||
+          product?.source?.toLowerCase().includes(filterBy)
       )
       ?.sort((a, b) => {
         if (sortBy === "price") {
-          const priceA = parseFloat(a.price?.replace(/[^\d.]/g, "") || 0);
-          const priceB = parseFloat(b.price?.replace(/[^\d.]/g, "") || 0);
+          const priceA = parseFloat(a?.price?.replace(/[^\d.]/g, "") || 0);
+          const priceB = parseFloat(b?.price?.replace(/[^\d.]/g, "") || 0);
           return priceA - priceB;
         }
         if (sortBy === "rating") {
-          return (b.rating || 0) - (a.rating || 0);
+          return (b?.rating || 0) - (a?.rating || 0);
         }
         return 0;
       }) || [];
@@ -131,95 +126,23 @@ const ComparisonPage = () => {
         <h2 className="mb-0">Compare Prices: {productName}</h2>
       </div>
 
-      {/* Controls */}
-      <Row className="mb-4">
-        <Col md={6}>
-          <div className="d-flex flex-wrap gap-2 mb-2">
-            <span className="fw-bold">Filter:</span>
-            <Button
-              variant={filterBy === "all" ? "primary" : "outline-primary"}
-              size="sm"
-              onClick={() => setFilterBy("all")}
-            >
-              All Stores
-            </Button>
-            <Button
-              variant={filterBy === "amazon" ? "primary" : "outline-primary"}
-              size="sm"
-              onClick={() => setFilterBy("amazon")}
-            >
-              Amazon
-            </Button>
-            <Button
-              variant={filterBy === "ebay" ? "primary" : "outline-primary"}
-              size="sm"
-              onClick={() => setFilterBy("ebay")}
-            >
-              eBay
-            </Button>
-            <Button
-              variant={filterBy === "walmart" ? "primary" : "outline-primary"}
-              size="sm"
-              onClick={() => setFilterBy("walmart")}
-            >
-              Walmart
-            </Button>
-          </div>
-        </Col>
-        <Col md={6} className="text-md-end">
-          <div className="d-flex flex-wrap gap-2 justify-content-md-end">
-            <span className="fw-bold">Sort by:</span>
-            <Button
-              variant={sortBy === "price" ? "primary" : "outline-primary"}
-              size="sm"
-              onClick={() => setSortBy("price")}
-            >
-              Price
-            </Button>
-            <Button
-              variant={sortBy === "rating" ? "primary" : "outline-primary"}
-              size="sm"
-              onClick={() => setSortBy("rating")}
-            >
-              Rating
-            </Button>
-
-            <span className="fw-bold ms-2">View:</span>
-            <Button
-              variant={viewMode === "grid" ? "primary" : "outline-primary"}
-              size="sm"
-              onClick={() => setViewMode("grid")}
-            >
-              <i className="bi bi-grid"></i>
-            </Button>
-            <Button
-              variant={viewMode === "table" ? "primary" : "outline-primary"}
-              size="sm"
-              onClick={() => setViewMode("table")}
-            >
-              <i className="bi bi-list"></i>
-            </Button>
-          </div>
-        </Col>
-      </Row>
-
       {/* Results Count */}
       <div className="mb-3">
         <p className="text-muted">
-          Found {filteredProducts.length} results across retailers
+          Found {filteredProducts?.length || 0} results across retailers
         </p>
       </div>
 
       {/* Grid View */}
       {viewMode === "grid" && (
         <Row className="g-4">
-          {filteredProducts.map((product, index) => (
+          {filteredProducts?.map((product, index) => (
             <Col key={index} md={6} lg={4} xl={3}>
               <Card className="h-100 shadow-sm compare-card">
                 <div className="position-relative">
                   <Card.Img
                     variant="top"
-                    src={product.image || "/placeholder.png"}
+                    src={product?.image || "/placeholder.png"}
                     style={{
                       height: "200px",
                       objectFit: "contain",
@@ -233,18 +156,20 @@ const ComparisonPage = () => {
                     bg="primary"
                     className="position-absolute top-0 end-0 m-2"
                   >
-                    {product.source}
+                    {product?.source || "Unknown"}
                   </Badge>
                 </div>
                 <Card.Body className="d-flex flex-column">
-                  <Card.Title className="h6" title={product.name}>
-                    {product.name.length > 60
-                      ? `${product.name.substring(0, 60)}...`
-                      : product.name}
+                  <Card.Title className="h6" title={product?.name || "N/A"}>
+                    {product?.name
+                      ? product.name.length > 60
+                        ? `${product.name.substring(0, 60)}...`
+                        : product.name
+                      : "No Name"}
                   </Card.Title>
 
                   <div className="mb-2">
-                    {product.rating && (
+                    {product?.rating && (
                       <div className="d-flex align-items-center">
                         <span className="text-warning me-1">
                           <i className="bi bi-star-fill"></i>
@@ -252,7 +177,7 @@ const ComparisonPage = () => {
                         <small>{product.rating}</small>
                       </div>
                     )}
-                    {product.reviews && (
+                    {product?.reviews && (
                       <small className="text-muted">
                         {product.reviews} reviews
                       </small>
@@ -262,15 +187,17 @@ const ComparisonPage = () => {
                   <div className="mt-auto">
                     <div className="d-flex align-items-center mb-2">
                       <span className="h5 text-success mb-0">
-                        {product.price || "Price not available"}
+                        {product?.price || "Price not available"}
                       </span>
                     </div>
 
                     <div className="d-grid gap-2">
                       <Button
                         variant="primary"
-                        onClick={() => window.open(product.link, "_blank")}
-                        disabled={!product.link}
+                        onClick={() =>
+                          product?.link && window.open(product.link, "_blank")
+                        }
+                        disabled={!product?.link}
                       >
                         <i className="bi bi-cart me-1"></i> Visit Store
                       </Button>
@@ -304,13 +231,13 @@ const ComparisonPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredProducts.map((product, index) => (
+                {filteredProducts?.map((product, index) => (
                   <tr key={index}>
                     <td>
                       <div className="d-flex align-items-center">
                         <img
-                          src={product.image || "/placeholder.png"}
-                          alt={product.name}
+                          src={product?.image || "/placeholder.png"}
+                          alt={product?.name || "N/A"}
                           style={{
                             width: "50px",
                             height: "50px",
@@ -322,21 +249,25 @@ const ComparisonPage = () => {
                           }}
                         />
                         <div>
-                          <div className="fw-bold">{product.name}</div>
+                          <div className="fw-bold">
+                            {product?.name || "Unnamed"}
+                          </div>
                           <small className="text-muted">
-                            {product.description?.substring(0, 80)}...
+                            {product?.description
+                              ? product.description.substring(0, 80)
+                              : "No description"}
                           </small>
                         </div>
                       </div>
                     </td>
                     <td>
-                      <Badge bg="primary">{product.source}</Badge>
+                      <Badge bg="primary">{product?.source || "N/A"}</Badge>
                     </td>
                     <td className="fw-bold text-success">
-                      {product.price || "N/A"}
+                      {product?.price || "N/A"}
                     </td>
                     <td>
-                      {product.rating ? (
+                      {product?.rating ? (
                         <div className="d-flex align-items-center">
                           <span className="text-warning me-1">
                             <i className="bi bi-star-fill"></i>
@@ -352,8 +283,10 @@ const ComparisonPage = () => {
                         <Button
                           variant="outline-primary"
                           size="sm"
-                          onClick={() => window.open(product.link, "_blank")}
-                          disabled={!product.link}
+                          onClick={() =>
+                            product?.link && window.open(product.link, "_blank")
+                          }
+                          disabled={!product?.link}
                         >
                           <i className="bi bi-cart"></i>
                         </Button>
@@ -375,7 +308,7 @@ const ComparisonPage = () => {
       )}
 
       {/* No Results */}
-      {filteredProducts.length === 0 && !isLoading && (
+      {filteredProducts?.length === 0 && !isLoading && (
         <Alert variant="info" className="text-center">
           <i className="bi bi-search display-4 d-block mb-3"></i>
           <h4>No products found</h4>
@@ -397,8 +330,8 @@ const ComparisonPage = () => {
             <Row>
               <Col md={6}>
                 <img
-                  src={selectedProduct.image || "/placeholder.png"}
-                  alt={selectedProduct.name}
+                  src={selectedProduct?.image || "/placeholder.png"}
+                  alt={selectedProduct?.name || "N/A"}
                   className="img-fluid rounded"
                   style={{ maxHeight: "300px", objectFit: "contain" }}
                   onError={(e) => {
@@ -407,22 +340,24 @@ const ComparisonPage = () => {
                 />
               </Col>
               <Col md={6}>
-                <h4>{selectedProduct.name}</h4>
+                <h4>{selectedProduct?.name || "Unnamed Product"}</h4>
                 <Badge bg="primary" className="mb-2">
-                  {selectedProduct.source}
+                  {selectedProduct?.source || "N/A"}
                 </Badge>
 
                 <div className="mb-3">
-                  <h3 className="text-success">{selectedProduct.price}</h3>
+                  <h3 className="text-success">
+                    {selectedProduct?.price || "Price not available"}
+                  </h3>
                 </div>
 
-                {selectedProduct.rating && (
+                {selectedProduct?.rating && (
                   <div className="d-flex align-items-center mb-2">
                     <span className="text-warning me-1">
                       <i className="bi bi-star-fill"></i>
                     </span>
                     <span className="me-2">{selectedProduct.rating}</span>
-                    {selectedProduct.reviews && (
+                    {selectedProduct?.reviews && (
                       <small className="text-muted">
                         ({selectedProduct.reviews} reviews)
                       </small>
@@ -430,7 +365,7 @@ const ComparisonPage = () => {
                   </div>
                 )}
 
-                {selectedProduct.description && (
+                {selectedProduct?.description && (
                   <div className="mb-3">
                     <h6>Description:</h6>
                     <p className="text-muted">{selectedProduct.description}</p>
@@ -440,8 +375,11 @@ const ComparisonPage = () => {
                 <Button
                   variant="primary"
                   className="w-100"
-                  onClick={() => window.open(selectedProduct.link, "_blank")}
-                  disabled={!selectedProduct.link}
+                  onClick={() =>
+                    selectedProduct?.link &&
+                    window.open(selectedProduct.link, "_blank")
+                  }
+                  disabled={!selectedProduct?.link}
                 >
                   <i className="bi bi-cart me-1"></i> Visit Store
                 </Button>

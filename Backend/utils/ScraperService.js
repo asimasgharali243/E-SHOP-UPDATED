@@ -37,13 +37,12 @@ async function getPageContent(browser, url) {
   }
 }
 
-// Scrapers for Pakistani Websites
+
 
 export async function scrapeIshopping(browser, searchUrl) {
   const $ = await getPageContent(browser, searchUrl);
   if (!$) return null;
   try {
-    // New selector for iShopping search results
     const firstProductLink = $('li.product-item > div.product-item-info a.product-item-link').first().attr('href');
     if (!firstProductLink) {
         console.log(`iShopping: No product link found for ${searchUrl}`);
@@ -239,7 +238,7 @@ export async function scrapeBestBuy(browser, searchUrl) {
 
 }
 
-export async function scrapeDaraz(browser, searchUrl, maxProducts = 8) {
+export async function scrapeDaraz(browser, searchUrl, maxProducts = 5) {
   const $ = await getPageContent(browser, searchUrl);
   if (!$) return null;
 
