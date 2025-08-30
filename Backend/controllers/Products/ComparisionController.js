@@ -25,7 +25,7 @@ const getBrowserInstance = async () => {
         "--disable-dev-shm-usage",
         "--disable-gpu",
         "--lang=en-US,en",
-      ]
+              ]
     });
     console.log("Puppeteer browser instance launched.");
   }

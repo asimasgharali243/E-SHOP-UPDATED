@@ -101,7 +101,10 @@ const AppRouter = createBrowserRouter([
       { path: "terms-and-conditions", element: <TermsAndConditions /> },
       { path: "help", element: <Help /> },
       { path: "profile", element: <ProfilePage /> },
-
+      {
+        path: "compare",
+        element: <CompareProduct />,
+      },
       // Dashboard Routes
       {
         path: "dashboard",
@@ -111,10 +114,7 @@ const AppRouter = createBrowserRouter([
           { path: "products/list", element: <ProductLists /> },
           { path: "products/add", element: <ProductCreate /> },
           { path: "products/details/:id", element: <ProductDetails /> },
-          {
-            path: "compare",
-            element: <CompareProduct />,
-          },
+          ,
           { path: "customers/list", element: <CustomerLists /> },
           { path: "customers/details", element: <CustomerDetails /> },
 

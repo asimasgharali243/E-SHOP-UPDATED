@@ -10,7 +10,8 @@ import ThemeReducer from './features/theme-mode/ThemeSlice';
 import CartSliceReducer , { loadCart } from "./features/Cart/SliceCard";
 import likeReducer from './features/products/LikeProduct';
 import likeDebounceMiddleware from './features/products/LikeMiddleWare';
-
+import userProfileReducer from './api/productsApi/userApi';
+import tokenMiddleware from './middleware/Tokensetmiddleware';
 export const store = configureStore({
   reducer: {
     authUser: authreducer,
@@ -21,6 +22,7 @@ export const store = configureStore({
     cart: CartSliceReducer,
     Likes: likeReducer, // Using 'Likes' as the key
     [ProductApi.reducerPath]: ProductApi.reducer,
+    [userProfileReducer.reducerPath]: userProfileReducer.reducer
   },
   preloadedState: {
     cart: {
@@ -34,7 +36,9 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       likeDebounceMiddleware,  
-      ProductApi.middleware    
+      ProductApi.middleware,
+      userProfileReducer.middleware    ,
+      tokenMiddleware
     ),
 });
 

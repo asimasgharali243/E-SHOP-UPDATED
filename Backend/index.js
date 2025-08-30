@@ -20,7 +20,7 @@ const httpServer = http.createServer(app);
 // Initialize Socket.IO
 export const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000","http://127.0.0.1:3000"],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
   },

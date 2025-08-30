@@ -4,9 +4,19 @@ import apis from "../../../utils/apis";
 
 export const productApi = createApi({
   reducerPath: "productApi",
+  
   baseQuery: fetchBaseQuery({
     baseUrl: apis().baseUrl,
     credentials: "include",
+      prepareHeaders: (headers) => {
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    if (accessToken) headers.set('Authorization', `Bearer ${accessToken}`);
+    if (refreshToken) headers.set('X-Refresh-Token', refreshToken);
+
+    return headers;
+  }
   }),
   tagTypes: ["Product", "Products", "Likes"],
   endpoints: (builder) => ({
