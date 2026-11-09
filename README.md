@@ -1,4 +1,10 @@
-# E-Shop — E-commerce application
+# Full-stack E-Commerce Marketplace | React, Express, MongoDB
+
+Full-stack e-commerce application with React/Vite storefront, product browsing, cart and reviews, Express/Mongoose APIs, Socket.IO messaging, and payment/media integration points.
+
+**Explore this repository:** [Architecture](docs/ARCHITECTURE.md) · [Developer runbook](docs/RUNBOOK.md) · [Screenshot evidence guide](docs/SCREENSHOT_GUIDE.md) · [Audit](docs/PORTFOLIO_AUDIT.md)
+
+**Discoverability topics:** `ecommerce` · `react` · `vite` · `express` · `mongodb` · `mongoose` · `redux-toolkit` · `socket-io` · `marketplace`. These are suggested GitHub repository topics, not a claim that the repository settings have been updated.
 
 > **Verification status:** Documentation derived from inspected repository files. Application execution and screenshots have not yet been verified.
 
