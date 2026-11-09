@@ -1,111 +1,87 @@
 import React from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { Container, Row, Col } from "react-bootstrap";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import "./Footer.scss";
 
-const Footer = () => {
-  return (
-    <footer className="footer mt-5">
-      <Container fluid className="footer-top py-5 px-4 px-md-5">
-        <Row className="gy-4">
-          {/* Brand Info */}
-          <Col xs={12} md={4} lg={3}>
-            <h4 className="footer-logo">E-Shop</h4>
-            <p>
-              Your one-stop shop for all your needs. We deliver products at your
-              doorstep with trusted service.
-            </p>
-            <div className="social-icons">
-              <a href="#">
-                <i className="bi bi-facebook"></i>
-              </a>
-              <a href="#">
-                <i className="bi bi-twitter"></i>
-              </a>
-              <a href="#">
-                <i className="bi bi-instagram"></i>
-              </a>
-              <a href="#">
-                <i className="bi bi-linkedin"></i>
-              </a>
-            </div>
-          </Col>
+const groups = [
+  {
+    title: "Explore",
+    links: [
+      ["Shop all", "/home"],
+      ["Browse catalog", "/catalog"],
+      ["Your wishlist", "/wishlist"],
+      ["Your cart", "/cart"],
+    ],
+  },
+  {
+    title: "Customer care",
+    links: [
+      ["Help center", "/help"],
+      ["Contact us", "/contact"],
+      ["Shipping policy", "/shipping-policy"],
+      ["Returns & refunds", "/return-policy"],
+    ],
+  },
+  {
+    title: "About E-Shop",
+    links: [
+      ["Our story", "/about"],
+      ["Privacy policy", "/privacy-policy"],
+      ["Terms & conditions", "/terms-and-conditions"],
+    ],
+  },
+];
 
-          {/* Quick Links */}
-          <Col xs={6} md={4} lg={2}>
-            <h5>Quick Links</h5>
-            <ul>
-              <li>
-                <a href="home">Shop</a>
-              </li>
-              <li>
-                <a href="#">Categories</a>
-              </li>
-              <li>
-                <a href="#">Deals</a>
-              </li>
-              <li>
-                <a href="#">New Arrivals</a>
-              </li>
-              <li>
-                <a href="#">Best Sellers</a>
-              </li>
-            </ul>
-          </Col>
-
-          {/* Customer Service */}
-          <Col xs={6} md={4} lg={2}>
-            <h5>Customer Service</h5>
-            <ul>
-              <li>
-                <a href="help">Help Center</a>
-              </li>
-              <li>
-                <a href="return-policy">Returns</a>
-              </li>
-              <li>
-                <a href="shipping-policy">Shipping</a>
-              </li>
-              <li>
-                <a href="privacy-policy">Privacy Policy</a>
-              </li>
-              <li>
-                <a href="terms-and-conditions">Terms & Conditions</a>
-              </li>
-            </ul>
-          </Col>
-
-          {/* Newsletter */}
-          <Col xs={12} md={8} lg={5}>
-            <h5>Subscribe to Newsletter</h5>
-            <p>Get updates about our latest offers & products.</p>
-            <Form className="newsletter-form d-flex">
-              <Form.Control
-                type="email"
-                placeholder="Enter your email"
-                className="me-2"
-              />
-              <Button type="submit" variant="primary">
-                Subscribe
-              </Button>
-            </Form>
-            <div className="payment-icons mt-3 d-flex gap-3 fs-4">
-              <i className="bi bi-credit-card"></i>
-              <i className="bi bi-paypal"></i>
-              <i className="bi bi-wallet2"></i>
-              <i className="bi bi-cart"></i>
-            </div>
-          </Col>
-        </Row>
-      </Container>
-
-      {/* Bottom Footer */}
-      <div className="footer-bottom text-center py-3">
-        <p className="mb-0">
-          © {new Date().getFullYear()} E-Shop. All Rights Reserved.
-        </p>
+const Footer = () => (
+  <footer className="eshop-footer mt-5" aria-label="Site footer">
+    <div className="eshop-footer__accent" aria-hidden="true" />
+    <Container className="eshop-footer__inner">
+      <div className="eshop-footer__intro">
+        <div>
+          <span className="eshop-footer__eyebrow">DISCOVER MORE</span>
+          <h2>Find your next favorite.</h2>
+          <p>Explore the catalog, save products you love, and shop at your own pace.</p>
+        </div>
+        <Link className="eshop-footer__cta" to="/catalog">
+          Explore products <i className="bi bi-arrow-up-right" aria-hidden="true" />
+        </Link>
       </div>
-    </footer>
-  );
-};
+      <Row className="eshop-footer__main gy-5">
+        <Col xs={12} lg={4}>
+          <Link to="/" className="eshop-footer__brand" aria-label="E-Shop home">
+            <span className="eshop-footer__brand-icon"><i className="bi bi-bag-heart" aria-hidden="true" /></span>
+            E<span>Shop</span><span className="eshop-footer__brand-dot">.</span>
+          </Link>
+          <p className="eshop-footer__description">
+            A modern shopping experience built around discovery, convenience and thoughtful design.
+          </p>
+          <div className="eshop-footer__note">
+            <i className="bi bi-shield-check" aria-hidden="true" />
+            <span>Questions about an order? Our help and policy pages are here for you.</span>
+          </div>
+        </Col>
+        {groups.map((group) => (
+          <Col xs={6} sm={4} lg key={group.title}>
+            <h3 className="eshop-footer__heading">{group.title}</h3>
+            <ul className="eshop-footer__links">
+              {group.links.map(([label, url]) => (
+                <li key={url}><Link to={url}>{label}</Link></li>
+              ))}
+            </ul>
+          </Col>
+        ))}
+      </Row>
+      <div className="eshop-footer__bottom">
+        <p>© {new Date().getFullYear()} E-Shop. Crafted for better everyday shopping.</p>
+        <div className="eshop-footer__legal">
+          <Link to="/privacy-policy">Privacy</Link>
+          <Link to="/terms-and-conditions">Terms</Link>
+          <Link to="/contact">Contact</Link>
+        </div>
+      </div>
+    </Container>
+  </footer>
+);
 
 export default Footer;
