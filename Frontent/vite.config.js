@@ -30,6 +30,9 @@ export default defineConfig({
       // 'Cross-Origin-Embedder-Policy': 'require-corp',
     },
   },
+  worker: {
+    format: 'es',
+  },
   logLevel: 'info',
   build: {
     minify: 'esbuild',
