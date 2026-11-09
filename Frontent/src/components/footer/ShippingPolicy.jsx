@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
-import { Truck, ClockHistory, GeoAlt } from "react-bootstrap-icons";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 const ShippingPolicy = () => {
   return (
@@ -17,7 +17,7 @@ const ShippingPolicy = () => {
           <Col md={4}>
             <Card className="h-100 shadow-sm">
               <Card.Body>
-                <Truck size={32} className="mb-3 text-success" />
+                <i className="bi bi-truck fs-2 mb-3 text-success" aria-hidden="true" />
                 <Card.Title>Delivery Methods</Card.Title>
                 <Card.Text>
                   We provide standard and express delivery across multiple
@@ -29,7 +29,7 @@ const ShippingPolicy = () => {
           <Col md={4}>
             <Card className="h-100 shadow-sm">
               <Card.Body>
-                <ClockHistory size={32} className="mb-3 text-primary" />
+                <i className="bi bi-clock-history fs-2 mb-3 text-primary" aria-hidden="true" />
                 <Card.Title>Delivery Time</Card.Title>
                 <Card.Text>
                   Standard shipping takes 3-5 business days, while express
@@ -41,7 +41,7 @@ const ShippingPolicy = () => {
           <Col md={4}>
             <Card className="h-100 shadow-sm">
               <Card.Body>
-                <GeoAlt size={32} className="mb-3 text-danger" />
+                <i className="bi bi-geo-alt fs-2 mb-3 text-danger" aria-hidden="true" />
                 <Card.Title>Tracking</Card.Title>
                 <Card.Text>
                   Track your orders in real-time with our tracking system and
