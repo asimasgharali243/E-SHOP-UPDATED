@@ -12,6 +12,16 @@ These images are captured by **Chromium running the actual Vite frontend** in Gi
 
 ![E-Shop storefront — mobile viewport screenshot](docs/screenshots/homepage-mobile.png)
 
+### Redesigned responsive footer
+
+The footer now includes an editorial shopping call-to-action, semantic navigation to actual application routes, responsive columns, keyboard-visible focus states, and reduced-motion support. These are real screenshots captured from the running frontend after the workflow succeeds:
+
+![E-Shop redesigned footer on desktop](docs/screenshots/footer-desktop.png)
+
+![E-Shop redesigned footer on mobile](docs/screenshots/footer-mobile.png)
+
+**Demo-data limitation:** CI can start the Vite frontend, but the MongoDB-backed catalog cannot be populated without a working backend and authorized database. Screenshots may show empty/loading product areas; they are not presented as evidence of populated production records. The footer itself is independent of database access.
+
 [Frontend build and screenshot workflow](https://github.com/asimasgharali243/E-SHOP-UPDATED/actions/workflows/portfolio-frontend-build.yml)
 
 ## Features
