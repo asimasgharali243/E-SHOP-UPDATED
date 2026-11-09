@@ -1,54 +1,155 @@
-# Full-stack E-Commerce Marketplace | React, Express, MongoDB
+# E-SHOP UPDATED — Full-Stack E-Commerce Platform
 
-Full-stack e-commerce application with React/Vite storefront, product browsing, cart and reviews, Express/Mongoose APIs, Socket.IO messaging, and payment/media integration points.
+A full-stack online storefront and product-management application built with **React, Vite, Redux Toolkit, React Bootstrap, Node.js, Express, MongoDB and Socket.IO**. The code includes product browsing, authentication, shopping cart operations, product reviews, seller/product administration and negotiation messaging. Some features require configured third-party services and have not been verified end-to-end.
 
-**Explore this repository:** [Architecture](docs/ARCHITECTURE.md) · [Developer runbook](docs/RUNBOOK.md) · [Screenshot evidence guide](docs/SCREENSHOT_GUIDE.md) · [Audit](docs/PORTFOLIO_AUDIT.md)
+[Quick start](#quick-start) · [Screenshots](#real-application-screenshots) · [Features](#features) · [Architecture](#architecture) · [Configuration](#configuration-and-security) · [Troubleshooting](#troubleshooting)
 
-**Discoverability topics:** `ecommerce` · `react` · `vite` · `express` · `mongodb` · `mongoose` · `redux-toolkit` · `socket-io` · `marketplace`. These are suggested GitHub repository topics, not a claim that the repository settings have been updated.
+## Real application screenshots
 
-> **Verification status:** Documentation derived from inspected repository files. Application execution and screenshots have not yet been verified.
+These images are captured by **Chromium running the actual Vite frontend** in GitHub Actions, rather than mockups or AI-generated screens. They will appear once the screenshot workflow completes and commits the files. A frontend screenshot does not establish that database-backed flows are working.
 
-## Purpose and features
+![E-Shop storefront — desktop browser screenshot](docs/screenshots/homepage-desktop.png)
 
-React/Vite frontend in `Frontent/` and Express/Mongoose backend in `Backend/`. Product, cart, auth, review, negotiation and image-processing modules appear in source.
+![E-Shop storefront — mobile viewport screenshot](docs/screenshots/homepage-mobile.png)
+
+[Frontend build and screenshot workflow](https://github.com/asimasgharali243/E-SHOP-UPDATED/actions/workflows/portfolio-frontend-build.yml)
+
+## Features
+
+| Area | Implementation found in source |
+| --- | --- |
+| Storefront | React pages, product cards, catalog, product details and search/filter interfaces |
+| Accounts | Authentication routes for registration, login, logout, password recovery and verification |
+| Shopping | Cart API, cart synchronization and product-related endpoints |
+| Product management | Product creation, updates, deletion, reviews, likes and rollback endpoints |
+| Negotiation | Negotiation routes and Socket.IO events for room membership and typing |
+| Media and services | ImageKit, Cloudinary, email and other integrations referenced by backend dependencies |
+
+**Implementation is not the same as verified production readiness.** Payment, external AI/media services and account workflows must be configured and tested with safe demo accounts.
+
+## Tech stack
+
+- **Frontend:** React 18, Vite 6, React Router, Redux Toolkit/RTK Query, React Bootstrap, Sass, Bootstrap Icons.
+- **Backend:** Node.js, Express 4, Mongoose 8, Socket.IO, JWT-related dependencies.
+- **Database:** MongoDB.
+- **External integrations:** ImageKit and other optional services referenced by the source. Credentials are not included.
+
+## Project layout
+
+```text
+E-SHOP-UPDATED/
+├── Frontent/                # React + Vite client (folder spelling is intentional)
+│   ├── src/
+│   │   ├── components/      # Shared storefront and dashboard UI
+│   │   ├── pages/           # Storefront, product and admin pages
+│   │   ├── redux/           # State management and RTK Query APIs
+│   │   └── utils/apis.js    # API URL configuration
+│   └── package.json
+├── Backend/                 # Express and MongoDB API
+│   ├── Config/ConnectDB.js
+│   ├── routes/
+│   ├── app.js
+│   ├── index.js
+│   └── package.json
+├── docs/
+│   ├── ARCHITECTURE.md
+│   ├── RUNBOOK.md
+│   └── screenshots/
+└── README.md
+```
+
+## Quick start
+
+### Requirements
+
+- Node.js **22** and npm (the CI frontend build uses Node 22).
+- A reachable MongoDB database, local or hosted.
+- Your own credentials for any optional third-party service you choose to enable.
+
+### 1. Clone
+
+```bash
+git clone https://github.com/asimasgharali243/E-SHOP-UPDATED.git
+cd E-SHOP-UPDATED
+```
+
+**Note:** The documentation and fixes described here are currently on the `docs/portfolio-professionalization-2026` review branch, not yet merged to `main`. To review this version:
+
+```bash
+git switch docs/portfolio-professionalization-2026
+```
+
+### 2. Configure the backend
+
+```bash
+cd Backend
+npm install
+cp .env.example .env
+```
+
+Edit `Backend/.env` with your own values. At minimum, the source reads `MONGO_URI`, and the backend's ImageKit initialization reads `IMAGEKIT_PUBLIC_KEY`, `IMAGEKIT_PRIVATE_KEY`, and `IMAGEKIT_URL_ENDPOINT`. Additional routes may require further credentials. **Do not commit `.env` or paste secrets into issues.**
+
+```bash
+npm start
+```
+
+The backend script currently runs `nodemon index.js`; the server defaults to **http://localhost:5000**. Successful startup requires a working database and valid configuration.
+
+### 3. Start the frontend in a second terminal
+
+```bash
+cd E-SHOP-UPDATED/Frontent
+npm ci
+npm run dev -- --host 127.0.0.1 --port 3000
+```
+
+Open **http://localhost:3000**. Port 3000 matters: the checked-in backend CORS configuration permits `localhost:3000` and `127.0.0.1:3000`, while the frontend API helper currently targets `http://localhost:5000/api`.
+
+To build and preview the frontend:
+
+```bash
+npm run build
+npm run preview
+```
+
+The preview may render without backend data. Running a frontend build alone does **not** validate checkout, login, payments or other API flows.
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-  User --> Client[Frontend or document reader]
-  Client --> Domain[Application modules / content]
-  Domain --> Storage[Configured backend, storage or local files]
+    Visitor[Browser / React Vite] --> State[Redux Toolkit / RTK Query]
+    State --> API[Express API :5000]
+    API --> DB[(MongoDB)]
+    Visitor <-->|Negotiation events| Socket[Socket.IO]
+    Socket --- API
+    API -. optional integration .-> Media[Media and external services]
 ```
 
-This diagram is conceptual, not a claim about a deployed system. Refer to the repository directories above for the actual source.
+The frontend API helper lives in `Frontent/src/utils/apis.js`. The backend registers `/api/auth`, `/api/products`, `/api/cart`, and `/api/negotiation` in `Backend/app.js`.
 
-## Installation and running
+## Configuration and security
 
-Frontend: `cd Frontent && npm ci && npm run dev`. Backend: `cd Backend && npm ci && npm start`. Configure MongoDB and integrations first.
+An environment file was previously tracked in this **public** repository. The review branch removes it from tracking and ignores future environment files, but **the old values may remain in Git history and must be treated as exposed**. Rotate/revoke all credentials previously stored there, review repository history, and perform a coordinated history purge if appropriate. Removing the current file is **not** sufficient to invalidate leaked keys.
 
-Install required runtimes and dependencies, inspect package manifests, and provide secrets through local ignored configuration. These commands are **not yet runtime-tested**.
+Never put server secrets in Vite client code or screenshots. Use test accounts and sample product data for demonstrations.
 
-## Screenshots and walkthrough
+## Troubleshooting
 
-No verified runtime screenshots have been captured. Once the application runs with sanitized demo data, capture each screen into `docs/screenshots/`, document its purpose and workflow, and record the run command and commit. Do not use synthetic screenshots as evidence of running code.
+| Problem | Check |
+| --- | --- |
+| Browser shows CORS errors | Start the frontend on port **3000** and the backend on **5000**, or update both CORS and frontend configuration together |
+| API requests fail | Check MongoDB connection, backend startup logs and `Frontent/src/utils/apis.js` |
+| Empty product catalog | Verify the database has non-sensitive demo products and the `/api/products` endpoint works |
+| Frontend build fails on Linux | File import casing must match filenames exactly; see CI logs |
+| Third-party integration fails | Supply your own valid credentials through ignored local configuration |
 
-## Security and maintenance
+## Quality, contribution and status
 
-**Important:** `Backend/.env` is tracked. Rotate any valid credentials, remove the tracked file, and purge secrets from history before public deployment.
+The [frontend CI workflow](.github/workflows/portfolio-frontend-build.yml) installs dependencies, builds the client and attempts real browser screenshot capture. Build and screenshot success must be checked in the [Actions runs](https://github.com/asimasgharali243/E-SHOP-UPDATED/actions). Full backend integration tests, security assessment and deployment validation remain open work.
 
-Run dependency checks, verify licenses and inspect configuration before deployment. Do not include real credentials or private data in screenshots.
+For detailed notes, see [architecture](docs/ARCHITECTURE.md), [runbook](docs/RUNBOOK.md), [portfolio audit](docs/PORTFOLIO_AUDIT.md) and [screenshot guidance](docs/SCREENSHOT_GUIDE.md).
 
-## Contributing and review
+Contributions should include reproducible steps, appropriate tests and no secrets or private user data.
 
-Use feature branches and pull requests. Document reproduction steps, expected behavior, test results and any known limitations. Do not merge documentation until its setup commands and links have been checked.
-
-## Checklist
-
-- [x] Purpose and code-grounded structure
-- [x] Initial run instructions and security notes
-- [ ] Verify full local startup and workflows
-- [ ] Capture real, sanitized screenshots
-- [ ] Review deployment readiness
-
-See [documentation audit](docs/PORTFOLIO_AUDIT.md) for the detailed plan.
+**Search terms:** MERN e-commerce application, React shopping cart, Express MongoDB API, React Redux Toolkit storefront, Node.js e-commerce dashboard, Socket.IO negotiation.
