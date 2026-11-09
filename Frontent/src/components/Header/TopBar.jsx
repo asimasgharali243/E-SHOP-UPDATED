@@ -22,20 +22,20 @@ export default function TopBar() {
           {/* Help Text (hidden on small devices) */}
           <Col className="d-none d-md-flex align-items-center">
             <span className="topbar-text" aria-label="Customer help line">
-              Need help? Call us:(+98)0234456789
+              Need assistance? Explore our help center
             </span>
           </Col>
 
           {/* Navigation Links */}
           <Nav as={Col} className="d-flex align-items-center  justify-content-between">
             <Nav.Item>
-              <Nav.Link as={Link} to="/store" className="topbar-text" aria-label="Visit our store">
-                Our store
+              <Nav.Link as={Link} to="/about" className="topbar-text" aria-label="Visit our store">
+                About E-Shop
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link as={Link} to="/track" className="topbar-text" aria-label="Track your order">
-                Track order
+              <Nav.Link as={Link} to="/help" className="topbar-text" aria-label="Track your order">
+                Help center
               </Nav.Link>
             </Nav.Item>
           </Nav>
@@ -44,7 +44,7 @@ export default function TopBar() {
           <Form
             as={Col}
             className="d-flex align-items-center justify-content-end "
-            role="switch button"
+            role="group"
             aria-label="Dark mode toggle"
           >
             <Form.Check
