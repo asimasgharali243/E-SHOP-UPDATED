@@ -42,15 +42,17 @@ jobs:
             sleep 2
           done
           if [ "$ready" != 1 ]; then cat /tmp/portfolio-vite.log; exit 1; fi
-          npx playwright screenshot --browser chromium --viewport-size "1440,900" --wait-for-timeout 2000 http://127.0.0.1:4173/ ../docs/screenshots/homepage-desktop.png
-          npx playwright screenshot --browser chromium --viewport-size "390,844" --wait-for-timeout 2000 http://127.0.0.1:4173/ ../docs/screenshots/homepage-mobile.png
+          npx playwright screenshot --browser chromium --full-page --viewport-size "1440,900" --wait-for-timeout 2000 http://127.0.0.1:4173/ ../docs/screenshots/homepage-desktop.png
+          npx playwright screenshot --browser chromium --full-page --viewport-size "390,844" --wait-for-timeout 2000 http://127.0.0.1:4173/ ../docs/screenshots/homepage-mobile.png
+      - name: Capture redesigned footer screenshots
+        run: node scripts/capture-footer.mjs
       - name: Commit screenshots to review branch
         working-directory: .
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/screenshots/homepage-desktop.png docs/screenshots/homepage-mobile.png
+          git add docs/screenshots/homepage-desktop.png docs/screenshots/homepage-mobile.png docs/screenshots/footer-desktop.png docs/screenshots/footer-mobile.png
           if ! git diff --cached --quiet; then
             git commit -m "docs: capture real frontend screenshots [skip ci]"
             git fetch origin docs/portfolio-professionalization-2026
