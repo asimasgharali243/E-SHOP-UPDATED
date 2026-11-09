@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { Form, Accordion, Button, Col } from "react-bootstrap";
-import "./grid.scss";
+import "./Grid.scss";
 
 const FilterSidebar = React.memo(
   ({ filterOptions, onApplyFilters, currentFilters }) => {
