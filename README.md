@@ -20,6 +20,12 @@ The footer now includes an editorial shopping call-to-action, semantic navigatio
 
 ![E-Shop redesigned footer on mobile](docs/screenshots/footer-mobile.png)
 
+### Header and catalog error handling
+
+The header has a responsive, accessible product search field, improved navigation actions and corrected support links. When the API is unavailable, the homepage shows a helpful retry state instead of the raw `Error fetching data!` message, while the footer remains visible.
+
+**Database diagnosis:** `Frontent/src/utils/apis.js` points to `http://localhost:5000/api`. The backend expects `MONGO_URI` and uses `Backend/Config/ConnectDB.js` for Mongoose. A GitHub Actions browser cannot access a MongoDB service on your own computer; running the frontend alone cannot populate products. Start MongoDB and the backend, verify `/api/products` and `/api/products/getcategories`, and inspect server logs without exposing credentials.
+
 **Demo-data limitation:** CI can start the Vite frontend, but the MongoDB-backed catalog cannot be populated without a working backend and authorized database. Screenshots may show empty/loading product areas; they are not presented as evidence of populated production records. The footer itself is independent of database access.
 
 [Frontend build and screenshot workflow](https://github.com/asimasgharali243/E-SHOP-UPDATED/actions/workflows/portfolio-frontend-build.yml)
