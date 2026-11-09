@@ -32,8 +32,8 @@ export default function Home() {
   const handleProductClick = (productId) =>
     console.log("Product clicked:", productId);
 
-  if (productLoading || categoriesLoading) return <p>Loading...</p>;
-  if (productError || categoriesError) return <p>Error fetching data!</p>;
+  const isLoading = productLoading || categoriesLoading;
+  const hasConnectionIssue = productError || categoriesError;
 
   // Product sections
   const flashSalesProducts = products.filter((p) => p.discount > 0);
@@ -60,7 +60,15 @@ export default function Home() {
 
   return (
     <Container style={{ overflow: "hidden" }}>
-      <HeaderSlider />
+      {hasConnectionIssue && (
+        <section role="status" style={{ margin: "32px 0", padding: "28px", background: "#f2f7fb", border: "1px solid #dce8f2", borderRadius: 18 }}>
+          <h1 style={{ fontSize: "1.4rem", color: "#183149" }}>We're having trouble loading the catalog</h1>
+          <p style={{ color: "#51677a" }}>Products and categories are temporarily unavailable. Please try again shortly.</p>
+          <button type="button" className="btn btn-primary" onClick={() => window.location.reload()}>Try again</button>
+        </section>
+      )}
+      {isLoading && !hasConnectionIssue && <div role="status" className="py-5 text-center">Loading the catalog…</div>}
+      {!hasConnectionIssue && <HeaderSlider />}
 
       {flashSalesProducts.length > 0 && (
         <ProductSlider
@@ -86,7 +94,7 @@ export default function Home() {
         />
       )}
 
-      <SecondBannerSlider />
+      {!hasConnectionIssue && <SecondBannerSlider />}
 
       {newArrivals.length > 0 && (
         <ProductSlider

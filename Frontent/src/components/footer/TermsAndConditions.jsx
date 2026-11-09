@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
-import { ShieldLock, FileText, CartCheck } from "react-bootstrap-icons";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 const TermsAndConditions = () => {
   return (
@@ -18,7 +18,7 @@ const TermsAndConditions = () => {
           <Col md={4}>
             <Card className="h-100 shadow-sm">
               <Card.Body>
-                <ShieldLock size={32} className="mb-3 text-primary" />
+                <i className="bi bi-shield-lock fs-2 mb-3 text-primary" aria-hidden="true" />
                 <Card.Title>Use of Website</Card.Title>
                 <Card.Text>
                   You agree to use our platform only for lawful purposes and not
@@ -30,7 +30,7 @@ const TermsAndConditions = () => {
           <Col md={4}>
             <Card className="h-100 shadow-sm">
               <Card.Body>
-                <CartCheck size={32} className="mb-3 text-success" />
+                <i className="bi bi-cart-check fs-2 mb-3 text-success" aria-hidden="true" />
                 <Card.Title>Orders & Payments</Card.Title>
                 <Card.Text>
                   All orders placed are subject to product availability and
@@ -42,7 +42,7 @@ const TermsAndConditions = () => {
           <Col md={4}>
             <Card className="h-100 shadow-sm">
               <Card.Body>
-                <FileText size={32} className="mb-3 text-danger" />
+                <i className="bi bi-file-text fs-2 mb-3 text-danger" aria-hidden="true" />
                 <Card.Title>Limitation of Liability</Card.Title>
                 <Card.Text>
                   We are not liable for indirect damages arising from use of our

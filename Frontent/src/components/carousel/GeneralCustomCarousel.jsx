@@ -1,7 +1,7 @@
 import React from "react";
 import MultiCarousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import "./generalCustomCarousel.scss";
+import "./GeneralCustomCarousel.scss";
 
 const GeneralCarousel = ({
   children,

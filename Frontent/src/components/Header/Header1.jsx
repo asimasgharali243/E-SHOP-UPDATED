@@ -13,6 +13,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import CustomContainer from "../SubComponent/CustomContainer";
 import DropdownMenu from "./DropdownMenu";
 import "./Header1.scss";
+import "./ProfessionalHeader.scss";
 import TopBar from "./TopBar";
 import SearchBar from "./SearchBar";
 import ToggleIcon from "../SubComponent/ToggleIcon";
@@ -32,7 +33,7 @@ export default function Header1() {
 
   // Redux states
   const likes = useSelector((state) => state.Likes);
-  console.log("likes+" + likes);
+
   const cart = useSelector((state) => state.cart);
   const user = useSelector((state) => state.authUser.user);
 

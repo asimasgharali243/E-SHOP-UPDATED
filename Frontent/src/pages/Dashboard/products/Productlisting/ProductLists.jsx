@@ -14,7 +14,7 @@ import {
   useGetAllProductsQuery,
   useDeleteProductMutation,
 } from "../../../../redux/api/productsApi/ProductApi";
-import "./Product.scss";
+import "./product.scss";
 
 const ProductLists = () => {
   const [searchTerm, setSearchTerm] = useState("");

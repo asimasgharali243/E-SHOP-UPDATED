@@ -1,7 +1,7 @@
 // OrderConfirmation.js
 import React from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import { CheckCircleFill } from "react-bootstrap-icons";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import { useNavigate } from "react-router-dom";
 
 const OrderConfirmation = () => {
@@ -15,7 +15,7 @@ const OrderConfirmation = () => {
       <Row className="w-100 justify-content-center">
         <Col md={6} lg={5}>
           <Card className="shadow-lg text-center p-4">
-            <CheckCircleFill className="text-success mb-3" size={60} />
+            <i className="bi bi-check-circle-fill text-success mb-3" style={{ fontSize: 60 }} aria-hidden="true" />
             <h3 className="fw-bold mb-2">Order Confirmed!</h3>
             <p className="text-muted mb-4">
               Thank you for your purchase. Your order has been successfully

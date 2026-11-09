@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
-import { ArrowRepeat, Cash, BoxArrowInLeft } from "react-bootstrap-icons";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 const Returns = () => {
   return (
@@ -15,7 +15,7 @@ const Returns = () => {
           <Col md={4}>
             <Card className="h-100 shadow-sm">
               <Card.Body>
-                <ArrowRepeat size={32} className="mb-3 text-danger" />
+                <i className="bi bi-arrow-repeat fs-2 mb-3 text-danger" aria-hidden="true" />
                 <Card.Title>Return Policy</Card.Title>
                 <Card.Text>
                   Products can be returned within 7 days of delivery if unused,
@@ -27,7 +27,7 @@ const Returns = () => {
           <Col md={4}>
             <Card className="h-100 shadow-sm">
               <Card.Body>
-                <Cash size={32} className="mb-3 text-success" />
+                <i className="bi bi-cash fs-2 mb-3 text-success" aria-hidden="true" />
                 <Card.Title>Refund Process</Card.Title>
                 <Card.Text>
                   Refunds will be processed to your original payment method
@@ -39,7 +39,7 @@ const Returns = () => {
           <Col md={4}>
             <Card className="h-100 shadow-sm">
               <Card.Body>
-                <BoxArrowInLeft size={32} className="mb-3 text-primary" />
+                <i className="bi bi-box-arrow-in-left fs-2 mb-3 text-primary" aria-hidden="true" />
                 <Card.Title>Exchange Option</Card.Title>
                 <Card.Text>
                   Exchanges are available for defective or wrong items,
