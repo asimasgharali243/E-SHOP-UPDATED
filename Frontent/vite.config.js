@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react';
 import viteCompression from 'vite-plugin-compression';
 
 export default defineConfig({
+  worker: {
+    format: 'es',
+  },
   plugins: [
     react(),
     viteCompression({
